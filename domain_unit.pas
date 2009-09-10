@@ -19,15 +19,15 @@ type
 
 implementation
 constructor Domain.create(good_region: Region);
-begin
-goodregion:= good_region;
-setlength(nogoodregions,0);
-end;
+	begin
+	goodregion:= good_region;
+	setlength(nogoodregions,0);
+	end;
 
 procedure Domain.add_no_good_region(no_good_region: Region);
-begin
+	begin
 
-end;
+	end;
 
 end.
 
