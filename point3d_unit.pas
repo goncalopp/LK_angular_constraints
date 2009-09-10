@@ -47,7 +47,7 @@ constructor Point3d.create(x_,y_,z_: double);
 	x:=x_;
 	y:=y_;
 	z:=z_;
-    coordinates[0]:=@x;
+    coordinates[0]:=@x; //"coordinate[0]" and "x" become the same variable
     coordinates[1]:=@y;
 	coordinates[2]:=@z;
 	end;
