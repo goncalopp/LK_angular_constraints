@@ -10,8 +10,8 @@ uses
 type
   Region = class
   private
-    point1, point2: Point3D;
   public
+  	point1, point2: Point3D;
     constructor create(bound1, bound2: Point3D);
   end;
 

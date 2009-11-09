@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  domain_unit, region_unit, point3d_unit, StdCtrls;
+  domain_unit, region_unit, atom_unit, point3d_unit, rigidgroup_unit, StdCtrls;
 
 type
 
