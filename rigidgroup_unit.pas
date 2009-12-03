@@ -5,20 +5,21 @@ unit rigidgroup_unit;
 interface
 
 uses
-  Classes, SysUtils, point3d_unit, atom_unit, domain_unit, region_unit;
+  Classes, SysUtils, point3d_unit, atom_unit, domain_unit, region_unit,Forms, dialogs;
   
 type
 
 RigidGroup = class
   private
-    center: Point3D;    //in global coordinates
-    atoms: array of Atom;
   public
+	   center: Point3D;    //in global coordinates
+    atoms: array of Atom;
     constructor create();
     procedure addAtom(pos_x, pos_y, pos_z, dom_x1, dom_x2, dom_y1, dom_y2, dom_z1, dom_z2:double);
     procedure recalculateCenter();
     procedure rotateOver(rotationaxis: char; angle: double);
-    procedure calculateCenterDomain(x_angle_step, y_angle_step: double);
+    procedure calculateCenterDomain(x_angle_step, y_angle_step: double; application:TApplication);
+    //procedure calculateCenterDomain(x_angle_step, y_angle_step: double);
   end;
   
 
@@ -71,15 +72,17 @@ var i:integer;
     	atoms[i].position.rotate(rotationaxis, angle);
     end;
 
-procedure RigidGroup.calculateCenterDomain(x_angle_step, y_angle_step: double);
+
+procedure RigidGroup.calculateCenterDomain(x_angle_step, y_angle_step: double; application:TApplication);
+//procedure RigidGroup.calculateCenterDomain(x_angle_step, y_angle_step: double);
 var x,y,i, x_steps, y_steps: integer;
 	centerDomain: Domain;
     vector: Point3D;
 	begin
     centerDomain:= Domain.create(Region.create(Point3d.create(-10e9, -10e9, -10e9), Point3d.create(10e9, 10e9, 10e9)));
-	x_steps:= trunc(x_angle_step / (2.0*pi));
-    y_steps:= trunc(y_angle_step / pi);		//no need to do 360º to cover 3D space, only 180
-	for x:= 0 to x_steps - 1 do
+	y_steps:= trunc((2.0*pi) / y_angle_step);
+    x_steps:= trunc( pi / x_angle_step);		//no need to do 360º to cover 3D space, only 180
+ 	for x:= 0 to x_steps - 1 do
     	begin
         self.rotateOver('x', x_angle_step);
     	for y:= 0 to y_steps - 1 do
@@ -88,8 +91,8 @@ var x,y,i, x_steps, y_steps: integer;
 			for i:= 0 to length(atoms) -1 do
             	begin
 				vector:=atoms[i].position.vectorTo(center);
-
-
+                application.processmessages();
+                sleep(10);
                 vector.Free();
                 end;
 			end;
