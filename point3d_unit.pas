@@ -19,6 +19,7 @@ type
     procedure moveto(x_, y_, z_: double);
     procedure translate(x_, y_, z_: double);
     procedure rotateOver(rotationaxis: char; point: Point3d; angle: double);
+    procedure rotate(rotationaxis: char; angle: double);
     function vectorTo(point: Point3d): Point3d;
     function distanceTo(point: Point3d): double;
   end;
@@ -92,6 +93,14 @@ procedure Point3d.rotateOver(rotationaxis: char; point: Point3d; angle: double);
     coordinates[c0]^:=point.coordinates[c0]^+distance*cos(current_angle+angle);
     coordinates[c1]^:=point.coordinates[c1]^+distance*sin(current_angle+angle);
 	end;
+
+procedure Point3d.rotate(rotationaxis:char; angle: double);
+var tmppoint:Point3d;
+	begin
+	tmppoint:= Point3d.create(0,0,0);
+    rotateOver(rotationaxis, tmppoint, angle);
+    tmppoint.destroy();
+    end;
 
 function Point3d.vectorTo(point: Point3d): Point3d;
     begin
