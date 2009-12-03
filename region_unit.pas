@@ -21,7 +21,9 @@ constructor Region.create(bound1, bound2: Point3D);
 	begin
 	point1:= Point3D.create( min(bound1.x, bound2.x), min(bound1.y, bound2.y), min(bound1.z, bound2.z));
 	point2:= Point3D.create( max(bound1.x, bound2.x), max(bound1.y, bound2.y), max(bound1.z, bound2.z));
-	end;
+	bound1.Destroy();
+    bound2.Destroy();
+ 	end;
 
 end.
 
