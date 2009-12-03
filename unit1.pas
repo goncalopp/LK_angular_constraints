@@ -6,16 +6,24 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  domain_unit, region_unit, atom_unit, point3d_unit, rigidgroup_unit, StdCtrls;
+  domain_unit, region_unit, atom_unit, point3d_unit, rigidgroup_unit, StdCtrls,
+  ExtCtrls;
 
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
-   ToggleBox1: TToggleBox;
+    Button1: TButton;
+    frontview: TImage;
+    sideview: TImage;
+    perspectiveview: TImage;
+    topview: TImage;
+    Timer1: TTimer;
+    procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure ToggleBox1Change(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure drawPoint(p:point3d; size: integer);
   private
     { private declarations }
   public
@@ -24,39 +32,90 @@ type
 
 var
   Form1: TForm1; 
-  region1: Region;
+  rigid: rigidgroup;
 
 implementation
 
 { TForm1 }
 
 procedure TForm1.FormCreate(Sender: TObject);
-begin
+	begin
 
-end;
+	end;
+
+function xtransformation(x: double): integer;
+	begin
+    result:= trunc(x+120);
+	end;
+
+function ytransformation(y: double): integer;
+	begin
+    result:= trunc(240- (y+120) );
+    end;
+
+procedure TForm1.drawPoint(p:point3d; size: integer);
+var x1,x2,y1,y2,z1,z2: integer;
+	begin
+    frontview.Canvas.Rectangle(
+    					xtransformation(p.x)-size, ytransformation(p.y)-size,
+        				xtransformation(p.x)+size, ytransformation(p.y)+size
+						);
+	sideview.Canvas.Rectangle(
+    					xtransformation(p.z)-size, ytransformation(p.y)-size,
+        				xtransformation(p.z)+size, ytransformation(p.y)+size
+						);
+	topview.Canvas.Rectangle(
+    					xtransformation(p.x)-size, ytransformation(p.z)-size,
+        				xtransformation(p.x)+size, ytransformation(p.z)+size
+						);
+    perspectiveview.Canvas.Rectangle(
+    					xtransformation(p.x/1+p.z*1.41/5)-size, ytransformation(p.y/1+p.z*1.41/5)-size,
+        				xtransformation(p.x/1+p.z*1.41/5)+size, ytransformation(p.y/1+p.z*1.41/5)+size
+						);
+
+	perspectiveview.canvas.moveto(160,120);
+    perspectiveview.canvas.lineto(xtransformation(p.x/1+p.z*1.41/5) ,ytransformation(p.y/1+p.z*1.41/5));
+
+	perspectiveview.canvas.moveto(160,120);
+    perspectiveview.canvas.lineto(160,0);
+    perspectiveview.canvas.moveto(160,120);
+    perspectiveview.canvas.lineto(800,120);
+    perspectiveview.canvas.moveto(160,120);
+    perspectiveview.canvas.lineto(40,240);
 
 
 
-
-procedure TForm1.ToggleBox1Change(Sender: TObject);
-var point1, point2: Point3d; i: integer;
-begin
-point1:= Point3d.create(0,0,0);
-point2:= Point3d.create(50,50,0);
+	end;
 
 
-for i:=0 to 99999 do begin
-canvas.clear;
-canvas.Ellipse(trunc(point1.x+100), trunc(-point1.y+100), trunc(point1.x+110), trunc(-point1.y+110));
-canvas.Ellipse(trunc(point2.x+100), trunc(-point2.y+100), trunc(point2.x+110), trunc(-point2.y+110));
+procedure TForm1.Timer1Timer(Sender: TObject);
+var i:integer; p: point3d;
+	begin
+    frontview.Canvas.Clear();
+	sideview.Canvas.Clear();
+	topview.Canvas.Clear();
+	perspectiveview.Canvas.Clear();
 
-point2.rotateOver('z', point1, pi/100000);
-canvas.textout(30,30, floattostr(point2.x)+' '+floattostr(point2.y)+' '+floattostr(point2.z));
-application.processmessages;
-//sleep(0);
-end;
+    for i:=0 to 9 do
+		begin
+        drawPoint(rigid.atoms[i].position, 2);
+		end;
+    application.processmessages();
+	end;
 
-end;
+
+
+procedure TForm1.Button1Click(Sender: TObject);
+var i:integer;
+	begin
+    rigid:= rigidgroup.Create();
+    for i:=0 to 9 do
+		rigid.addAtom(random()*240-120 , random()*240 -120, random()*240 -120, 0, 0, 0, 0, 0, 0);
+    //rigid.recalculateCenter();
+    timer1.enabled:=true;
+    rigid.calculateCenterDomain(pi/8, pi/16, application);
+	end;
+
 
 initialization
   {$I unit1.lrs}
