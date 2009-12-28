@@ -60,8 +60,8 @@ sum, translation: point3d;
         for c:=0 to 2 do
         	begin
          	atoms[i].position.coordinates[c]^:=atoms[i].position.coordinates[c]^-translation.coordinates[c]^;
-         	atoms[i].domain.goodregion.point1.coordinates[c]^:=atoms[i].domain.goodregion.point1.coordinates[c]^-translation.coordinates[c]^;
-         	atoms[i].domain.goodregion.point2.coordinates[c]^:=atoms[i].domain.goodregion.point2.coordinates[c]^-translation.coordinates[c]^;
+         	atoms[i].adomain.goodregion.point1.coordinates[c]^:=atoms[i].adomain.goodregion.point1.coordinates[c]^-translation.coordinates[c]^;
+         	atoms[i].adomain.goodregion.point2.coordinates[c]^:=atoms[i].adomain.goodregion.point2.coordinates[c]^-translation.coordinates[c]^;
             end;
 end;
 

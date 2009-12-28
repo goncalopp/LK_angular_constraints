@@ -13,7 +13,7 @@ type
     { private declarations }
   public
     position: Point3d;
-    domain: Domain;
+    adomain: Domain;
     constructor create(pos_x, pos_y, pos_z, dom_x1, dom_x2, dom_y1, dom_y2, dom_z1, dom_z2: double);
     end;
 
@@ -27,7 +27,7 @@ var goodregion: Region; point1, point2: Point3d;
     point1:=    Point3d.Create(dom_x1, dom_y1, dom_z1);
     point2:=    Point3d.Create(dom_x2, dom_y2, dom_z2);
     goodregion:=Region.Create(point1, point2);
-    domain:=    Domain.create(goodregion);
+    adomain:=    Domain.create(goodregion);
     
     end;
 
