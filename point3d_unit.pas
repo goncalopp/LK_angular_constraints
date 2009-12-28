@@ -5,7 +5,7 @@ unit point3d_unit;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, math;
 
 
 type
@@ -25,23 +25,6 @@ type
   end;
 
 implementation
-
-function anglefromcoordinates(x,y : double): double;
-    var distance: double;
-    begin
-    if x=0 then x:= 0.000000000001;
-	if y=0 then y:= 0.000000000001;
-    
-    distance:= sqrt( x*x + y*y );     		//
-    x:= x/distance;                         //normalize
-    y:= y/distance;                         //
-
-    result:=arctan(y/x);
-    if (x<0) then
-        result:=result+pi;
-    if (result<0) then
-        result:=result+2*pi;
-    end;
 
 constructor Point3d.create(x_,y_,z_: double);
 	begin
@@ -86,9 +69,9 @@ procedure Point3d.rotateOver(rotationaxis: char; point: Point3d; angle: double);
     point.coordinates[ce]^:=coordinates[ce]^; 	//project the point into the plane of rotation...
     distance:= distanceTo(point);               //...so we can calculate the distance in the plane
     
-	current_angle:=anglefromcoordinates(        //calculate current angle in trig circle
- 			coordinates[c0]^-point.coordinates[c0]^,
-    		coordinates[c1]^-point.coordinates[c1]^);
+	current_angle:=arctan2(        //calculate current angle in trig circle
+ 			coordinates[c1]^-point.coordinates[c1]^,
+    		        coordinates[c0]^-point.coordinates[c0]^);
 
     coordinates[c0]^:=point.coordinates[c0]^+distance*cos(current_angle+angle);
     coordinates[c1]^:=point.coordinates[c1]^+distance*sin(current_angle+angle);

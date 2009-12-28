@@ -5,7 +5,7 @@ unit sineWave_unit;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, Math;
 
 type
   sineWave = class
@@ -34,24 +34,12 @@ procedure sineWave.invert();
     end;
 
 function sineWave.addWave(wave: sineWave):sineWave;
-	begin
-    result:= sineWave.create
-    	(
-
-    	sqrt
-    		(
-    		sqr(amplitude*sin(phase)+wave.amplitude*sin(wave.phase))+
-    		sqr(amplitude*cos(phase)+wave.amplitude*cos(wave.phase))
-    		)
-
-      	,
-    	arctan
-     		(
-            (amplitude*sin(phase)+wave.amplitude*sin(wave.phase))
-            /
-            (amplitude*cos(phase)+wave.amplitude*cos(wave.phase))
-            )
-    	);
+var x,y,newphase:double;
+    begin
+    y:= amplitude*sin(phase)+wave.amplitude*sin(wave.phase);
+    x:= amplitude*cos(phase)+wave.amplitude*cos(wave.phase);
+    newphase:=ArcTan2(y,x);
+    result:= sineWave.create(sqrt(sqr(x)+sqr(y)), newphase);
     end;
 
 function sineWave.valueat(x: double): double;
