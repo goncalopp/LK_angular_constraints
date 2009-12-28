@@ -22,7 +22,6 @@ type
     topview: TImage;
     Timer1: TTimer;
     procedure Button1Click(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure drawPoint(p:point3d; size: integer);
     procedure drawCenterDomainCalculation();
@@ -36,16 +35,11 @@ type
 var
   Form1: TForm1; 
   rigid: rigidgroup;
-  sine1, sine2, sine3: sinewave;
 
 implementation
 
 { TForm1 }
 
-procedure TForm1.FormCreate(Sender: TObject);
-	begin
-
-	end;
 
 function xtransformation(x: double): integer;
 	begin
@@ -113,18 +107,11 @@ var i: integer;
         end;
     end;
 
+
 procedure TForm1.Timer1Timer(Sender: TObject);
 	begin
     drawCenterDomainCalculation();
 
-    sineview.canvas.clear();
-    drawSine(sine1);
-    drawSine(sine2);
-
-    sine1.phase:=sine1.phase+0.05;
-    sine3.destroy();
-    sine3:=sine1.addWave(sine2);
-    drawSine(sine3);
 	end;
 
 
@@ -134,14 +121,11 @@ var i:integer;
 	begin
     rigid:= rigidgroup.Create();
     for i:=0 to 9 do
-		rigid.addAtom(random()*240-120 , random()*240 -120, random()*240 -120, 0, 0, 0, 0, 0, 0);
-    //rigid.recalculateCenter();
-    sine1:=sinewave.create(1,0);
-    sine2:=sinewave.create(1,18);
-    sine3:=sine1.addWave(sine2);
+		rigid.addAtom(random()*120 , random()*120, random()*120, 0, 0, 0, 0, 0, 0);
+    rigid.recalculateCenter();
     timer1.enabled:=true;
 
-    //rigid.calculateCenterDomain(pi/8, pi/16, application);
+    rigid.calculateCenterDomain(pi/8, pi/16, application);
 	end;
 
 

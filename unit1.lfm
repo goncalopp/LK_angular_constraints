@@ -6,7 +6,6 @@ object Form1: TForm1
   Caption = 'Form1'
   ClientHeight = 709
   ClientWidth = 672
-  OnCreate = FormCreate
   LCLVersion = '0.9.26.2'
   object frontview: TImage
     Left = 8
