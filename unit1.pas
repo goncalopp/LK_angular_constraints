@@ -18,7 +18,7 @@ type
     frontview: TImage;
     sineview: TImage;
     sideview: TImage;
-    perspectiveview: TImage;
+    perspectiveview: TImage;    
     topview: TImage;
     Timer1: TTimer;
     procedure Button1Click(Sender: TObject);
@@ -137,7 +137,7 @@ var i:integer;
 		rigid.addAtom(random()*240-120 , random()*240 -120, random()*240 -120, 0, 0, 0, 0, 0, 0);
     //rigid.recalculateCenter();
     sine1:=sinewave.create(1,0);
-    sine2:=sinewave.create(1,0);
+    sine2:=sinewave.create(1,18);
     sine3:=sine1.addWave(sine2);
     timer1.enabled:=true;
 

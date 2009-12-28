@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 447
-  Height = 561
-  Top = 182
-  Width = 691
+  Left = 366
+  Height = 709
+  Top = 0
+  Width = 672
   Caption = 'Form1'
-  ClientHeight = 561
-  ClientWidth = 691
+  ClientHeight = 709
+  ClientWidth = 672
   OnCreate = FormCreate
   LCLVersion = '0.9.26.2'
   object frontview: TImage
@@ -32,10 +32,16 @@ object Form1: TForm1
     Top = 256
     Width = 320
   end
+  object sineview: TImage
+    Left = 8
+    Height = 160
+    Top = 504
+    Width = 650
+  end
   object Button1: TButton
     Left = 581
     Height = 25
-    Top = 504
+    Top = 672
     Width = 75
     Caption = 'Button1'
     OnClick = Button1Click
@@ -46,6 +52,6 @@ object Form1: TForm1
     Interval = 10
     OnTimer = Timer1Timer
     left = 544
-    top = 504
+    top = 672
   end
 end
