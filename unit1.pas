@@ -35,6 +35,7 @@ type
 var
   Form1: TForm1; 
   rigid: rigidgroup;
+  sine1: sinewave;
 
 implementation
 
@@ -98,19 +99,31 @@ var x1,x2,y1,y2,z1,z2: integer;
 	end;
 
 procedure TForm1.drawSine(sine: sinewave);
-var i: integer;
+var i: integer; root:integer;
 	begin
     sineview.Canvas.moveto(0, (sineview.height div 2) - trunc(50*sine.valueat(0)));
     for i:=1 to sineview.width do
     	begin
         sineview.Canvas.lineto(i, (sineview.height div 2) - trunc(50*sine.valueat(i/sineview.Width*  2*pi)));
         end;
+
+	sineview.Canvas.moveto(0, sineview.height div 2);
+    sineview.Canvas.lineto(sineview.width, sineview.height div 2);
+
+    root:=trunc  ((sine.firstZero()/(2*pi))*sineview.Width);
+    sineview.Canvas.moveto(root, sineview.canvas.height);
+    sineview.Canvas.lineto(root,0);
+    sineview.Canvas.moveto(root+sineview.canvas.Width div 2, sineview.height);
+    sineview.Canvas.lineto(root+sineview.canvas.Width div 2,0);
     end;
 
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 	begin
     drawCenterDomainCalculation();
+    sineview.canvas.clear();
+    drawSine(sine1);
+    sine1.phase:=sine1.phase+0.01;
 
 	end;
 
@@ -120,6 +133,7 @@ procedure TForm1.Button1Click(Sender: TObject);
 var i:integer;
 	begin
     rigid:= rigidgroup.Create();
+    sine1:=sinewave.create(1,0);
     for i:=0 to 9 do
 		rigid.addAtom(random()*120 , random()*120, random()*120, 0, 0, 0, 0, 0, 0);
     rigid.recalculateCenter();
