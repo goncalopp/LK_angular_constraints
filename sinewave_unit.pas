@@ -32,7 +32,7 @@ constructor sineWave.create(amplitude_, phase_: double);
 procedure sineWave.simplifyPhase();
 	begin
     if ((phase>=2*pi) or (phase<0)) then
-        phase:= phase - trunc(phase / (2*pi))*2*pi;
+        phase:= phase - floor(phase / (2*pi))*2*pi;
     end;
 
 procedure sineWave.invert();
@@ -61,7 +61,7 @@ function sineWave.firstZero():double;
     simplifyPhase();
     result:=pi-phase;
     if (result<0) then
-    	result:=2*pi - phase;
+    	result:=result+pi;
     end;
 
 end.
