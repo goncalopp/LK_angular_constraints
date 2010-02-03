@@ -19,11 +19,12 @@ type
     procedure moveto(x_, y_, z_: double);
     procedure translate(x_, y_, z_: double);
 	function coordinateNumberFromChar(coordinate: char):integer;
-	function angleInProjection(x_,y_:integer; point:point3d): double;
+	function angleInProjection(x_coordinate,y_coordinate:integer): double;
     procedure rotateOver(rotationaxis: char; point: Point3d; angle: double);
     procedure rotate(rotationaxis: char; angle: double);
     function vectorTo(point: Point3d): Point3d;
     function distanceTo(point: Point3d): double;
+    function norm():double;
   end;
 
 implementation
@@ -61,25 +62,25 @@ function Point3d.coordinateNumberFromChar(coordinate: char): integer;
     	result:=2;
     end;
 
-function Point3d.angleInProjection(x_, y_:integer; point:point3d): double;
-//calculate angle in trig circle of point in a plane projection
+function Point3d.angleInProjection(x_coordinate, y_coordinate:integer): double;
+//calculate angle in trig circle of *vector* in a plane projection
 	begin
-    result:= arctan2(coordinates[y_]^ - point.coordinates[y_]^, coordinates[x_]^-point.coordinates[x_]^)
+    result:= arctan2(coordinates[y_coordinate]^, coordinates[x_coordinate]^);
     end;
 
 
 procedure Point3d.rotateOver(rotationaxis: char; point: Point3d; angle: double);
-    var distance, current_angle, tmp: double; ce, c0, c1: integer;
+    var distance, current_angle, tmp: double; ce, c0, c1: integer; vector: point3d;
  	begin
 	ce:=coordinateNumberFromChar(rotationaxis);	//excluded coordinate
     c0:=(ce+1) mod 3;          					//first coordinate to process
     c1:=(ce+2) mod 3;          					//second coordinate to process
 
-    tmp:=point.coordinates[ce]^;                //backup old value from unused coordinate
-    point.coordinates[ce]^:=coordinates[ce]^; 	//project the point into the plane of rotation...
-    distance:= distanceTo(point);               //...so we can calculate the distance in the plane
-	current_angle:=angleInProjection(c0,c1, point);
-    point.coordinates[ce]^:=tmp;                //restore unused coordinate after calculations
+    vector:=point.vectorTo(self);
+	vector.coordinates[ce]^:=0; 	//project the vector into the plane of rotation...
+    distance:= vector.norm();       //...so we can calculate the distance in the plane
+	current_angle:=vector.angleInProjection(c0,c1);
+    vector.free();
 
     coordinates[c0]^:=point.coordinates[c0]^+distance*cos(current_angle+angle);
     coordinates[c1]^:=point.coordinates[c1]^+distance*sin(current_angle+angle);
@@ -101,6 +102,14 @@ function Point3d.vectorTo(point: Point3d): Point3d;
 function Point3d.distanceTo(point: Point3d): double;
     begin
     result:=sqrt( (x-point.x)*(x-point.x) + (y-point.y)*(y-point.y) + (z-point.z)*(z-point.z));
+    end;
+
+function Point3d.norm(): double;
+var origin:point3d;
+	begin
+    origin:=point3d.create(0,0,0);
+    result:=distanceTo(origin);
+    origin.free();
     end;
     
 end.
