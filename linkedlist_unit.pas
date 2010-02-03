@@ -28,6 +28,7 @@ type
     counter: integer;
     constructor create();
     procedure addElementAfter(node: LinkedNode; element: TObject);
+    procedure addElement(element: TObject);
     procedure removeElement(node: LinkedNode);
     function advance(): LinkedNode;
 
@@ -124,6 +125,11 @@ function LinkedList.advance(): LinkedNode;
     result:=position;
     if (position.next<>nil) then
      	position:=position.next;
+    end;
+
+procedure LinkedList.addElement(element: TObject);
+	begin
+    addElementAfter(tail, element);
     end;
 
 end.
