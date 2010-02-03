@@ -18,6 +18,8 @@ type
     constructor create(x_,y_,z_: double);
     procedure moveto(x_, y_, z_: double);
     procedure translate(x_, y_, z_: double);
+	function coordinateNumberFromChar(coordinate: char):integer;
+	function angleInProjection(x_,y_:integer; point:point3d): double;
     procedure rotateOver(rotationaxis: char; point: Point3d; angle: double);
     procedure rotate(rotationaxis: char; angle: double);
     function vectorTo(point: Point3d): Point3d;
@@ -50,28 +52,34 @@ procedure Point3d.translate(x_, y_, z_: double);
 	z:=z+z_;
 	end;
 
+function Point3d.coordinateNumberFromChar(coordinate: char): integer;
+	begin
+    result:=0;
+    if (coordinate='y') then
+    	result:=1;
+    if (coordinate='z') then
+    	result:=2;
+    end;
+
+function Point3d.angleInProjection(x_, y_:integer; point:point3d): double;
+//calculate angle in trig circle of point in a plane projection
+	begin
+    result:= arctan2(coordinates[y_]^ - point.coordinates[y_]^, coordinates[x_]^-point.coordinates[x_]^)
+    end;
+
+
 procedure Point3d.rotateOver(rotationaxis: char; point: Point3d; angle: double);
-    var distance, current_angle: double; ce, c0, c1: integer;
+    var distance, current_angle, tmp: double; ce, c0, c1: integer;
  	begin
-    if rotationaxis='x' then
-    	begin
-     	ce:=0;          //excluded coordinate
-        c0:=1;          //first coordinate to process
-        c1:=2;          //second coordinate to process
-        end;
-        
-    if rotationaxis='y' then
-        begin c0:=0; ce:=1; c1:=2; end;
-        
-    if rotationaxis='z' then
-     	begin c0:=0; c1:=1; ce:=2; end;
-        
+	ce:=coordinateNumberFromChar(rotationaxis);	//excluded coordinate
+    c0:=(ce+1) mod 3;          					//first coordinate to process
+    c1:=(ce+2) mod 3;          					//second coordinate to process
+
+    tmp:=point.coordinates[ce]^;                //backup old value from unused coordinate
     point.coordinates[ce]^:=coordinates[ce]^; 	//project the point into the plane of rotation...
     distance:= distanceTo(point);               //...so we can calculate the distance in the plane
-    
-	current_angle:=arctan2(        //calculate current angle in trig circle
- 			coordinates[c1]^-point.coordinates[c1]^,
-    		        coordinates[c0]^-point.coordinates[c0]^);
+	current_angle:=angleInProjection(c0,c1, point);
+    point.coordinates[ce]^:=tmp;                //restore unused coordinate after calculations
 
     coordinates[c0]^:=point.coordinates[c0]^+distance*cos(current_angle+angle);
     coordinates[c1]^:=point.coordinates[c1]^+distance*sin(current_angle+angle);
