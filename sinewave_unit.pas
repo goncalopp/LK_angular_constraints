@@ -12,20 +12,22 @@ type
   private
   	procedure simplifyPhase();
   public
-    amplitude, phase: double;
-    constructor create(amplitude_, phase_: double);
+    amplitude, phase, y_deslocation: double;
+    constructor create(amplitude_, phase_, y_deslocation_: double);
     procedure invert();                           
     function addWave(wave: sineWave):sineWave;
     function valueat(x: double): double;
     function firstZero():double;
+    function secondZero():double;
     end;
 
 implementation
 
-constructor sineWave.create(amplitude_, phase_: double);
+constructor sineWave.create(amplitude_, phase_, y_deslocation_:double);
 	begin
     amplitude:= amplitude_;
     phase:= phase_;
+    y_deslocation:= y_deslocation_;
     end;
 
 
@@ -47,21 +49,29 @@ var x,y,newphase:double;
     y:= amplitude*sin(phase)+wave.amplitude*sin(wave.phase);
     x:= amplitude*cos(phase)+wave.amplitude*cos(wave.phase);
     newphase:=ArcTan2(y,x);
-    result:= sineWave.create(sqrt(sqr(x)+sqr(y)), newphase);
+    result:= sineWave.create(sqrt(sqr(x)+sqr(y)), newphase, wave.y_deslocation+y_deslocation);
     result.simplifyPhase();
     end;
 
 function sineWave.valueat(x: double): double;
 	begin
-    result:= amplitude*sin(x+phase);
+    result:= amplitude*sin(x+phase)+y_deslocation;
     end;
 
 function sineWave.firstZero():double;
 	begin
     simplifyPhase();
-    result:=pi-phase;
+    result:=pi+arcsin(y_deslocation/amplitude)-phase;
     if (result<0) then
-    	result:=result+pi;
+    	result:=result+2*pi;
+    end;
+
+function sineWave.secondZero():double;
+	begin
+    simplifyPhase();
+    result:=2*pi-arcsin(y_deslocation/amplitude)-phase;
+    if (result<0) then
+    	result:=result+2*pi;
     end;
 
 end.

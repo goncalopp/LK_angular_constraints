@@ -117,11 +117,10 @@ var root:integer;
 	begin
     drawCenterDomainCalculation();
     sineview.canvas.clear();
-    drawSine(sine1);
-    drawSine(sine2);
+
 
     sine1.phase:=sine1.phase+6*pi+0.01;
-    sine2.phase:=sine2.phase-4*pi+0.02;
+    //sine2.phase:=sine2.phase-4*pi+0.02;
 
     sine2.invert();
     sine3:=sine1.addWave(sine2);
@@ -130,8 +129,16 @@ var root:integer;
 	root:=trunc  ((sine3.firstZero()/(2*pi))*sineview.Width);
     sineview.Canvas.moveto(root, sineview.canvas.height);
     sineview.Canvas.lineto(root,0);
-    sineview.Canvas.moveto(root+sineview.canvas.Width div 2, sineview.height);
-    sineview.Canvas.lineto(root+sineview.canvas.Width div 2,0);
+    root:=trunc  ((sine3.secondZero()/(2*pi))*sineview.Width);
+    sineview.Canvas.moveto(root, sineview.canvas.height);
+    sineview.Canvas.lineto(root,0);;
+    drawSine(sine1);
+    drawSine(sine2);
+    sineview.canvas.Pen.Color:=clRed;
+
+    drawSine(sine3);
+    sineview.canvas.Pen.Color:=$000000;
+
     sine3.Free();
 	end;
 
@@ -141,8 +148,8 @@ procedure TForm1.Button1Click(Sender: TObject);
 var i:integer;
 	begin
     rigid:= rigidgroup.Create();
-    sine1:=sinewave.create(1,0);
-    sine2:=sinewave.create(1,0);
+    sine1:=sinewave.create(1.5,0,0.5);
+    sine2:=sinewave.create(0.8,0,0);
     for i:=0 to 9 do
 		rigid.addAtom(random()*120 , random()*120, random()*120, 0, 0, 0, 0, 0, 0);
     rigid.recalculateCenter();
