@@ -30,7 +30,8 @@ type
     procedure addElementAfter(node: LinkedNode; element: TObject);
     procedure addElement(element: TObject);
     procedure removeElement(node: LinkedNode);
-    function advance(): LinkedNode;
+    function advance(): TObject;
+    procedure rewind();
 
   end;
 
@@ -120,16 +121,25 @@ procedure LinkedList.removeElement(node: LinkedNode);
         end;
     end;
 
-function LinkedList.advance(): LinkedNode;
+function LinkedList.advance(): TObject;
 	begin
-    result:=position;
-    if (position.next<>nil) then
-     	position:=position.next;
+    result:=nil;
+    if (position<>nil) then
+    	begin
+    	result:=position.element;
+    	if (position.next<>nil) then
+    	 	position:=position.next;
+        end;
     end;
 
 procedure LinkedList.addElement(element: TObject);
 	begin
     addElementAfter(tail, element);
+    end;
+
+procedure LinkedList.rewind();
+	begin
+    position:=head;
     end;
 
 end.
