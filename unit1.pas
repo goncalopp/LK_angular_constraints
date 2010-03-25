@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   domain_unit, region_unit, atom_unit, point3d_unit, rigidgroup_unit, sinewave_unit, StdCtrls,
-  ExtCtrls, ComCtrls;
+  ExtCtrls, ComCtrls, linkedlist_unit;
 
 type
 
@@ -37,7 +37,8 @@ type
 var
   Form1: TForm1; 
   rigid: rigidgroup;
-  sine1, sine2, sine3: sinewave;
+  uppersines: linkedlist;
+  lowersines: linkedlist;
   trackbarposition: integer=0;
 
 implementation
@@ -63,7 +64,7 @@ var i: integer; p: point3d;
 	topview.Canvas.Clear();
 	perspectiveview.Canvas.Clear();
 
-    for i:=0 to 2 do
+    for i:=0 to length(rigid.atoms)-1 do
 		begin
         drawPoint(rigid.atoms[i].position, rigid.atoms[i].adomain.goodregion.point1, rigid.atoms[i].adomain.goodregion.point2, 2);
 		end;
@@ -110,75 +111,82 @@ var x1,x2,y1,y2,z1,z2: integer;
 	end;
 
 procedure TForm1.drawSine(sine: sinewave);
-var i: integer;
+var i, tmp: integer;
 	begin
-    sineview.Canvas.moveto(0, (sineview.height div 2) - trunc(50*sine.valueat(0)));
+    sineview.Canvas.moveto(0, (sineview.height div 2) - trunc(sine.valueat(0)));
     for i:=1 to sineview.width do
     	begin
-        sineview.Canvas.lineto(i, (sineview.height div 2) - trunc(50*sine.valueat(i/sineview.Width*  2*pi)));
+        sineview.Canvas.lineto(i, (sineview.height div 2) - trunc(sine.valueat(i/sineview.Width*  2*pi)));
+        tmp:= trunc(sine.valueat(i/sineview.Width*  2*pi));
         end;
 
+	sineview.Canvas.Pen.Color:=$AAAAAA;
 	sineview.Canvas.moveto(0, sineview.height div 2);
     sineview.Canvas.lineto(sineview.width, sineview.height div 2);
+    sineview.Canvas.Pen.Color:=0;
     end;
 
 procedure TForm1.TrackBar1Change(Sender: TObject);
 begin
-	rigid.rotateOver( 'z', double(trackbar1.Position-trackbarposition)/100*2*pi);
+	rigid.rotateOver( 'z', double(trackbar1.Position-trackbarposition)/200*2*pi);
     trackbarposition:=trackbar1.Position;
 end;
 
 
 procedure TForm1.Timer1Timer(Sender: TObject);
-var root:integer;
+var root, i:integer; sine: sinewave;
 	begin
     drawCenterDomainCalculation();
     sineview.canvas.clear();
 
-
-    sine1.phase:=sine1.phase+6*pi+0.01;
-    //sine2.phase:=sine2.phase-4*pi+0.02;
-
-    sine2.invert();
-    sine3:=sine1.addWave(sine2);
-    sine2.invert();
-
-	root:=trunc  ((sine3.firstZero()/(2*pi))*sineview.Width);
+    uppersines.rewind();
+    lowersines.rewind();
+    for i:=0 to uppersines.counter-1 do
+        	begin
+            drawsine(sinewave(uppersines.advance));
+            drawsine(sinewave(lowersines.advance));
+         	end;
+	root:=trunc  (trackbarposition/201*sineview.Width);
     sineview.Canvas.moveto(root, sineview.canvas.height);
     sineview.Canvas.lineto(root,0);
-    root:=trunc  ((sine3.secondZero()/(2*pi))*sineview.Width);
-    sineview.Canvas.moveto(root, sineview.canvas.height);
-    sineview.Canvas.lineto(root,0);;
-    drawSine(sine1);
-    drawSine(sine2);
-    sineview.canvas.Pen.Color:=clRed;
 
-    drawSine(sine3);
-    sineview.canvas.Pen.Color:=$000000;
-
-    sine3.Free();
 	end;
 
 
 
 procedure TForm1.Button1Click(Sender: TObject);
-var i:integer; atomposition, atomupper, atomlower: Point3D;
+var i:integer; tmppoint: Point3D;
 	x,y,z:double;
 	begin
     rigid:= rigidgroup.Create();
-    sine1:=sinewave.create(1.5,0,0.5);
-    sine2:=sinewave.create(0.8,0,0);
+
     for i:=0 to 2 do
     	begin
         x:= random()*120;
         y:= random()*120;
         z:= random()*120;
-
 		rigid.addAtom(Point3d.create(x,y,z), point3d.create(x-10, y-10, z-10), point3d.create(x+10, y+10, z+10));
     	end;
-    rigid.recalculateCenter();             
-    timer1.enabled:=true;
+    rigid.recalculateCenter();
 
+    uppersines:= linkedlist.create();
+    lowersines:= linkedlist.create();
+
+    for i:=0 to length(rigid.atoms)-1 do
+        with rigid.atoms[i] do
+        	begin
+            tmppoint:=adomain.goodregion.point1.clone();
+            tmppoint.vectorFrom(position);
+        	lowersines.addElement(Sinewave.create(position.norm(),position.angleInProjection(0,2),tmppoint.x));
+            tmppoint.Destroy();
+
+            tmppoint:=adomain.goodregion.point2.clone();
+            tmppoint.vectorFrom(position);
+        	uppersines.addElement(Sinewave.create(position.norm(),position.angleInProjection(0,2),tmppoint.x));
+            tmppoint.Destroy();
+            end;
+
+    timer1.enabled:=true;
     //rigid.calculateCenterDomain(pi/8, pi/16, application);
 	end;
 
