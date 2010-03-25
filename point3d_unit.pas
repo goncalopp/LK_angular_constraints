@@ -18,13 +18,17 @@ type
     constructor create(x_,y_,z_: double);
     procedure moveto(x_, y_, z_: double);
     procedure translate(x_, y_, z_: double);
+    procedure translate(point: Point3D);
+    procedure scale(x_, y_, z_: double);
 	function coordinateNumberFromChar(coordinate: char):integer;
 	function angleInProjection(x_coordinate,y_coordinate:integer): double;
     procedure rotateOver(rotationaxis: char; point: Point3d; angle: double);
     procedure rotate(rotationaxis: char; angle: double);
-    function vectorTo(point: Point3d): Point3d;
+    procedure vectorTo(point: Point3d);
+    procedure vectorFrom(point: Point3d);
     function distanceTo(point: Point3d): double;
     function norm():double;
+    function clone(): Point3D;
   end;
 
 implementation
@@ -53,6 +57,20 @@ procedure Point3d.translate(x_, y_, z_: double);
 	z:=z+z_;
 	end;
 
+procedure Point3d.translate(point: Point3d);
+	begin
+	x:=x+point.x;
+	y:=y+point.y;
+	z:=z+point.z;
+	end;
+
+procedure Point3d.scale(x_, y_, z_: double);
+	begin
+	x:=x*x_;
+	y:=y*y_;
+	z:=z*z_;
+	end;
+
 function Point3d.coordinateNumberFromChar(coordinate: char): integer;
 	begin
     result:=0;
@@ -76,7 +94,8 @@ procedure Point3d.rotateOver(rotationaxis: char; point: Point3d; angle: double);
     c0:=(ce+1) mod 3;          					//first coordinate to process
     c1:=(ce+2) mod 3;          					//second coordinate to process
 
-    vector:=point.vectorTo(self);
+    vector:=point.clone();
+    vector.vectorTo(self);
 	vector.coordinates[ce]^:=0; 	//project the vector into the plane of rotation...
     distance:= vector.norm();       //...so we can calculate the distance in the plane
 	current_angle:=vector.angleInProjection(c0,c1);
@@ -94,9 +113,18 @@ var tmppoint:Point3d;
     tmppoint.destroy();
     end;
 
-function Point3d.vectorTo(point: Point3d): Point3d;
+procedure Point3d.vectorTo(point: Point3d);
     begin
-    result:=Point3d.create(point.x-x, point.y-y, point.z-z);
+    x:=point.x-x;
+    y:=point.y-y;
+    z:=point.z-z;
+    end;
+
+procedure Point3D.vectorFrom(point: Point3d);
+	begin
+    x:=x-point.x;
+    y:=y-point.y;
+    z:=z-point.z;
     end;
     
 function Point3d.distanceTo(point: Point3d): double;
@@ -110,6 +138,11 @@ var origin:point3d;
     origin:=point3d.create(0,0,0);
     result:=distanceTo(origin);
     origin.free();
+    end;
+
+function Point3D.clone: Point3D;
+	begin
+    result:=Point3D.create(x,y,z);
     end;
     
 end.

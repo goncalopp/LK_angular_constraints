@@ -14,21 +14,18 @@ type
   public
     position: Point3d;
     adomain: Domain;
-    constructor create(pos_x, pos_y, pos_z, dom_x1, dom_x2, dom_y1, dom_y2, dom_z1, dom_z2: double);
+    constructor create(position_, lowerlimit, higherlimit: point3D);
     end;
 
 
 implementation
 
-constructor Atom.create(pos_x, pos_y, pos_z, dom_x1, dom_x2, dom_y1, dom_y2, dom_z1, dom_z2: double);
+constructor Atom.create(position_, lowerlimit, higherlimit: point3D);
 var goodregion: Region; point1, point2: Point3d;
     begin
-    position:= 	Point3d.Create(pos_x, pos_y, pos_z);
-    point1:=    Point3d.Create(dom_x1, dom_y1, dom_z1);
-    point2:=    Point3d.Create(dom_x2, dom_y2, dom_z2);
-    goodregion:=Region.Create(point1, point2);
+    position:= 	position_;
+    goodregion:=Region.Create(lowerlimit, higherlimit);
     adomain:=    Domain.create(goodregion);
-    
     end;
 
 end.

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   domain_unit, region_unit, atom_unit, point3d_unit, rigidgroup_unit, sinewave_unit, StdCtrls,
-  ExtCtrls;
+  ExtCtrls, ComCtrls;
 
 type
 
@@ -21,11 +21,13 @@ type
     perspectiveview: TImage;    
     topview: TImage;
     Timer1: TTimer;
+    TrackBar1: TTrackBar;
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure drawPoint(p:point3d; size: integer);
+    procedure drawPoint(p, lowlimit, highlimit:point3d; size: integer);
     procedure drawCenterDomainCalculation();
     procedure drawSine(sine: sinewave);
+    procedure TrackBar1Change(Sender: TObject);
   private
     { private declarations }
   public
@@ -36,6 +38,7 @@ var
   Form1: TForm1; 
   rigid: rigidgroup;
   sine1, sine2, sine3: sinewave;
+  trackbarposition: integer=0;
 
 implementation
 
@@ -60,9 +63,9 @@ var i: integer; p: point3d;
 	topview.Canvas.Clear();
 	perspectiveview.Canvas.Clear();
 
-    for i:=0 to 9 do
+    for i:=0 to 2 do
 		begin
-        drawPoint(rigid.atoms[i].position, 2);
+        drawPoint(rigid.atoms[i].position, rigid.atoms[i].adomain.goodregion.point1, rigid.atoms[i].adomain.goodregion.point2, 2);
 		end;
 
     perspectiveview.canvas.moveto(160,120);
@@ -74,17 +77,25 @@ var i: integer; p: point3d;
     application.processmessages();
     end;
 
-procedure TForm1.drawPoint(p:point3d; size: integer);
+procedure TForm1.drawPoint(p, lowlimit, highlimit:point3d; size: integer);
 var x1,x2,y1,y2,z1,z2: integer;
 	begin
+    frontview.Canvas.Rectangle(
+    					xtransformation(lowlimit.x), ytransformation(lowlimit.y),
+        				xtransformation(highlimit.x), ytransformation(highlimit.y)
+						);
     frontview.Canvas.Rectangle(
     					xtransformation(p.x)-size, ytransformation(p.y)-size,
         				xtransformation(p.x)+size, ytransformation(p.y)+size
 						);
+
+
+
 	sideview.Canvas.Rectangle(
     					xtransformation(p.z)-size, ytransformation(p.y)-size,
         				xtransformation(p.z)+size, ytransformation(p.y)+size
 						);
+
 	topview.Canvas.Rectangle(
     					xtransformation(p.x)-size, ytransformation(p.z)-size,
         				xtransformation(p.x)+size, ytransformation(p.z)+size
@@ -110,6 +121,12 @@ var i: integer;
 	sineview.Canvas.moveto(0, sineview.height div 2);
     sineview.Canvas.lineto(sineview.width, sineview.height div 2);
     end;
+
+procedure TForm1.TrackBar1Change(Sender: TObject);
+begin
+	rigid.rotateOver( 'z', double(trackbar1.Position-trackbarposition)/100*2*pi);
+    trackbarposition:=trackbar1.Position;
+end;
 
 
 procedure TForm1.Timer1Timer(Sender: TObject);
@@ -145,17 +162,24 @@ var root:integer;
 
 
 procedure TForm1.Button1Click(Sender: TObject);
-var i:integer;
+var i:integer; atomposition, atomupper, atomlower: Point3D;
+	x,y,z:double;
 	begin
     rigid:= rigidgroup.Create();
     sine1:=sinewave.create(1.5,0,0.5);
     sine2:=sinewave.create(0.8,0,0);
-    for i:=0 to 9 do
-		rigid.addAtom(random()*120 , random()*120, random()*120, 0, 0, 0, 0, 0, 0);
-    rigid.recalculateCenter();
+    for i:=0 to 2 do
+    	begin
+        x:= random()*120;
+        y:= random()*120;
+        z:= random()*120;
+
+		rigid.addAtom(Point3d.create(x,y,z), point3d.create(x-10, y-10, z-10), point3d.create(x+10, y+10, z+10));
+    	end;
+    rigid.recalculateCenter();             
     timer1.enabled:=true;
 
-    rigid.calculateCenterDomain(pi/8, pi/16, application);
+    //rigid.calculateCenterDomain(pi/8, pi/16, application);
 	end;
 
 

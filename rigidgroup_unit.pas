@@ -15,7 +15,7 @@ RigidGroup = class
 	   center: Point3D;    //in global coordinates
     atoms: array of Atom;
     constructor create();
-    procedure addAtom(pos_x, pos_y, pos_z, dom_x1, dom_x2, dom_y1, dom_y2, dom_z1, dom_z2:double);
+    procedure addAtom(position, lowerlimit, upperlimit: point3D);
     procedure recalculateCenter();
     procedure rotateOver(rotationaxis: char; angle: double);
     procedure calculateCenterDomain(x_angle_step, y_angle_step: double; application:TApplication);
@@ -31,38 +31,40 @@ constructor RigidGroup.create();
     setlength(atoms, 0);
 	end;
     
-procedure RigidGroup.addAtom(pos_x, pos_y, pos_z, dom_x1, dom_x2, dom_y1, dom_y2, dom_z1, dom_z2:double);
+procedure RigidGroup.addAtom(position, lowerlimit, upperlimit: point3D);
     begin
-    pos_x:=pos_x-center.x;  //
-    pos_y:=pos_y-center.y;  //transform into local coordinates
-    pos_z:=pos_z-center.z;  //
+    position.vectorFrom(center);    //
+    lowerlimit.vectorFrom(center);  //transform into local coordinates
+    upperlimit.vectorFrom(center);  //
+
     setlength(atoms, length(atoms)+1);
-    atoms[length(atoms)-1]:=Atom.create(pos_x, pos_y, pos_z, dom_x1, dom_x2, dom_y1, dom_y2, dom_z1, dom_z2);
-    end;
+    atoms[length(atoms)-1]:=Atom.create(position, lowerlimit, upperlimit);
+    end;                                                                          
 
 procedure RigidGroup.recalculateCenter();
 var i,c: integer;
 sum, translation: point3d;
+resizescale: double;
 	begin
     sum:= point3d.create(0,0,0);
     
     for i:= 0 to length(atoms)-1 do
-        for c:=0 to 2 do
-        	sum.coordinates[c]^:=sum.coordinates[c]^ +atoms[i].position.coordinates[c]^;
-	for c:=0 to 2 do
-        	sum.coordinates[c]^:=sum.coordinates[c]^ / length(atoms);
+    	sum.translate(atoms[i].position);
+    resizescale:= 1/length(atoms);
+	sum.scale(resizescale,resizescale, resizescale);
 
-    translation:= center.vectorTo(sum);
-    for c:=0 to 2 do
-    	center.coordinates[c]^:=sum.coordinates[c]^;
+    translation:= sum.clone();
+    translation.vectorFrom(center);
+
+    center.destroy();
+    center:=sum;
         
     for i:= 0 to length(atoms)-1 do
-        for c:=0 to 2 do
-        	begin
-         	atoms[i].position.coordinates[c]^:=atoms[i].position.coordinates[c]^-translation.coordinates[c]^;
-         	atoms[i].adomain.goodregion.point1.coordinates[c]^:=atoms[i].adomain.goodregion.point1.coordinates[c]^-translation.coordinates[c]^;
-         	atoms[i].adomain.goodregion.point2.coordinates[c]^:=atoms[i].adomain.goodregion.point2.coordinates[c]^-translation.coordinates[c]^;
-            end;
+    	begin
+    	atoms[i].position.vectorFrom(translation);
+        atoms[i].adomain.goodregion.point1.vectorFrom(translation);
+        atoms[i].adomain.goodregion.point2.vectorFrom(translation);
+        end;
 end;
 
 procedure RigidGroup.rotateOver(rotationaxis: char; angle: double);
@@ -90,10 +92,10 @@ var x,y,i, x_steps, y_steps: integer;
 			self.rotateOver('y', y_angle_step);
 			for i:= 0 to length(atoms) -1 do
             	begin
-				vector:=atoms[i].position.vectorTo(center);
+
                 application.processmessages();
                 sleep(10);
-                vector.Free();
+
                 end;
 			end;
 		end;
