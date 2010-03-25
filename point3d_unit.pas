@@ -20,7 +20,7 @@ type
     procedure translate(x_, y_, z_: double);
     procedure translate(point: Point3D);
     procedure scale(x_, y_, z_: double);
-	function coordinateNumberFromChar(coordinate: char):integer;
+	class function coordinateNumberFromChar(coordinate: char):integer;
 	function angleInProjection(x_coordinate,y_coordinate:integer): double;
     procedure rotateOver(rotationaxis: char; point: Point3d; angle: double);
     procedure rotate(rotationaxis: char; angle: double);
@@ -71,7 +71,7 @@ procedure Point3d.scale(x_, y_, z_: double);
 	z:=z*z_;
 	end;
 
-function Point3d.coordinateNumberFromChar(coordinate: char): integer;
+class function Point3d.coordinateNumberFromChar(coordinate: char): integer;
 	begin
     result:=0;
     if (coordinate='y') then
