@@ -37,8 +37,7 @@ type
 var
   Form1: TForm1; 
   rigid: rigidgroup;
-  uppersines: linkedlist;
-  lowersines: linkedlist;
+  sines: array [0..1] of linkedList;
   trackbarposition: integer=0;
 
 implementation
@@ -66,7 +65,7 @@ var i: integer; p: point3d;
 
     for i:=0 to length(rigid.atoms)-1 do
 		begin
-        drawPoint(rigid.atoms[i].position, rigid.atoms[i].adomain.goodregion.point1, rigid.atoms[i].adomain.goodregion.point2, 2);
+        drawPoint(rigid.atoms[i].position, rigid.atoms[i].adomain.goodregion.points[0], rigid.atoms[i].adomain.goodregion.points[1], 2);
 		end;
 
     perspectiveview.canvas.moveto(160,120);
@@ -116,8 +115,8 @@ var i, tmp: integer;
     sineview.Canvas.moveto(0, (sineview.height div 2) - trunc(sine.valueat(0)));
     for i:=1 to sineview.width do
     	begin
-        sineview.Canvas.lineto(i, (sineview.height div 2) - trunc(sine.valueat(i/sineview.Width*  2*pi)));
-        tmp:= trunc(sine.valueat(i/sineview.Width*  2*pi));
+        tmp:= trunc(sine.valueat(i/sineview.Width*  2*pi)/1.8);
+        sineview.Canvas.lineto(i, (sineview.height div 2) - tmp);
         end;
 
 	sineview.Canvas.Pen.Color:=$AAAAAA;
@@ -128,24 +127,25 @@ var i, tmp: integer;
 
 procedure TForm1.TrackBar1Change(Sender: TObject);
 begin
-	rigid.rotateOver( 'z', double(trackbar1.Position-trackbarposition)/200*2*pi);
+	rigid.rotateOver( 'z', double(trackbar1.Position-trackbarposition)/201*2*pi);
     trackbarposition:=trackbar1.Position;
 end;
 
 
 procedure TForm1.Timer1Timer(Sender: TObject);
-var root, i:integer; sine: sinewave;
+var root, i,j:integer; sine: sinewave;
 	begin
     drawCenterDomainCalculation();
     sineview.canvas.clear();
 
-    uppersines.rewind();
-    lowersines.rewind();
-    for i:=0 to uppersines.counter-1 do
-        	begin
-            drawsine(sinewave(uppersines.advance));
-            drawsine(sinewave(lowersines.advance));
-         	end;
+
+    for j:=0 to 1 do
+    	begin
+        sines[j].rewind();
+   	 	for i:=0 to sines[0].counter-1 do
+            drawsine(sinewave(sines[j].advance));
+        end;
+
 	root:=trunc  (trackbarposition/201*sineview.Width);
     sineview.Canvas.moveto(root, sineview.canvas.height);
     sineview.Canvas.lineto(root,0);
@@ -155,8 +155,9 @@ var root, i:integer; sine: sinewave;
 
 
 procedure TForm1.Button1Click(Sender: TObject);
-var i:integer; tmppoint: Point3D;
+var i,j:integer;
 	x,y,z:double;
+    tmppoint, origin: Point3D;
 	begin
     rigid:= rigidgroup.Create();
 
@@ -169,24 +170,27 @@ var i:integer; tmppoint: Point3D;
     	end;
     rigid.recalculateCenter();
 
-    uppersines:= linkedlist.create();
-    lowersines:= linkedlist.create();
+    origin:=Point3D.create(0,0,0);
+    for j:= 0 to 1 do
+    	begin
+    	sines[j]:= linkedlist.create();
 
-    for i:=0 to length(rigid.atoms)-1 do
-        with rigid.atoms[i] do
-        	begin
-            tmppoint:=adomain.goodregion.point1.clone();
-            tmppoint.vectorFrom(position);
-        	lowersines.addElement(Sinewave.create(position.norm(),position.angleInProjection(0,2),tmppoint.x));
-            tmppoint.Destroy();
-
-            tmppoint:=adomain.goodregion.point2.clone();
-            tmppoint.vectorFrom(position);
-        	uppersines.addElement(Sinewave.create(position.norm(),position.angleInProjection(0,2),tmppoint.x));
-            tmppoint.Destroy();
-            end;
+    	for i:=0 to length(rigid.atoms)-1 do
+        	with rigid.atoms[i] do                                                       
+        		begin
+            	tmppoint:= position.clone();
+            	tmppoint.vectorTo(origin);
+            	tmppoint.z:=0;
+        		sines[j].addElement(
+         			Sinewave.create(
+           				tmppoint.norm(),
+              			tmppoint.angleInProjection(0,1),
+                		adomain.goodregion.points[j].y));
+            	end;
+		end;
 
     timer1.enabled:=true;
+    origin.Free();
     //rigid.calculateCenterDomain(pi/8, pi/16, application);
 	end;
 

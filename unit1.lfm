@@ -51,7 +51,7 @@ object Form1: TForm1
     Height = 37
     Top = 674
     Width = 264
-    Max = 100
+    Max = 200
     OnChange = TrackBar1Change
     Position = 0
     Ctl3D = False

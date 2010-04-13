@@ -62,8 +62,8 @@ resizescale: double;
     for i:= 0 to length(atoms)-1 do
     	begin
     	atoms[i].position.vectorFrom(translation);
-        atoms[i].adomain.goodregion.point1.vectorFrom(translation);
-        atoms[i].adomain.goodregion.point2.vectorFrom(translation);
+        atoms[i].adomain.goodregion.points[0].vectorFrom(translation);
+        atoms[i].adomain.goodregion.points[1].vectorFrom(translation);
         end;
 end;
 
