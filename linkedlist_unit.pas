@@ -67,6 +67,7 @@ var newnode: LinkedNode;
     if (counter=0) then
         begin
         head:=newnode;
+        tail:=head;
         position:=head;
         end
 	else
