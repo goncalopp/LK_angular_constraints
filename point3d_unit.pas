@@ -84,6 +84,8 @@ function Point3d.angleInProjection(x_coordinate, y_coordinate:integer): double;
 //calculate angle in trig circle of *vector* in a plane projection
 	begin
     result:= arctan2(coordinates[y_coordinate]^, coordinates[x_coordinate]^);
+    if (result<0) then
+    	result:= result+2*pi;
     end;
 
 
