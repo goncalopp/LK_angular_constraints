@@ -5,23 +5,23 @@ unit atom_unit;
 interface
 
 uses
-  Classes, SysUtils, point3d_unit, domain_unit, region_unit;
+  Classes, SysUtils, pointnd_unit, domain_unit, region_unit;
 
 type
   Atom = class
   private
     { private declarations }
   public
-    position: Point3d;
+    position: PointND;
     adomain: Domain;
-    constructor create(position_, lowerlimit, higherlimit: point3D);
+    constructor create(position_, lowerlimit, higherlimit: pointND);
     end;
 
 
 implementation
 
-constructor Atom.create(position_, lowerlimit, higherlimit: point3D);
-var goodregion: Region; point1, point2: Point3d;
+constructor Atom.create(position_, lowerlimit, higherlimit: pointND);
+var goodregion: Region; point1, point2: PointND;
     begin
     position:= 	position_;
     goodregion:=Region.Create(lowerlimit, higherlimit);

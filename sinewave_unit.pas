@@ -5,7 +5,7 @@ unit sineWave_unit;
 interface
 
 uses
-  Classes, SysUtils, Math;
+  Classes, SysUtils, Math, Graphics;      	//debug remove graphics
 
 type
   sineWave = class
@@ -13,6 +13,7 @@ type
   	procedure simplifyPhase();
   public
     amplitude, phase, y_deslocation: double;
+    color: TColor;         //debug
     constructor create(amplitude_, phase_, y_deslocation_: double);
     procedure invert();                           
     function addWave(wave: sineWave):sineWave;
