@@ -13,6 +13,7 @@ type
   public
   	bounds: array [0..1] of PointND;
     constructor create(bound1, bound2: PointND);
+    function inside(point: PointND): boolean;
   end;
 
 implementation
@@ -29,6 +30,18 @@ var i:integer;
 	bound1.Destroy();
     bound2.Destroy();
  	end;
+
+function Region.inside(point: PointND): boolean;
+var i: integer;
+	begin
+    result:=true;
+    for i:=0 to length(point.c) - 1 do
+        if (point.c[i] < bounds[0].c[i]) or (point.c[i] > bounds[1].c[i]) then
+        	begin
+         	result:=false;
+            break;
+            end;
+    end;
 
 end.
 
