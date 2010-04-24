@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   pointnd_unit, rigidgroup_unit, sinewave_unit, StdCtrls,
-  ExtCtrls, ComCtrls, linkedlist_unit, myinteger_unit;
+  ExtCtrls, ComCtrls, linkedlist_unit, atom_unit;
 
 type
 
@@ -158,33 +158,33 @@ var root, i,j:integer;
 
 
 
+function  sineFromAtomDomain(a: atom; coordinate, bound: integer): SineWave;
+ var tmppoint: PointND;
+ 	begin
+    tmppoint:= a.position.clone();
+    tmppoint.scale(-1); 	//transform in a vector from atom to center
+    tmppoint.c[(coordinate+1) mod 3]:=0;
+    result:= Sinewave.create(
+           				tmppoint.norm(),
+              			tmppoint.angleInProjection2D((coordinate-1) mod 2,coordinate),
+                		a.adomain.goodregion.bounds[bound].c[coordinate]);
+    tmppoint.destroy();
+
+    end;
+
 procedure calculateSines();
-	var tmppoint, origin: PointND;
-    i,j:integer;
+    var i,j:integer;
 	begin
-    origin:=PointND.create(0,0,0);
     sinesdomains:= linkedlist.create();
     for j:= 0 to 1 do
     	begin
     	sines[j]:= linkedlist.create();
     	for i:=0 to length(rigid.atoms)-1 do
-        	with rigid.atoms[i] do
         		begin
-            	tmppoint:= position.clone();
-            	tmppoint.vectorTo(origin);
-            	tmppoint.z^:=0;
-
-        		sines[j].addElement(
-         			Sinewave.create(
-           				tmppoint.norm(),
-              			tmppoint.angleInProjection2D(0,1),
-                		adomain.goodregion.bounds[j].y^));
-                sinewave(sines[j].tail.element).color:=(i*$D2A67A) mod $FFFFFF
+        		sines[j].addElement(sineFromAtomDomain(rigid.atoms[i], 1, j));
+                sinewave(sines[j].tail.element).color:=(i*$D2A67A) mod $FFFFFF;
             	end;
-
 		end;
-
-	origin.Free();
     end;
 
 procedure TForm1.Button1Click(Sender: TObject);

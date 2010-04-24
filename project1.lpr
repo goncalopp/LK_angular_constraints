@@ -9,7 +9,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms
   { you can add units after this }, Unit1, domain_unit, region_unit,
-  atom_unit, sineWave_unit, linkedList_unit, myinteger_unit, sineSegment_unit,
+  atom_unit, sineWave_unit, linkedList_unit,
   pointnd_unit;
 
 begin
