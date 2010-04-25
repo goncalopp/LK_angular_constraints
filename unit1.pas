@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   pointnd_unit, rigidgroup_unit, sinewave_unit, StdCtrls,
-  ExtCtrls, ComCtrls, linkedlist_unit, atom_unit;
+  ExtCtrls, ComCtrls, linkedlist_unit, atom_unit, region_unit;
 
 type
 
@@ -25,6 +25,7 @@ type
     Timer1: TTimer;
     TrackBar1: TTrackBar;
     procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure drawPoint(p, lowlimit, highlimit:pointND; size: integer);
     procedure drawCenterDomainCalculation();
@@ -40,7 +41,7 @@ var
   Form1: TForm1; 
   rigid: rigidgroup;
   sines: array [0..1] of linkedList;
-  sinesdomains: linkedList;
+  sinesdomains: array [0..1] of linkedList;
   trackbarposition: integer=0;
 
 implementation
@@ -169,22 +170,50 @@ function  sineFromAtomDomain(a: atom; coordinate, bound: integer): SineWave;
               			tmppoint.angleInProjection2D((coordinate-1) mod 2,coordinate),
                 		a.adomain.goodregion.bounds[bound].c[coordinate]);
     tmppoint.destroy();
+    end;
 
+procedure addAtomToSines(a: atom; coordinate: integer; color: TColor);
+var atomsine, intersection, iteratedsine: SineWave;
+	domainsine, iterateddomainsine: Region;
+	i, bound:integer;
+	begin
+    for bound:=0 to 1 do
+    	begin
+        sines[bound].rewind();
+        sinesdomains[bound].rewind();
+        atomsine:= sineFromAtomDomain(a, coordinate, bound);
+        atomsine.color:=color;
+
+        if sines[bound].counter=0 then
+        	begin
+            sines[bound].addElement(atomsine);
+            sinesdomains[bound].addElement(region.create(pointnd.create(0), pointnd.create(2*pi)));
+    		end
+        else
+            for i:=0 to sines[bound].counter - 1 do
+            	begin
+                iteratedsine:= sineWave(  sines[bound].advance()  );
+                iterateddomainsine:= Region(  sinesdomains[bound].advance()  );
+                intersection:=atomsine.intersectWave(iteratedsine);
+               // if iterateddomainsine.inside(intersection.zeros[0]) then
+
+                end;
+
+    	end;
     end;
 
 procedure calculateSines();
-    var i,j:integer;
+    var i:integer;
 	begin
-    sinesdomains:= linkedlist.create();
-    for j:= 0 to 1 do
+    sinesdomains[0]:= linkedlist.create();
+    sinesdomains[1]:= linkedlist.create();
+    sines[0]:= linkedlist.create();
+    sines[1]:= linkedlist.create();
+    for i:=0 to length(rigid.atoms)-1 do
     	begin
-    	sines[j]:= linkedlist.create();
-    	for i:=0 to length(rigid.atoms)-1 do
-        		begin
-        		sines[j].addElement(sineFromAtomDomain(rigid.atoms[i], 1, j));
-                sinewave(sines[j].tail.element).color:=(i*$D2A67A) mod $FFFFFF;
-            	end;
-		end;
+        addAtomtoSines(rigid.atoms[i], 1, (i*$D2A67A) mod $FFFFFF)
+       	end;
+
     end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -208,7 +237,6 @@ var i:integer;
 
     //rigid.calculateCenterDomain(pi/8, pi/16, application);
 	end;
-
 
 initialization
   {$I unit1.lrs}

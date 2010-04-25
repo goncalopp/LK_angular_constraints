@@ -13,16 +13,18 @@ type
   	procedure simplifyPhase();
   public
     amplitude, phase, y_deslocation: double;
+    zeros: array[0..1] of double;
     color: TColor;         //debug
     constructor create(amplitude_, phase_, y_deslocation_: double);
     procedure invert();                           
     function addWave(wave: sineWave):sineWave;
+    function intersectWave(wave: sineWave):sineWave;
     function valueat(x: double): double;
-    function firstZero():double;
-    function secondZero():double;
+    procedure calculateZeros();
     end;
 
 implementation
+
 
 constructor sineWave.create(amplitude_, phase_, y_deslocation_:double);
 	begin
@@ -50,8 +52,15 @@ var x,y,newphase:double;
     y:= amplitude*sin(phase)+wave.amplitude*sin(wave.phase);
     x:= amplitude*cos(phase)+wave.amplitude*cos(wave.phase);
     newphase:=ArcTan2(y,x);
-    result:= sineWave.create(sqrt(sqr(x)+sqr(y)), newphase, wave.y_deslocation+y_deslocation);
+    result:= sineWave.create(sqrt(sqr(x)+sqr(y)), newphase, -wave.y_deslocation+y_deslocation);
     result.simplifyPhase();
+    end;
+
+function sineWave.intersectWave(wave: sineWave):sineWave;
+	begin
+    wave.invert();
+    result:= addwave(wave);
+    wave.invert();
     end;
 
 function sineWave.valueat(x: double): double;
@@ -59,20 +68,29 @@ function sineWave.valueat(x: double): double;
     result:= amplitude*sin(x+phase)+y_deslocation;
     end;
 
-function sineWave.firstZero():double;
-	begin
+procedure sineWave.calculateZeros();
+	var tmp:double;
+ 	begin
     simplifyPhase();
-    result:=pi+arcsin(y_deslocation/amplitude)-phase;
-    if (result<0) then
-    	result:=result+2*pi;
-    end;
-
-function sineWave.secondZero():double;
-	begin
-    simplifyPhase();
-    result:=2*pi-arcsin(y_deslocation/amplitude)-phase;
-    if (result<0) then
-    	result:=result+2*pi;
+    try
+    	tmp:=arcsin(y_deslocation/amplitude);
+    except
+        zeros[0]:=-1;
+        zeros[1]:=-1;
+        exit;
+        end;
+    zeros[0]:=pi+tmp-phase;
+    zeros[1]:=2*pi-tmp-phase;
+    if (zeros[0]<0) then
+    	zeros[0]:=zeros[0]+2*pi;
+    if (zeros[1]<0) then
+    	zeros[1]:=zeros[1]+2*pi;
+    if (zeros[0]>zeros[1]) then
+    	begin
+        tmp:=zeros[0];
+        zeros[0]:=zeros[1];
+        zeros[1]:=tmp;
+        end;
     end;
 
 end.
