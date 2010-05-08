@@ -57,6 +57,15 @@ object Form1: TForm1
     Ctl3D = False
     TabOrder = 1
   end
+  object Button2: TButton
+    Left = 581
+    Height = 25
+    Top = 702
+    Width = 75
+    Caption = 'Button2'
+    OnClick = Button2Click
+    TabOrder = 2
+  end
   object Timer1: TTimer
     Enabled = False
     Interval = 10
