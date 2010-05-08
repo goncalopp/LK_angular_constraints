@@ -25,7 +25,7 @@ type
     head: LinkedNode;
     tail: LinkedNode;
     position: LinkedNode;
-    counter: integer;
+    length: integer;
     constructor create();
     procedure addElementAfter(node: LinkedNode; element: TObject);
     procedure addElement(element: TObject);
@@ -57,21 +57,21 @@ procedure LinkedNode.setPrevious(node: LinkedNode);
 
 constructor LinkedList.create();
 	begin
-    counter:=0;
+    length:=0;
     end;
 
 procedure LinkedList.addElementAfter(node: LinkedNode; element: TObject);
 var newnode: LinkedNode;
 	begin
     newnode:= LinkedNode.create(element);
-    if (counter=0) then
+    if (length=0) then
         begin
         head:=newnode;
         tail:=head;
         position:=head;
         end
 	else
-    	if (counter=1) then
+    	if (length=1) then
     		begin
         	tail:=newnode;
         	tail.setPrevious(head);
@@ -84,21 +84,21 @@ var newnode: LinkedNode;
             	tail:=newnode;
             node.setNext(newnode);
             end;
-    counter:=counter+1;
+    length:=length+1;
     end;
 
 
 procedure LinkedList.removeElement(node: LinkedNode);
 	begin
-    if (counter=1) then
+    if (length=1) then
     	begin
        	head:=nil;
         tail:=nil;
         node.free;
-        counter:=0;
+        length:=0;
         end;
 
-    if (counter>1) then
+    if (length>1) then
     	begin
         if (node.previous<>nil) then
         	node.previous.setNext(node.next)
@@ -118,7 +118,7 @@ procedure LinkedList.removeElement(node: LinkedNode);
             tail:=node.previous;
             end;
         node.free();
-        counter:=counter-1;
+        length:=length-1;
         end;
     end;
 
