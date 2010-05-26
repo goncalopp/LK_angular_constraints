@@ -45,7 +45,7 @@ region: TRegion;
 
 //given two SIR, returns an array of SIR with the sines maximizing
 // maximumFunction() in each subregion of its (SIRs) intersection
-function maximizeSinesInRegion(sine1, sine2: sinewaveInRegion; maximumFunction: Tgetmaximumfunction): TsinewaveInRegionArray;
+function maximizeSIR(sine1, sine2: sinewaveInRegion; maximumFunction: Tgetmaximumfunction): TsinewaveInRegionArray;
 var i: integer;
 	mean: double;
     newregion: TRegion;
@@ -89,7 +89,7 @@ function lowline(sine1, sine2: sinewave; point: double): sinewave;
     end;
 
 procedure addAtomToSines(a: atom; coordinate: integer; color: TColor);
-var atomsine, iteratedsineinregion: sinewaveInRegion;
+var atomSIR, iterSIR: sinewaveInRegion;
     maxsines: array of sinewaveInRegion;
 	i, j, bound, numsines:integer;
 
@@ -98,20 +98,20 @@ var atomsine, iteratedsineinregion: sinewaveInRegion;
     	begin
         sines[bound].rewind();
         numsines:= sines[bound].length;
-        atomsine:=SIRFromAtomDomain(a, coordinate, bound);
-        atomsine.sine.color:=color;
+        atomSIR:=SIRFromAtomDomain(a, coordinate, bound);
+        atomSIR.sine.color:=color;
 
         if sines[bound].length=0 then
-        	sines[bound].addElement(atomsine)
+        	sines[bound].addElement(atomSIR)
         else
             for i:=0 to numsines-1 do
             	begin
-                iteratedsineinregion:= sineWaveInRegion(  sines[bound].position.element  );
+                iterSIR:= sineWaveInRegion(  sines[bound].position.element  );
                 sines[bound].removeElement(sines[bound].position);
                 if bound=0 then
-                	maxsines:= maximizeSinesInRegion(atomsine, iteratedsineinregion, @highline )
+                	maxsines:= maximizeSIR(atomSIR, iterSIR, @highline )
                 else
-                    maxsines:= maximizeSinesInRegion(atomsine, iteratedsineinregion, @lowline );
+                    maxsines:= maximizeSIR(atomSIR, iterSIR, @lowline );
                 for j:= 0 to length(maxsines)-1 do
                 	begin
                     sines[bound].addElement(maxsines[j]);
