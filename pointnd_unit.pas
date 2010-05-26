@@ -39,6 +39,8 @@ type
 
   end;
 
+  TPointNDArray = array of PointND;
+
 implementation
 
 procedure PointND.creator(number_of_coordinates: integer);

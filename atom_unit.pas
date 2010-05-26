@@ -21,10 +21,10 @@ type
 implementation
 
 constructor Atom.create(position_, lowerlimit, higherlimit: pointND);
-var goodregion: Region; point1, point2: PointND;
+var goodregion: TRegion; point1, point2: PointND;
     begin
     position:= 	position_;
-    goodregion:=Region.Create(lowerlimit, higherlimit);
+    goodregion:= TRegion.Create(lowerlimit, higherlimit);
     adomain:=    Domain.create(goodregion);
     end;
 

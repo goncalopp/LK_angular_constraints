@@ -81,7 +81,7 @@ var x,y,i, x_steps, y_steps: integer;
 	centerDomain: Domain;
     vector: PointND;
 	begin
-    centerDomain:= Domain.create(Region.create(PointND.create(-10e9, -10e9, -10e9), PointND.create(10e9, 10e9, 10e9)));
+    centerDomain:= Domain.create(TRegion.create(PointND.create(-10e9, -10e9, -10e9), PointND.create(10e9, 10e9, 10e9)));
 	y_steps:= trunc((2.0*pi) / y_angle_step);
     x_steps:= trunc( pi / x_angle_step);		//no need to do 360º to cover 3D space, only 180
  	for x:= 0 to x_steps - 1 do

@@ -7,10 +7,10 @@ interface
 
 uses
   Classes, SysUtils, atom_unit, sinewave_unit, pointnd_unit, sinewaveinregion_unit,
-  region_unit, Graphics, linkedlist_unit;
+  Graphics, region_unit, linkedlist_unit;
 
   type
-  Tpointndarray = array of PointND;
+
   Tsinewaveinregionarray = array of SinewaveInRegion;
   Tgetmaximumfunction = Function(sine1, sine2: sinewave; point: double): sinewave;
 
@@ -21,91 +21,54 @@ sines: array [0..1] of linkedList;
 
 implementation
 
-function  sineFromAtomDomain(a: atom; coordinate, bound: integer): sineWave;
+function  SIRFromAtomDomain(a: atom; coordinate, bound: integer): sineWaveInRegion;
 var tmppoint: PointND;
+sine: sinewave;
+region: TRegion;
  	begin
     tmppoint:= a.position.clone();
-    tmppoint.scale(-1); 	//transform in a vector from atom to center
-    tmppoint.c[(coordinate+1) mod 3]:=0;
-    result:= Sinewave.create(
+    tmppoint.scale(-1); 				//transform in a vector from atom to center
+    tmppoint.c[(coordinate+1) mod 3]:=0;//project
+    sine:= Sinewave.create(
            				tmppoint.norm(),
               			tmppoint.angleInProjection2D((coordinate-1) mod 2,coordinate),
                 		a.adomain.goodregion.bounds[bound].c[coordinate]);
     tmppoint.destroy();
+    region:= TRegion.create(PointND.create(0), PointND.create(2*PI));
+    result:=SineWaveInRegion.create(sine, region);
+
+
+
     end;
 
 
-//returns array of PointND that represents the intersection points of the two
-//sines that are inside the given region
-function sineIntersectionsInRegion(sine, sine2: sinewave; theregion: Region): Tpointndarray;
-var intersectionsine: sinewave;
-	intersection1, intersection2: PointND;
-	begin
-    intersectionsine:=sine.intersectWave(sine2);
-    intersectionsine.calculateZeros();
-    intersection1:=PointND.create(intersectionsine.zeros[0]);
-    intersection2:=PointND.create(intersectionsine.zeros[1]);
-    intersectionsine.destroy();
 
-    if theregion.inside(intersection1)
-    	then
-        if theregion.inside(intersection2) then
-        	begin  		//two intersection points
-            setlength(result,2);
-            result[0]:= intersection1;
-            result[1]:= intersection2;
-            end
-		else
-        	begin      	//one intersection point: intersection1
-            setlength(result,1);
-            result[0]:=intersection1;
-            intersection2.destroy();
-            end
-	else
-    	if theregion.inside(intersection2) then
-        	begin       //one intersection point: intersection2
-            setlength(result,1);
-            result[0]:=intersection2;
-            intersection1.destroy();
-            end
-		else
-        	begin		//no intersection points
-            setlength(result,0);
-            intersection1.destroy();
-            intersection2.destroy();
-            end;
-    end;
-
-
-//given two sines, a region and a sine intersection inside that region, returns
-//an array of sinewaveinregion that represents the sines maximizing
-//maximumFunction() in each corresponding sinewaveinregion's region
-function maximizeSinesInRegion(sine1, sine2: sinewave; theregion: Region; maximumFunction: Tgetmaximumfunction): TsinewaveInRegionArray;
-var intersections: array of PointND;
-	i,j: integer;
-    tmp1, tmp2: double;
+//given two SIR, returns an array of SIR with the sines maximizing
+// maximumFunction() in each subregion of its (SIRs) intersection
+function maximizeSinesInRegion(sine1, sine2: sinewaveInRegion; maximumFunction: Tgetmaximumfunction): TsinewaveInRegionArray;
+var i: integer;
 	mean: double;
-	maxsine: sinewave;
+    newregion: TRegion;
+    newsine, maxsine: sinewave;
+    newsr: sineWaveInRegion;
+    regions: TRegionArray;
 
  	begin
-    intersections:=sineIntersectionsInRegion(sine1, sine2, theregion);
+    newregion:=sine1.region.intersect(sine2.region);
+    newsine:=sine1.sine.intersectWave(sine2.sine);
+    newsr:=sineWaveInRegion.create(newsine, newregion);
+    regions:= newsr.getSubregions();
+    newregion.Destroy();
+    newsine.Destroy();
+    newsr.Destroy();
 
-    setlength(intersections, length(intersections) +2);  //shift intersections,
-    for i:= length(intersections)-3 downto 0 do          //so we can insert 2 new,
-    	intersections[i+1]:=intersections[i];            //on beginning and end of array
-    intersections[0]:=theregion.bounds[0];
-    intersections[length(intersections)-1]:=theregion.bounds[1];
+    setlength(result, length(regions));
 
-    setlength(result,length(intersections)-1);
-    for i:=0 to length(intersections)-2 do
+    for i:=0 to high(regions) do
     	begin
-        mean:= (intersections[i].c[0] + intersections[i+1].c[0]) /2 ;
-    	maxsine:= maximumFunction(sine1, sine2, mean);
-        result[i]:=sinewaveinregion.create
-           	(
-           	maxsine,
-           	Region.create(intersections[i], intersections[i+1])
-           	);
+        mean:= (regions[i].bounds[0].c[0] + regions[i].bounds[1].c[0]) /2 ;
+    	maxsine:= maximumFunction(sine1.sine, sine2.sine, mean);
+        result[i]:=sinewaveinregion.create(maxsine, regions[i]);
         end;
     end;
 
@@ -126,8 +89,7 @@ function lowline(sine1, sine2: sinewave; point: double): sinewave;
     end;
 
 procedure addAtomToSines(a: atom; coordinate: integer; color: TColor);
-var atomsine: SineWave;
-	iteratedsineinregion, tmpnewsineregion: sinewaveInRegion;
+var atomsine, iteratedsineinregion: sinewaveInRegion;
     maxsines: array of sinewaveInRegion;
 	i, j, bound, numsines:integer;
 
@@ -136,31 +98,23 @@ var atomsine: SineWave;
     	begin
         sines[bound].rewind();
         numsines:= sines[bound].length;
-        atomsine:= sineFromAtomDomain(a, coordinate, bound);
-        atomsine.color:=color;
+        atomsine:=SIRFromAtomDomain(a, coordinate, bound);
+        atomsine.sine.color:=color;
 
         if sines[bound].length=0 then
-        	sines[bound].addElement
-         		(
-         		SineWaveInRegion.create
-           			(
-           			atomsine,
-              		Region.create(PointND.create(0), PointND.create(2*PI))
-                    )
-              	)
+        	sines[bound].addElement(atomsine)
         else
             for i:=0 to numsines-1 do
             	begin
                 iteratedsineinregion:= sineWaveInRegion(  sines[bound].position.element  );
                 sines[bound].removeElement(sines[bound].position);
                 if bound=0 then
-                	maxsines:= maximizeSinesInRegion(atomsine, iteratedsineinregion.sine, iteratedsineinregion.region, @highline )
+                	maxsines:= maximizeSinesInRegion(atomsine, iteratedsineinregion, @highline )
                 else
-                    maxsines:= maximizeSinesInRegion(atomsine, iteratedsineinregion.sine, iteratedsineinregion.region, @lowline );
+                    maxsines:= maximizeSinesInRegion(atomsine, iteratedsineinregion, @lowline );
                 for j:= 0 to length(maxsines)-1 do
                 	begin
-                    tmpnewsineregion:=maxsines[j];
-                	sines[bound].addElement(maxsines[j]);
+                    sines[bound].addElement(maxsines[j]);
                     end;
                 end;
     	end;
