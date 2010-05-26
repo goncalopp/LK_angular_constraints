@@ -1,0 +1,76 @@
+object Form1: TForm1
+  Left = 485
+  Height = 734
+  Top = 0
+  Width = 672
+  ActiveControl = Button1
+  Caption = 'Form1'
+  ClientHeight = 734
+  ClientWidth = 672
+  LCLVersion = '0.9.28.2'
+  object frontview: TImage
+    Left = 8
+    Height = 240
+    Top = 8
+    Width = 320
+  end
+  object sideview: TImage
+    Left = 336
+    Height = 240
+    Top = 8
+    Width = 320
+  end
+  object perspectiveview: TImage
+    Left = 336
+    Height = 240
+    Top = 256
+    Width = 320
+  end
+  object topview: TImage
+    Left = 8
+    Height = 240
+    Top = 256
+    Width = 320
+  end
+  object sineview: TImage
+    Left = 8
+    Height = 160
+    Top = 504
+    Width = 650
+  end
+  object Button1: TButton
+    Left = 581
+    Height = 25
+    Top = 672
+    Width = 75
+    Caption = 'Button1'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object TrackBar1: TTrackBar
+    Left = 16
+    Height = 37
+    Top = 674
+    Width = 264
+    Max = 200
+    OnChange = TrackBar1Change
+    Position = 0
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 581
+    Height = 25
+    Top = 702
+    Width = 75
+    Caption = 'Button2'
+    OnClick = Button2Click
+    TabOrder = 2
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 10
+    OnTimer = Timer1Timer
+    left = 544
+    top = 672
+  end
+end

@@ -10,9 +10,9 @@ uses
 type
   Domain = class
   private
+  public
     goodregion: Region;
     nogoodregions: array of Region;
-  public
     constructor create(good_region: Region);
     procedure add_no_good_region(no_good_region: Region);
   end;
