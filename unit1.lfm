@@ -3,10 +3,11 @@ object Form1: TForm1
   Height = 734
   Top = 0
   Width = 672
+  ActiveControl = Button1
   Caption = 'Form1'
   ClientHeight = 734
   ClientWidth = 672
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object frontview: TImage
     Left = 8
     Height = 240
@@ -54,7 +55,6 @@ object Form1: TForm1
     Max = 200
     OnChange = TrackBar1Change
     Position = 0
-    Ctl3D = False
     TabOrder = 1
   end
   object Button2: TButton
