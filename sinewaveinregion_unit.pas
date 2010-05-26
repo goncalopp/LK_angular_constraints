@@ -11,9 +11,16 @@ type
   SineWaveInRegion = class
     sine: sinewave;
    	region: Region;
+    constructor create(sine_: sinewave; region_: Region);
     end;
 
 implementation
+
+constructor SineWaveInRegion.create(sine_: sinewave; region_: Region);
+	begin
+    sine:=sine_;
+    region:=region_;
+    end;
 
 end.
                                                    
