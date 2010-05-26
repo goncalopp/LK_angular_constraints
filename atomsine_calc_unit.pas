@@ -97,25 +97,22 @@ var atomSIR, iterSIR: sinewaveInRegion;
     for bound:=0 to 1 do
     	begin
         sines[bound].rewind();
-        numsines:= sines[bound].length;
+        numsines:= sines[bound].length; //necessary! it changes during operations
         atomSIR:=SIRFromAtomDomain(a, coordinate, bound);
         atomSIR.sine.color:=color;
 
         if sines[bound].length=0 then
-        	sines[bound].addElement(atomSIR)
+        	sines[bound].add(atomSIR)
         else
             for i:=0 to numsines-1 do
             	begin
-                iterSIR:= sineWaveInRegion(  sines[bound].position.element  );
-                sines[bound].removeElement(sines[bound].position);
+                iterSIR:= sineWaveInRegion(  sines[bound].remove()  );
                 if bound=0 then
                 	maxsines:= maximizeSIR(atomSIR, iterSIR, @highline )
                 else
                     maxsines:= maximizeSIR(atomSIR, iterSIR, @lowline );
-                for j:= 0 to length(maxsines)-1 do
-                	begin
-                    sines[bound].addElement(maxsines[j]);
-                    end;
+                for j:= 0 to high(maxsines) do
+                    sines[bound].add(maxsines[j]);
                 end;
     	end;
     end;

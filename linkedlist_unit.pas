@@ -27,9 +27,10 @@ type
     position: LinkedNode;
     length: integer;
     constructor create();
-    procedure addElementAfter(node: LinkedNode; element: TObject);
-    procedure addElement(element: TObject);
-    procedure removeElement(node: LinkedNode);
+    procedure addAfter(node: LinkedNode; element: TObject);
+    procedure add(element: TObject);
+    function remove(node: LinkedNode): TObject;
+    function remove(): TObject;
     function advance(): LinkedNode;
     procedure rewind();
 
@@ -60,7 +61,7 @@ constructor LinkedList.create();
     length:=0;
     end;
 
-procedure LinkedList.addElementAfter(node: LinkedNode; element: TObject);
+procedure LinkedList.addAfter(node: LinkedNode; element: TObject);
 var newnode: LinkedNode;
 	begin
     newnode:= LinkedNode.create(element);
@@ -87,9 +88,14 @@ var newnode: LinkedNode;
     length:=length+1;
     end;
 
-
-procedure LinkedList.removeElement(node: LinkedNode);
+function LinkedList.remove(): TObject;
 	begin
+    result:= remove(position);
+    end;
+
+function LinkedList.remove(node: LinkedNode): TObject;
+	begin
+    result:= node.element;
     if position=node then
     	position:=node.next;
 
@@ -137,9 +143,9 @@ function LinkedList.advance(): LinkedNode;
         end;
     end;
 
-procedure LinkedList.addElement(element: TObject);
+procedure LinkedList.add(element: TObject);
 	begin
-    addElementAfter(tail, element);
+    addAfter(tail, element);
     end;
 
 procedure LinkedList.rewind();
