@@ -13,6 +13,7 @@ type
   public
   	bounds: array [0..1] of PointND;
     constructor create(bound1, bound2: PointND);
+    destructor destroy();
     function inside(point: PointND): boolean;
     function intersect(other: TRegion): TRegion;
   end;
@@ -27,6 +28,12 @@ var i:integer;
 	bounds[0]:= bound1;
     bounds[1]:= bound2;
  	end;
+
+destructor Tregion.destroy();
+	begin
+    bounds[0].destroy();
+    bounds[1].destroy();
+    end;
 
 function TRegion.inside(point: PointND): boolean;
 var i: integer;

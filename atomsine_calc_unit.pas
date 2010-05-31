@@ -113,6 +113,7 @@ var atomSIR, iterSIR: sinewaveInRegion;
                     maxsines:= maximizeSIR(atomSIR, iterSIR, @lowline );
                 for j:= 0 to high(maxsines) do
                     sines[bound].add(maxsines[j]);
+                //iterSIR.region.Destroy();
                 end;
     	end;
     end;

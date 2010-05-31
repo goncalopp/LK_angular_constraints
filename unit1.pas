@@ -205,27 +205,13 @@ var i:integer;
 	end;
 
 procedure TForm1.Button2Click(Sender: TObject);
-var sine1, sine2: sinewave;
-	myregion: Region;
-	maxsines: array of sinewaveInRegion;
-    i: integer;
+var r1,r2: TRegion;
 begin
-{
-    sine1:= sinewave.create(1, 0, 0);
-    sine2:= sinewave.create(1, pi, 0);
-    myregion:= Region.Create(PointND.create(0), PointND.create(2*pi));
-    maxsines:= maximizeSinesinRegion(sine1, sine2, myregion, @highline);
-    showmessage(inttostr(length(maxsines)));
-    for i:=0 to length(maxsines)-1 do
-    	showmessage(
-        			'phase: '+
-      				floattostr(maxsines[i].sine.phase)+#13#10+
-                    'interval: '+
-             		floattostr(maxsines[i].region.bounds[0].c[0])+' -- '+
-                    floattostr(maxsines[i].region.bounds[1].c[0])
-               		);
+r1:= TRegion.create(PointND.create(0,3),PointND.create(5,7));
+r2:= TRegion.create(PointND.create(1,2),PointND.create(6,3));
+r2:= r2.intersect(r1);
+showmessage(floattostr(r2.bounds[0].c[0])+' '+floattostr(r2.bounds[1].c[0])+#13#10+floattostr(r2.bounds[0].c[1])+' '+floattostr(r2.bounds[1].c[1]))
 
-        }
 end;
 
 

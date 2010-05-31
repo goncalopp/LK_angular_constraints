@@ -47,8 +47,8 @@
         <ComponentName Value="Form1"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <CursorPos X="7" Y="211"/>
-        <TopLine Value="193"/>
+        <CursorPos X="18" Y="193"/>
+        <TopLine Value="164"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -60,7 +60,7 @@
         <UnitName Value="domain_unit"/>
         <CursorPos X="41" Y="21"/>
         <TopLine Value="4"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit2>
@@ -75,9 +75,9 @@
         <Filename Value="region_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="region_unit"/>
-        <CursorPos X="15" Y="59"/>
-        <TopLine Value="36"/>
-        <EditorIndex Value="2"/>
+        <CursorPos X="1" Y="57"/>
+        <TopLine Value="42"/>
+        <EditorIndex Value="3"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit4>
@@ -87,7 +87,7 @@
         <UnitName Value="rigidgroup_unit"/>
         <CursorPos X="35" Y="84"/>
         <TopLine Value="69"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit5>
@@ -97,7 +97,7 @@
         <UnitName Value="atom_unit"/>
         <CursorPos X="19" Y="27"/>
         <TopLine Value="2"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit6>
@@ -107,7 +107,7 @@
         <UnitName Value="sineWave_unit"/>
         <CursorPos X="33" Y="71"/>
         <TopLine Value="56"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit7>
@@ -115,9 +115,11 @@
         <Filename Value="linkedlist_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="linkedList_unit"/>
-        <CursorPos X="1" Y="138"/>
-        <TopLine Value="123"/>
+        <CursorPos X="31" Y="93"/>
+        <TopLine Value="82"/>
+        <EditorIndex Value="2"/>
         <UsageCount Value="368"/>
+        <Loaded Value="True"/>
       </Unit8>
       <Unit9>
         <Filename Value="myinteger_unit.pas"/>
@@ -137,9 +139,9 @@
         <Filename Value="pointnd_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="pointnd_unit"/>
-        <CursorPos X="36" Y="42"/>
-        <TopLine Value="33"/>
-        <EditorIndex Value="6"/>
+        <CursorPos X="17" Y="65"/>
+        <TopLine Value="36"/>
+        <EditorIndex Value="7"/>
         <UsageCount Value="327"/>
         <Loaded Value="True"/>
       </Unit11>
@@ -148,8 +150,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="sinewaveinregion_unit"/>
         <CursorPos X="22" Y="44"/>
-        <TopLine Value="33"/>
-        <EditorIndex Value="7"/>
+        <TopLine Value="15"/>
+        <EditorIndex Value="8"/>
         <UsageCount Value="235"/>
         <Loaded Value="True"/>
       </Unit12>
@@ -175,131 +177,135 @@
         <Filename Value="atomsine_calc_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="atomsine_calc_unit"/>
-        <CursorPos X="16" Y="51"/>
-        <TopLine Value="36"/>
+        <CursorPos X="60" Y="106"/>
+        <TopLine Value="91"/>
         <EditorIndex Value="1"/>
-        <UsageCount Value="51"/>
+        <UsageCount Value="54"/>
         <Loaded Value="True"/>
         <FoldState Value=" T4iV061X"/>
       </Unit16>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="53" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="101" Column="1" TopLine="83"/>
       </Position1>
       <Position2>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="57" Column="1" TopLine="42"/>
+        <Caret Line="102" Column="1" TopLine="83"/>
       </Position2>
       <Position3>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="58" Column="1" TopLine="43"/>
+        <Caret Line="104" Column="1" TopLine="83"/>
       </Position3>
       <Position4>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="59" Column="1" TopLine="44"/>
+        <Caret Line="107" Column="1" TopLine="92"/>
       </Position4>
       <Position5>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="61" Column="1" TopLine="46"/>
+        <Caret Line="109" Column="1" TopLine="94"/>
       </Position5>
       <Position6>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="63" Column="1" TopLine="48"/>
+        <Caret Line="110" Column="1" TopLine="95"/>
       </Position6>
       <Position7>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="65" Column="1" TopLine="50"/>
+        <Caret Line="113" Column="1" TopLine="95"/>
       </Position7>
       <Position8>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="48" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="114" Column="1" TopLine="95"/>
       </Position8>
       <Position9>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="49" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="115" Column="1" TopLine="95"/>
       </Position9>
       <Position10>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="50" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="116" Column="1" TopLine="95"/>
       </Position10>
       <Position11>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="51" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="119" Column="1" TopLine="95"/>
       </Position11>
       <Position12>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="52" Column="1" TopLine="28"/>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="179" Column="1" TopLine="164"/>
       </Position12>
       <Position13>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="48" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="96" Column="1" TopLine="75"/>
       </Position13>
       <Position14>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="49" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="97" Column="1" TopLine="82"/>
       </Position14>
       <Position15>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="50" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="99" Column="1" TopLine="83"/>
       </Position15>
       <Position16>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="52" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="100" Column="1" TopLine="83"/>
       </Position16>
       <Position17>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="48" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="101" Column="1" TopLine="83"/>
       </Position17>
       <Position18>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="49" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="102" Column="1" TopLine="83"/>
       </Position18>
       <Position19>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="50" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="104" Column="1" TopLine="83"/>
       </Position19>
       <Position20>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="52" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="107" Column="1" TopLine="92"/>
       </Position20>
       <Position21>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="48" Column="1" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="109" Column="1" TopLine="94"/>
       </Position21>
       <Position22>
-        <Filename Value="sinewaveinregion_unit.pas"/>
-        <Caret Line="50" Column="83" TopLine="28"/>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="110" Column="1" TopLine="95"/>
       </Position22>
       <Position23>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="24" Column="56" TopLine="11"/>
+        <Caret Line="111" Column="1" TopLine="95"/>
       </Position23>
       <Position24>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="38" Column="51" TopLine="20"/>
+        <Caret Line="114" Column="1" TopLine="95"/>
       </Position24>
       <Position25>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="37" Column="11" TopLine="22"/>
+        <Caret Line="115" Column="1" TopLine="95"/>
       </Position25>
       <Position26>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="10" Column="13" TopLine="7"/>
+        <Caret Line="116" Column="1" TopLine="95"/>
       </Position26>
       <Position27>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="37" Column="80" TopLine="22"/>
+        <Caret Line="109" Column="1" TopLine="94"/>
       </Position27>
       <Position28>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="17" Column="93" TopLine="1"/>
+        <Caret Line="110" Column="1" TopLine="95"/>
       </Position28>
       <Position29>
         <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="37" Column="14" TopLine="22"/>
+        <Caret Line="111" Column="1" TopLine="95"/>
       </Position29>
+      <Position30>
+        <Filename Value="atomsine_calc_unit.pas"/>
+        <Caret Line="112" Column="41" TopLine="95"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
