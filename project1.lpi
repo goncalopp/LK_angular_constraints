@@ -8,7 +8,7 @@
       </Flags>
       <MainUnit Value="0"/>
       <TargetFileExt Value=""/>
-      <ActiveEditorIndexAtStart Value="1"/>
+      <ActiveEditorIndexAtStart Value="2"/>
     </General>
     <VersionInfo>
       <ProjectVersion Value=""/>
@@ -32,7 +32,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="17">
+    <Units Count="18">
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -47,20 +47,20 @@
         <ComponentName Value="Form1"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <CursorPos X="18" Y="193"/>
-        <TopLine Value="164"/>
+        <CursorPos X="61" Y="181"/>
+        <TopLine Value="151"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
-        <FoldState Value=" T4iB03112b"/>
+        <FoldState Value=" T4iB0311211i"/>
       </Unit1>
       <Unit2>
         <Filename Value="domain_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="domain_unit"/>
         <CursorPos X="41" Y="21"/>
-        <TopLine Value="4"/>
-        <EditorIndex Value="4"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="5"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit2>
@@ -69,15 +69,15 @@
         <UnitName Value="point3d_unit"/>
         <CursorPos X="1" Y="10"/>
         <TopLine Value="1"/>
-        <UsageCount Value="85"/>
+        <UsageCount Value="84"/>
       </Unit3>
       <Unit4>
         <Filename Value="region_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="region_unit"/>
         <CursorPos X="1" Y="57"/>
-        <TopLine Value="42"/>
-        <EditorIndex Value="3"/>
+        <TopLine Value="40"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit4>
@@ -87,7 +87,7 @@
         <UnitName Value="rigidgroup_unit"/>
         <CursorPos X="35" Y="84"/>
         <TopLine Value="69"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit5>
@@ -96,8 +96,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="atom_unit"/>
         <CursorPos X="19" Y="27"/>
-        <TopLine Value="2"/>
-        <EditorIndex Value="5"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="6"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit6>
@@ -117,7 +117,7 @@
         <UnitName Value="linkedList_unit"/>
         <CursorPos X="31" Y="93"/>
         <TopLine Value="82"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <UsageCount Value="368"/>
         <Loaded Value="True"/>
       </Unit8>
@@ -126,31 +126,29 @@
         <UnitName Value="myinteger_unit"/>
         <CursorPos X="47" Y="1"/>
         <TopLine Value="1"/>
-        <UsageCount Value="72"/>
+        <UsageCount Value="71"/>
       </Unit9>
       <Unit10>
         <Filename Value="sinesegment_unit.pas"/>
         <UnitName Value="sineSegment_unit"/>
         <CursorPos X="1" Y="1"/>
         <TopLine Value="1"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit10>
       <Unit11>
         <Filename Value="pointnd_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="pointnd_unit"/>
         <CursorPos X="17" Y="65"/>
-        <TopLine Value="36"/>
-        <EditorIndex Value="7"/>
+        <TopLine Value="8"/>
         <UsageCount Value="327"/>
-        <Loaded Value="True"/>
       </Unit11>
       <Unit12>
         <Filename Value="sinewaveinregion_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="sinewaveinregion_unit"/>
-        <CursorPos X="22" Y="44"/>
-        <TopLine Value="15"/>
+        <CursorPos X="22" Y="45"/>
+        <TopLine Value="16"/>
         <EditorIndex Value="8"/>
         <UsageCount Value="235"/>
         <Loaded Value="True"/>
@@ -159,152 +157,161 @@
         <Filename Value="../../../usr/lib/lazarus/0.9.28.2/lcl/include/control.inc"/>
         <CursorPos X="1" Y="1580"/>
         <TopLine Value="1579"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
       </Unit13>
       <Unit14>
         <Filename Value="../../../usr/lib/lazarus/0.9.28.2/lcl/include/buttoncontrol.inc"/>
         <CursorPos X="1" Y="27"/>
         <TopLine Value="12"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
       </Unit14>
       <Unit15>
         <Filename Value="../../../usr/lib/lazarus/0.9.28.2/lcl/include/buttons.inc"/>
         <CursorPos X="1" Y="332"/>
         <TopLine Value="307"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="10"/>
       </Unit15>
       <Unit16>
         <Filename Value="atomsine_calc_unit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="atomsine_calc_unit"/>
-        <CursorPos X="60" Y="106"/>
-        <TopLine Value="91"/>
+        <CursorPos X="25" Y="15"/>
+        <TopLine Value="5"/>
         <EditorIndex Value="1"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="59"/>
         <Loaded Value="True"/>
-        <FoldState Value=" T4iV061X"/>
       </Unit16>
+      <Unit17>
+        <Filename Value="quicksort_unit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="quicksort_unit"/>
+        <CursorPos X="63" Y="61"/>
+        <TopLine Value="39"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="25"/>
+        <Loaded Value="True"/>
+      </Unit17>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="101" Column="1" TopLine="83"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="14" Column="30" TopLine="1"/>
       </Position1>
       <Position2>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="102" Column="1" TopLine="83"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="22" Column="17" TopLine="7"/>
       </Position2>
       <Position3>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="104" Column="1" TopLine="83"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="30" Column="37" TopLine="10"/>
       </Position3>
       <Position4>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="107" Column="1" TopLine="92"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="32" Column="19" TopLine="19"/>
       </Position4>
       <Position5>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="109" Column="1" TopLine="94"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="19" Column="28" TopLine="4"/>
       </Position5>
       <Position6>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="110" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="24" Column="6" TopLine="7"/>
       </Position6>
       <Position7>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="113" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="19" Column="22" TopLine="7"/>
       </Position7>
       <Position8>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="114" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="12" Column="37" TopLine="4"/>
       </Position8>
       <Position9>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="115" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="20" Column="37" TopLine="5"/>
       </Position9>
       <Position10>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="116" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="23" Column="20" TopLine="8"/>
       </Position10>
       <Position11>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="119" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="11" Column="43" TopLine="8"/>
       </Position11>
       <Position12>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="179" Column="1" TopLine="164"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="22" Column="22" TopLine="7"/>
       </Position12>
       <Position13>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="96" Column="1" TopLine="75"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="20" Column="30" TopLine="7"/>
       </Position13>
       <Position14>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="97" Column="1" TopLine="82"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="23" Column="10" TopLine="8"/>
       </Position14>
       <Position15>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="99" Column="1" TopLine="83"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="24" Column="13" TopLine="9"/>
       </Position15>
       <Position16>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="100" Column="1" TopLine="83"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="25" Column="7" TopLine="10"/>
       </Position16>
       <Position17>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="101" Column="1" TopLine="83"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="28" Column="23" TopLine="13"/>
       </Position17>
       <Position18>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="102" Column="1" TopLine="83"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="31" Column="16" TopLine="23"/>
       </Position18>
       <Position19>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="104" Column="1" TopLine="83"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="33" Column="7" TopLine="23"/>
       </Position19>
       <Position20>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="107" Column="1" TopLine="92"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="38" Column="49" TopLine="23"/>
       </Position20>
       <Position21>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="109" Column="1" TopLine="94"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="43" Column="27" TopLine="18"/>
       </Position21>
       <Position22>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="110" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="31" Column="18" TopLine="18"/>
       </Position22>
       <Position23>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="111" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="46" Column="24" TopLine="24"/>
       </Position23>
       <Position24>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="114" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="27" Column="127" TopLine="23"/>
       </Position24>
       <Position25>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="115" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="61" Column="36" TopLine="39"/>
       </Position25>
       <Position26>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="116" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="49" Column="55" TopLine="33"/>
       </Position26>
       <Position27>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="109" Column="1" TopLine="94"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="57" Column="32" TopLine="39"/>
       </Position27>
       <Position28>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="110" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="55" Column="34" TopLine="39"/>
       </Position28>
       <Position29>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="111" Column="1" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="63" Column="22" TopLine="39"/>
       </Position29>
       <Position30>
-        <Filename Value="atomsine_calc_unit.pas"/>
-        <Caret Line="112" Column="41" TopLine="95"/>
+        <Filename Value="quicksort_unit.pas"/>
+        <Caret Line="61" Column="29" TopLine="39"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -322,6 +329,12 @@
     </Other>
   </CompilerOptions>
   <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Source Value="atomsine_calc_unit.pas"/>
+        <Line Value="124"/>
+      </Item1>
+    </BreakPoints>
     <Exceptions Count="2">
       <Item1>
         <Name Value="ECodetoolError"/>
