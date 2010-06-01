@@ -7,11 +7,13 @@ interface
 uses
   Classes, SysUtils;
 
-  TYPE
-  QSarray = ARRAY OF TObject;
-  QSPointer = ^TObject;
-  QSMapping = double;
-  QSFunction = Function(obj: TObject): QSMapping;
+    TYPE
+  	QSarray = ARRAY OF TObject;
+  	QSPointer = ^TObject;
+  	QSMapping = double;
+  	QSFunction = Function(obj: TObject): QSMapping;
+
+	PROCEDURE Quicksort(arr: QSArray; f: QSFunction; size: Integer);
 
 implementation
 
@@ -64,5 +66,5 @@ PROCEDURE Quicksort(arr: QSArray; f: QSFunction; size: Integer);
     END;
 END.
 
-end.
+
 

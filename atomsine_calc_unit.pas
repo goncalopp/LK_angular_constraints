@@ -6,25 +6,36 @@ interface
 
 
 uses
-  Classes, SysUtils, atom_unit, sinewave_unit, pointnd_unit, sinewaveinregion_unit,
-  Graphics, region_unit, linkedlist_unit;
+  Classes, SysUtils, dialogs, atom_unit, sinewave_unit, pointnd_unit, sinewaveinregion_unit,
+  Graphics, region_unit, linkedlist_unit, quicksort_unit;
 
   type
 
   Tsinewaveinregionarray = array of SinewaveInRegion;
   Tgetmaximumfunction = Function(sine1, sine2: sinewave; point: double): sinewave;
+  TIntersection = class
+  	sine1, sine2: Sinewave;
+    intersection: PointND;
+    constructor create(s1,s2: sinewave; inter: PointND);
+  	end;
 
 procedure addAtomToSines(a: atom; coordinate: integer; color: TColor);
+procedure process();
 
   var
-sines: array [0..1] of linkedList;
+allsines: array [0..1] of linkedList;
+intersections: array [0..1] of QSArray;
 
 implementation
 
-function  SIRFromAtomDomain(a: atom; coordinate, bound: integer): sineWaveInRegion;
+constructor TIntersection.create(s1,s2: sinewave; inter: PointND);
+	begin
+    sine1:= s1; sine2:=s2; intersection:=inter;
+	end;
+
+function  sineFromAtomDomain(a: atom; coordinate, bound: integer): sineWave;
 var tmppoint: PointND;
 sine: sinewave;
-region: TRegion;
  	begin
     tmppoint:= a.position.clone();
     tmppoint.scale(-1); 				//transform in a vector from atom to center
@@ -34,43 +45,10 @@ region: TRegion;
               			tmppoint.angleInProjection2D((coordinate-1) mod 2,coordinate),
                 		a.adomain.goodregion.bounds[bound].c[coordinate]);
     tmppoint.destroy();
-    region:= TRegion.create(PointND.create(0), PointND.create(2*PI));
-    result:=SineWaveInRegion.create(sine, region);
-
-
-
+    result:=sine;
     end;
 
 
-
-//given two SIR, returns an array of SIR with the sines maximizing
-// maximumFunction() in each subregion of its (SIRs) intersection
-function maximizeSIR(sine1, sine2: sinewaveInRegion; maximumFunction: Tgetmaximumfunction): TsinewaveInRegionArray;
-var i: integer;
-	mean: double;
-    newregion: TRegion;
-    newsine, maxsine: sinewave;
-    newsr: sineWaveInRegion;
-    regions: TRegionArray;
-
- 	begin
-    newregion:=sine1.region.intersect(sine2.region);
-    newsine:=sine1.sine.intersectWave(sine2.sine);
-    newsr:=sineWaveInRegion.create(newsine, newregion);
-    regions:= newsr.getSubregions();
-    newregion.Destroy();
-    newsine.Destroy();
-    newsr.Destroy();
-
-    setlength(result, length(regions));
-
-    for i:=0 to high(regions) do
-    	begin
-        mean:= (regions[i].bounds[0].c[0] + regions[i].bounds[1].c[0]) /2 ;
-    	maxsine:= maximumFunction(sine1.sine, sine2.sine, mean);
-        result[i]:=sinewaveinregion.create(maxsine, regions[i]);
-        end;
-    end;
 
 function highline(sine1, sine2: sinewave; point: double): sinewave;
 	begin
@@ -89,36 +67,45 @@ function lowline(sine1, sine2: sinewave; point: double): sinewave;
     end;
 
 procedure addAtomToSines(a: atom; coordinate: integer; color: TColor);
-var atomSIR, iterSIR: sinewaveInRegion;
-    maxsines: array of sinewaveInRegion;
-	i, j, bound, numsines:integer;
-
+var atomsine, itersine, intersectionsine: sinewave;
+	i, j, bound, intersectionindex :integer;
+    zeros: array of PointND;
 	begin
     for bound:=0 to 1 do
     	begin
-        sines[bound].rewind();
-        numsines:= sines[bound].length; //necessary! it changes during operations
-        atomSIR:=SIRFromAtomDomain(a, coordinate, bound);
-        atomSIR.sine.color:=color;
+        allsines[bound].rewind();
+        atomsine:=sineFromAtomDomain(a, coordinate, bound);
+        atomsine.color:=color;
 
-        if sines[bound].length=0 then
-        	sines[bound].add(atomSIR)
-        else
-            for i:=0 to numsines-1 do
-            	begin
-                iterSIR:= sineWaveInRegion(  sines[bound].remove()  );
-                if bound=0 then
-                	maxsines:= maximizeSIR(atomSIR, iterSIR, @highline )
-                else
-                    maxsines:= maximizeSIR(atomSIR, iterSIR, @lowline );
-                for j:= 0 to high(maxsines) do
-                    sines[bound].add(maxsines[j]);
-                //iterSIR.region.Destroy();
-                end;
+        for i:=0 to allsines[bound].length-1 do
+        	begin
+            itersine:= sinewave( allsines[bound].advance().element);
+            intersectionsine:=itersine.intersectWave(atomsine);
+            zeros:= intersectionsine.getZeros();
+            intersectionindex:= length(intersections[bound]);
+            setlength(intersections[bound], length(intersections[bound]) + length(zeros));
+            for j:=0 to high(zeros) do
+            	intersections[bound][intersectionindex+j]:= TIntersection.create(atomsine, itersine, zeros[j]);
+        	end;
+        allsines[bound].add(atomsine);
     	end;
+	end;
+
+function intersectionDouble(intersection: Tobject): double;
+	begin
+    result:= TIntersection(intersection).intersection.c[0];
     end;
 
+procedure process();
+var i:integer;
+	begin
+    for i:=0 to high(intersections[0]) do
+    	showmessage(floattostr(TIntersection(intersections[0][i]).intersection.c[0]));
+    Quicksort(intersections[0], @intersectionDouble, length(intersections[0]));
+    Quicksort(intersections[1], @intersectionDouble, length(intersections[1]));
+    for i:=0 to high(intersections[0]) do
+    	showmessage(floattostr(TIntersection(intersections[0][i]).intersection.c[0]));
 
+    end;
 
 end.
-
