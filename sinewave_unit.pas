@@ -14,9 +14,11 @@ type
   	procedure simplifyPhase();
   public
     amplitude, phase, y_deslocation: double;
+    zeros_calculated: boolean;
+    zeros: array of PointND;
     color: TColor;         //debug
     constructor create(amplitude_, phase_, y_deslocation_: double);
-    procedure invert();                           
+    procedure invert();
     function addWave(wave: sineWave):sineWave;
     function intersectWave(wave: sineWave):sineWave;
     function valueat(x: double): double;
@@ -31,6 +33,7 @@ constructor sineWave.create(amplitude_, phase_, y_deslocation_:double);
     amplitude:= amplitude_;
     phase:= phase_;
     y_deslocation:= y_deslocation_;
+    zeros_calculated:= false;
     end;
 
 
@@ -70,32 +73,36 @@ function sineWave.valueat(x: double): double;
 
 function sineWave.getZeros():TPointNDArray;
 var tmp, z0, z1:double;
-zeros: array[0..1] of double;
  	begin
-    simplifyPhase();
-    try
-    	tmp:=arcsin(y_deslocation/amplitude);
-    except
-        setlength(result,0);
-        exit;
-        end;
-    z0:=pi+tmp-phase;
-    z1:=2*pi-tmp-phase;
-    if (z0<0) then
-    	z0:=z0+2*pi;
-    if (z1<0) then
-    	z1:=z1+2*pi;
-    if (z0>z1) then         //swap
+    if not zeros_calculated then
     	begin
-        tmp:=z0;
-        z0:=z1;
-        z1:=tmp;
-        end;
+        simplifyPhase();
+        try
+        	tmp:=arcsin(y_deslocation/amplitude);
+        except
+            setlength(zeros,0);
+            exit;
+            end;
+         z0:=pi+tmp-phase;
+         z1:=2*pi-tmp-phase;
+         if (z0<0) then
+         	z0:=z0+2*pi;
+         if (z1<0) then
+         	z1:=z1+2*pi;
+         if (z0>z1) then         //swap
+         	begin
+             tmp:=z0;
+             z0:=z1;
+             z1:=tmp;
+             end;
 
-    setlength(result,2);
-    result[0]:=PointND.create(z0);
-    result[1]:=PointND.create(z1);
-    end;
+         setlength(zeros,2);
+         zeros[0]:=PointND.create(z0);
+         zeros[1]:=PointND.create(z1);
+         zeros_calculated:=true;
+       	 end;
+    result:=zeros;
+ 	end;
 
 end.
 
