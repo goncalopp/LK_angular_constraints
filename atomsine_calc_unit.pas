@@ -96,15 +96,50 @@ function intersectionDouble(intersection: Tobject): double;
     result:= TIntersection(intersection).intersection.c[0];
     end;
 
-procedure process();
+function getFirstSine(bound: integer): Sinewave;
 var i:integer;
+	s: sinewave;
+    f: Tgetmaximumfunction;
+    begin
+    if bound=0 then
+    	f:= @highline
+    else
+    	f:= @lowline;
+    allsines[bound].rewind();
+    s:= Sinewave(allsines[bound].advance().element);
+    for i:=0 to allsines[bound].length-2 do
+        	s:= f(s, Sinewave(allsines[bound].advance().element), 0);
+	result:=s;
+    end;
+
+function getNextIntersectionIndex(bound: integer; sine: sinewave; offset: integer):integer;
+    var inter: TIntersection;
+    begin
+    while (offset<length(intersections[bound])) do
+    	begin
+    	offset:= offset+1;
+        inter:=TIntersection(intersections[bound][offset]);
+        if ((sine=inter.sine1) or (sine=inter.sine2)) then
+        	begin
+            result:=offset;
+            exit();
+            end;
+        end;
+    result:= -1;
+    end;
+
+
+procedure process();
+var i, bound:integer;
+	sir: SinewaveInRegion;
+    s: sinewave;
 	begin
-    for i:=0 to high(intersections[0]) do
-    	showmessage(floattostr(TIntersection(intersections[0][i]).intersection.c[0]));
+
     Quicksort(intersections[0], @intersectionDouble, length(intersections[0]));
     Quicksort(intersections[1], @intersectionDouble, length(intersections[1]));
-    for i:=0 to high(intersections[0]) do
-    	showmessage(floattostr(TIntersection(intersections[0][i]).intersection.c[0]));
+    s:=getFirstSine(bound);
+
+
 
     end;
 
