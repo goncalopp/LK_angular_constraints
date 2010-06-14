@@ -154,11 +154,11 @@ var root, i,j:integer;
     drawCenterDomainCalculation();
     sineview.canvas.clear();
 
-    for j:=0 to 1 do
+    for j:=0 to 0 do
     	begin
-        sines[j].rewind();
-   	 	for i:=0 to sines[0].length-1 do
-            drawsine(sinewaveinregion(sines[j].advance().element));
+        sirs[j].rewind();
+   	 	for i:=0 to sirs[j].length-1 do
+            drawsine(sinewaveinregion(sirs[j].advance().element));
         end;
 
 	root:=trunc  (trackbarposition/201*sineview.Width);
@@ -172,16 +172,14 @@ procedure calculateSines();
     var i:integer;
     sine: sinewaveinregion;
 	begin
-    sines[0]:= linkedlist.create();
-    sines[1]:= linkedlist.create();
+    allsines[0]:= linkedlist.create();
+    allsines[1]:= linkedlist.create();
     for i:=0 to length(rigid.atoms)-1 do
     	begin
         atomsine_calc_unit.addAtomtoSines(rigid.atoms[i], 1, (i*$200000) mod $AA0000 + (i*$005000) mod $00FF00 + (i*$000090) mod $0000FF )
        	end;
 
-
-	sines[0].rewind;
-    sines[1].rewind;
+    atomsine_calc_unit.process();
     end;
 
 procedure TForm1.Button1Click(Sender: TObject);

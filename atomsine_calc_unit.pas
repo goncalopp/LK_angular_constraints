@@ -25,6 +25,7 @@ procedure process();
   var
 allsines: array [0..1] of linkedList;
 intersections: array [0..1] of QSArray;
+sirs: array [0..1] of linkedList;
 
 implementation
 
@@ -115,7 +116,7 @@ var i:integer;
 function getNextIntersectionIndex(bound: integer; sine: sinewave; offset: integer):integer;
     var inter: TIntersection;
     begin
-    while (offset<length(intersections[bound])) do
+    while (offset+1<length(intersections[bound])) do
     	begin
     	offset:= offset+1;
         inter:=TIntersection(intersections[bound][offset]);
@@ -128,16 +129,46 @@ function getNextIntersectionIndex(bound: integer; sine: sinewave; offset: intege
     result:= -1;
     end;
 
+function otherIntersectionSine(i: TIntersection; s: sinewave): sinewave;
+	begin
+    result:=nil;
+    if i.sine1=s then
+    	result:=i.sine2;
+    if i.sine2=s then
+    	result:=i.sine1;
+    end;
+
 
 procedure process();
-var i, bound:integer;
+var i, bound, iter:integer;
 	sir: SinewaveInRegion;
     s: sinewave;
+    p: pointND;
 	begin
-
     Quicksort(intersections[0], @intersectionDouble, length(intersections[0]));
     Quicksort(intersections[1], @intersectionDouble, length(intersections[1]));
-    s:=getFirstSine(bound);
+
+
+    bound:=0;
+    sirs[bound]:= linkedlist.create();
+
+
+    s:=getFirstSine(bound);    //s is highest or lowest sine, depending on bound
+    sir:=SinewaveInRegion.create(s, TRegion.create(PointND.create(0), nil));
+    sirs[bound].add(sir);
+    iter:=getNextIntersectionIndex(bound, s, -1);
+    while (iter<>-1) do
+    	begin
+        s:= otherIntersectionSine(Tintersection(intersections[bound][iter]), s);//swap s to the other sine in intersection
+        p:= TIntersection(intersections[bound][iter]).intersection.clone();     //p marks current intersection
+		sir.region.bounds[1]:=p;                                                //last SIR's region ends in p...
+        sir:= SinewaveInRegion.create(s, TRegion.create(p, nil));               //and the current (with sinewave s) begins on p
+
+        sirs[bound].add(sir);                                                   //add the constructed SIR to the list
+        iter:=getNextIntersectionIndex(bound, s, iter);  						//find next intersection that has s
+        end;
+    sir.region.bounds[1]:= PointND.create(2*pi);
+
 
 
 
