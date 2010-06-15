@@ -8,9 +8,9 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms
-  { you can add units after this }, Unit1, domain_unit, region_unit,
-  atom_unit, sineWave_unit, linkedList_unit,
-  pointnd_unit, sinewaveinregion_unit, atomsine_calc_unit, quicksort_unit;
+  { you can add units after this }, Unit1, domain_unit, region_unit, atom_unit,
+  sineWave_unit, linkedList_unit, pointnd_unit, sinewaveinregion_unit,
+  atomsine_calc_unit, quicksort_unit, mydebugger_unit;
 
 begin
   Application.Initialize;

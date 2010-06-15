@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   pointnd_unit, rigidgroup_unit, sinewave_unit, StdCtrls,
   ExtCtrls, ComCtrls, linkedlist_unit, atom_unit, region_unit, sinewaveInRegion_unit,
-  atomsine_calc_unit;
+  atomsine_calc_unit, mydebugger_unit;
 
 type
 
@@ -21,6 +21,10 @@ type
   TForm1 = class(TForm)
     Button1: TButton;
     Button2: TButton;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    CheckBox4: TCheckBox;
     frontview: TImage;
     sineview: TImage;
     sideview: TImage;
@@ -34,6 +38,7 @@ type
     procedure drawPoint(p, lowlimit, highlimit:pointND; size: integer);
     procedure drawCenterDomainCalculation();
     procedure drawSine(sine: sinewaveinregion);
+    procedure drawSine(sine: sinewave);
     procedure TrackBar1Change(Sender: TObject);
   private
     { private declarations }
@@ -44,8 +49,8 @@ type
 var
   Form1: TForm1; 
   rigid: rigidgroup;
-
   trackbarposition: integer=0;
+
 
 implementation
 
@@ -142,6 +147,18 @@ var i, tmp: integer;
     sineview.Canvas.Pen.Color:=0;
     end;
 
+procedure TForm1.drawSine(sine:sinewave);
+var tmpsir: sinewaveinregion;
+	tmpregion: TRegion;
+	begin
+    tmpregion:=TRegion.create(PointND.create(0), PointND.create(2*pi));
+	tmpsir:=sinewaveinregion.create(sine, tmpregion);
+    drawsine(tmpsir);
+    tmpsir.destroy();
+    tmpregion.destroy();
+    end;
+
+
 procedure TForm1.TrackBar1Change(Sender: TObject);
 begin
 	rigid.rotateOver( 'z', double(trackbar1.Position-trackbarposition)/201*2*pi);
@@ -154,11 +171,32 @@ var root, i,j:integer;
     drawCenterDomainCalculation();
     sineview.canvas.clear();
 
-    for j:=0 to 0 do
+    if checkbox1.checked then
     	begin
-        sirs[j].rewind();
-   	 	for i:=0 to sirs[j].length-1 do
-            drawsine(sinewaveinregion(sirs[j].advance().element));
+        allsines[0].rewind();
+   	 	for i:=0 to allsines[0].length-1 do
+            drawsine(sinewave(allsines[0].advance().element));
+        end;
+
+    if checkbox2.checked then
+    	begin
+        allsines[1].rewind();
+   	 	for i:=0 to allsines[1].length-1 do
+            drawsine(sinewave(allsines[1].advance().element));
+        end;
+
+    if checkbox3.checked then
+    	begin
+        sirs[0].rewind();
+   	 	for i:=0 to sirs[0].length-1 do
+            drawsine(sinewaveinregion(sirs[0].advance().element));
+        end;
+
+    if checkbox4.checked then
+    	begin
+        sirs[1].rewind();
+   	 	for i:=0 to sirs[1].length-1 do
+            drawsine(sinewaveinregion(sirs[1].advance().element));
         end;
 
 	root:=trunc  (trackbarposition/201*sineview.Width);
@@ -186,9 +224,10 @@ procedure TForm1.Button1Click(Sender: TObject);
 var i:integer;
 	x,y,z:double;
 	begin
+    dbg:= mydebugger.create('debug.log');
     rigid:= rigidgroup.Create();
 
-    for i:=0 to 2 do
+    for i:=0 to 5 do
     	begin
         x:= random()*120;
         y:= random()*120;
@@ -197,6 +236,9 @@ var i:integer;
     	end;
     rigid.recalculateCenter();
     calculateSines();
+
+
+    dbg.close;
     timer1.enabled:=true;
 
     //rigid.calculateCenterDomain(pi/8, pi/16, application);

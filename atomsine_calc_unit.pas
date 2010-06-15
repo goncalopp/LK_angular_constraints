@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, dialogs, atom_unit, sinewave_unit, pointnd_unit, sinewaveinregion_unit,
-  Graphics, region_unit, linkedlist_unit, quicksort_unit;
+  Graphics, region_unit, linkedlist_unit, quicksort_unit, mydebugger_unit;
 
   type
 
@@ -109,7 +109,10 @@ var i:integer;
     allsines[bound].rewind();
     s:= Sinewave(allsines[bound].advance().element);
     for i:=0 to allsines[bound].length-2 do
-        	s:= f(s, Sinewave(allsines[bound].advance().element), 0);
+		begin
+       	s:= f(s, Sinewave(allsines[bound].advance().element), 0);
+        dbg.write('max ('+inttostr(bound)+')='+floattostr(s.valueat(0)));
+        end;
 	result:=s;
     end;
 
@@ -148,28 +151,28 @@ var i, bound, iter:integer;
     Quicksort(intersections[0], @intersectionDouble, length(intersections[0]));
     Quicksort(intersections[1], @intersectionDouble, length(intersections[1]));
 
-
-    bound:=0;
-    sirs[bound]:= linkedlist.create();
-
-
-    s:=getFirstSine(bound);    //s is highest or lowest sine, depending on bound
-    sir:=SinewaveInRegion.create(s, TRegion.create(PointND.create(0), nil));
-    sirs[bound].add(sir);
-    iter:=getNextIntersectionIndex(bound, s, -1);
-    while (iter<>-1) do
+    for bound:= 0 to 1 do
     	begin
-        s:= otherIntersectionSine(Tintersection(intersections[bound][iter]), s);//swap s to the other sine in intersection
-        p:= TIntersection(intersections[bound][iter]).intersection.clone();     //p marks current intersection
-		sir.region.bounds[1]:=p;                                                //last SIR's region ends in p...
-        sir:= SinewaveInRegion.create(s, TRegion.create(p, nil));               //and the current (with sinewave s) begins on p
+        sirs[bound]:= linkedlist.create();
 
-        sirs[bound].add(sir);                                                   //add the constructed SIR to the list
-        iter:=getNextIntersectionIndex(bound, s, iter);  						//find next intersection that has s
+        s:=getFirstSine(bound);    //s is highest or lowest sine, depending on bound
+        sir:=SinewaveInRegion.create(s, TRegion.create(PointND.create(0), nil));
+        sirs[bound].add(sir);
+        iter:=getNextIntersectionIndex(bound, s, -1);
+        while (iter<>-1) do
+        	begin
+            s:= otherIntersectionSine(Tintersection(intersections[bound][iter]), s);//swap s to the other sine in intersection
+            p:= TIntersection(intersections[bound][iter]).intersection.clone();     //p marks current intersection
+    		sir.region.bounds[1]:=p;                                                //last SIR's region ends in p...
+            sir:= SinewaveInRegion.create(s, TRegion.create(p, nil));               //and the current (with sinewave s) begins on p
+
+            sirs[bound].add(sir);                                                   //add the constructed SIR to the list
+            iter:=getNextIntersectionIndex(bound, s, iter);  						//find next intersection that has s
+            end;
+        sir.region.bounds[1]:= PointND.create(2*pi);
         end;
-    sir.region.bounds[1]:= PointND.create(2*pi);
 
-
+   showmessage('first intersection: '+floattostr(Tintersection(intersections[0][0]).intersection.c[0]))
 
 
     end;

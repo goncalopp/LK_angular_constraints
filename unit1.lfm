@@ -66,6 +66,38 @@ object Form1: TForm1
     OnClick = Button2Click
     TabOrder = 2
   end
+  object CheckBox1: TCheckBox
+    Left = 328
+    Height = 22
+    Top = 664
+    Width = 95
+    Caption = 'CheckBox1'
+    TabOrder = 3
+  end
+  object CheckBox2: TCheckBox
+    Left = 328
+    Height = 22
+    Top = 680
+    Width = 95
+    Caption = 'CheckBox2'
+    TabOrder = 4
+  end
+  object CheckBox3: TCheckBox
+    Left = 328
+    Height = 22
+    Top = 696
+    Width = 95
+    Caption = 'CheckBox3'
+    TabOrder = 5
+  end
+  object CheckBox4: TCheckBox
+    Left = 328
+    Height = 22
+    Top = 712
+    Width = 95
+    Caption = 'CheckBox4'
+    TabOrder = 6
+  end
   object Timer1: TTimer
     Enabled = False
     Interval = 10
