@@ -81,6 +81,7 @@ var tmp, z0, z1:double;
         	tmp:=arcsin(y_deslocation/amplitude);
         except
             setlength(zeros,0);
+            result:=zeros;
             exit;
             end;
          z0:=pi+tmp-phase;

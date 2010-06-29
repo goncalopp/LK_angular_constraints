@@ -29,6 +29,7 @@ constructor mydebugger.create(filename: String);
 procedure mydebugger.write(s: String);
 	begin
     writeln(myfile, s);
+    flush(myfile);
     end;
 
 procedure mydebugger.close();
