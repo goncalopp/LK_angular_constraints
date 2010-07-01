@@ -225,18 +225,11 @@ procedure calculateSines();
 procedure TForm1.Button1Click(Sender: TObject);
 var i:integer;
 	x,y,z,x1,x2,y1,y2,z1,z2:double;
-    tf: textfile;
-    s:string;
 	begin
-    dbg:= mydebugger.create('debug.log');
-
-    assignfile(tf,'./debug.group');
-    reset(tf);
     rigid:= rigidgroup.Create();
-
     for i:=0 to 2 do
     	begin
-        {x:= random()*120;
+        x:= random()*120;
         y:= random()*120;
         z:= random()*120;
         x1:= x-10+random();
@@ -244,37 +237,12 @@ var i:integer;
         z1:= z-10+random();
         x2:= x+10+random();
         y2:= y+10+random();
-        z2:= z+10+random();  }
-
-        readln(tf,s);
-        x:= strtofloat(s);
-        readln(tf,s);
-        x1:=strtofloat(s);
-        readln(tf,s);
-        x2:=strtofloat(s);
-        readln(tf,s);
-        y:= strtofloat(s);
-        readln(tf,s);
-        y1:=strtofloat(s);
-        readln(tf,s);
-        y2:=strtofloat(s);
-        readln(tf,s);
-        z:= strtofloat(s);
-        readln(tf,s);
-        z1:=strtofloat(s);
-        readln(tf,s);
-        z2:=strtofloat(s);
-        readln(tf,s);
-
-
+        z2:= z+10+random();
 		rigid.addAtom(PointND.create(x,y,z), pointND.create(x1, y1, z1), pointND.create(x2, y2, z2));
-        //dbg.write(rigid.atoms[high(rigid.atoms)].toText());
-    	end;
+        end;
     rigid.recalculateCenter();
     calculateSines();
 
-
-    dbg.close;
     timer1.enabled:=true;
 
     //rigid.calculateCenterDomain(pi/8, pi/16, application);
