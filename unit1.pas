@@ -20,7 +20,6 @@ type
 
   TForm1 = class(TForm)
     Button1: TButton;
-    Button2: TButton;
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
     CheckBox3: TCheckBox;
@@ -33,7 +32,6 @@ type
     Timer1: TTimer;
     TrackBar1: TTrackBar;
     procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure drawPoint(p, lowlimit, highlimit:pointND; size: integer);
     procedure drawCenterDomainCalculation();
@@ -282,15 +280,6 @@ var i:integer;
     //rigid.calculateCenterDomain(pi/8, pi/16, application);
 	end;
 
-procedure TForm1.Button2Click(Sender: TObject);
-var r1,r2: TRegion;
-begin
-r1:= TRegion.create(PointND.create(0,3),PointND.create(5,7));
-r2:= TRegion.create(PointND.create(1,2),PointND.create(6,3));
-r2:= r2.intersect(r1);
-showmessage(floattostr(r2.bounds[0].c[0])+' '+floattostr(r2.bounds[1].c[0])+#13#10+floattostr(r2.bounds[0].c[1])+' '+floattostr(r2.bounds[1].c[1]))
-
-end;
 
 
 initialization
