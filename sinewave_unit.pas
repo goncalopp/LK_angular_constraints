@@ -90,6 +90,10 @@ var tmp, z0, z1:double;
          	z0:=z0+2*pi;
          if (z1<0) then
          	z1:=z1+2*pi;
+         if (z0>=2*pi) then
+         	z0:=z0-2*pi;
+         if (z1>=2*pi) then
+         	z1:=z1-2*pi;
          if (z0>z1) then         //swap
          	begin
              tmp:=z0;
