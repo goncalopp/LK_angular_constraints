@@ -47,6 +47,7 @@ sine: sinewave;
                 		a.adomain.goodregion.bounds[bound].c[coordinate]);
     tmppoint.destroy();
     result:=sine;
+    dbg.write('phase:' + floattostr(sine.phase)+'  amplitude:' + floattostr(sine.amplitude)+'  y:' + floattostr(sine.y_deslocation));
     end;
 
 
@@ -83,6 +84,8 @@ var atomsine, itersine, intersectionsine: sinewave;
             itersine:= sinewave( allsines[bound].advance().element);
             intersectionsine:=itersine.intersectWave(atomsine);
             zeros:= intersectionsine.getZeros();
+            if (zeros[0].c[0]>2*pi) or (zeros[1].c[0]>2*pi) then
+            	zeros:=zeros;							//debug
             intersectionindex:= length(intersections[bound]);
             setlength(intersections[bound], length(intersections[bound]) + length(zeros));
             for j:=0 to high(zeros) do
@@ -99,7 +102,7 @@ function intersectionDouble(intersection: Tobject): double;
 
 function getFirstSine(bound: integer): Sinewave;
 var i:integer;
-	s: sinewave;
+	s, maxs: sinewave;
     f: Tgetmaximumfunction;
     begin
     if bound=0 then
@@ -108,12 +111,16 @@ var i:integer;
     	f:= @lowline;
     allsines[bound].rewind();
     s:= Sinewave(allsines[bound].advance().element);
+    maxs:=s;
+    dbg.write('value of sinephase='+floattostr(s.phase)+'of bound['+inttostr(bound)+'] at f(0)='+floattostr(s.valueat(0)) );
     for i:=0 to allsines[bound].length-2 do
 		begin
-       	s:= f(s, Sinewave(allsines[bound].advance().element), 0);
-        dbg.write('max ('+inttostr(bound)+')='+floattostr(s.valueat(0)));
+       	s:= Sinewave(allsines[bound].advance().element);
+        maxs:=f(maxs,s, 0);
+        dbg.write('value of sinephase='+floattostr(s.phase)+'of bound['+inttostr(bound)+'] at f(0)='+floattostr(s.valueat(0)) );
         end;
-	result:=s;
+    dbg.write('max of bound['+inttostr(bound)+'] is  sinephase='+floattostr(maxs.phase));
+	result:=maxs;
     end;
 
 function getNextIntersectionIndex(bound: integer; sine: sinewave; offset: integer):integer;
@@ -143,16 +150,28 @@ function otherIntersectionSine(i: TIntersection; s: sinewave): sinewave;
 
 
 procedure process();
-var i, bound, iter:integer;
+var i,j, bound, iter:integer;
 	sir: SinewaveInRegion;
     s: sinewave;
     p: pointND;
+    debugi: Tintersection;
 	begin
     Quicksort(intersections[0], @intersectionDouble, length(intersections[0]));
     Quicksort(intersections[1], @intersectionDouble, length(intersections[1]));
 
+
+    dbg.write('----------------------------------------');
     for bound:= 0 to 1 do
     	begin
+        // <debug>
+        for i:=0 to high(Intersections[bound]) do
+        	begin
+            debugi:=Tintersection(intersections[bound][i]);
+            dbg.write(inttostr(bound)+': intersection at	'+floattostr(debugi.intersection.c[0])+
+            ' of sines with phases '+floattostr(debugi.sine1.phase)+' and '+floattostr(debugi.sine2.phase));
+        	end;
+        // </debug>
+
         sirs[bound]:= linkedlist.create();
 
         s:=getFirstSine(bound);    //s is highest or lowest sine, depending on bound
@@ -170,10 +189,18 @@ var i, bound, iter:integer;
             iter:=getNextIntersectionIndex(bound, s, iter);  						//find next intersection that has s
             end;
         sir.region.bounds[1]:= PointND.create(2*pi);
+
+        //<debug>
+        dbg.write('-------------------------------');
+        sirs[bound].rewind();
+        for j:=0 to sirs[bound].length-1 do
+            begin
+            sir:=SinewaveInRegion(sirs[bound].advance().element);
+            dbg.write('SIR['+inttostr(bound)+']: '+floattostr(sir.region.bounds[0].x^)+'--'+floattostr(sir.region.bounds[1].x^));
+            end;
+    	//  </debug>
+
         end;
-
-   showmessage('first intersection: '+floattostr(Tintersection(intersections[0][0]).intersection.c[0]))
-
 
     end;
 

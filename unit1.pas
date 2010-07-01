@@ -131,6 +131,8 @@ var i, tmp: integer;
     	begin
         angle:=PointND.create(i/sineview.Width*  2*pi);
         tmp:= trunc(sine.sine.valueat(angle.c[0])/1.8);
+        //angle:=PointND.create(i/sineview.Width*  0.007);
+        //tmp:= trunc(sine.sine.valueat(angle.c[0])/0.2);
         sineview.Canvas.moveto(i-1, (sineview.height div 2) - tmp);
         if sine.region.inside(angle) then
         	begin
@@ -212,6 +214,8 @@ procedure calculateSines();
 	begin
     allsines[0]:= linkedlist.create();
     allsines[1]:= linkedlist.create();
+    setlength(intersections[0],0);
+    setlength(intersections[1],0);
     for i:=0 to length(rigid.atoms)-1 do
     	begin
         atomsine_calc_unit.addAtomtoSines(rigid.atoms[i], 1, (i*$200000) mod $AA0000 + (i*$005000) mod $00FF00 + (i*$000090) mod $0000FF )
@@ -222,17 +226,51 @@ procedure calculateSines();
 
 procedure TForm1.Button1Click(Sender: TObject);
 var i:integer;
-	x,y,z:double;
+	x,y,z,x1,x2,y1,y2,z1,z2:double;
+    tf: textfile;
+    s:string;
 	begin
     dbg:= mydebugger.create('debug.log');
+
+    assignfile(tf,'./debug.group');
+    reset(tf);
     rigid:= rigidgroup.Create();
 
-    for i:=0 to 5 do
+    for i:=0 to 2 do
     	begin
-        x:= random()*120;
+        {x:= random()*120;
         y:= random()*120;
         z:= random()*120;
-		rigid.addAtom(PointND.create(x,y,z), pointND.create(x-10, y-10, z-10), pointND.create(x+10, y+10, z+10));
+        x1:= x-10+random();
+        y1:= y-10+random();
+        z1:= z-10+random();
+        x2:= x+10+random();
+        y2:= y+10+random();
+        z2:= z+10+random();  }
+
+        readln(tf,s);
+        x:= strtofloat(s);
+        readln(tf,s);
+        x1:=strtofloat(s);
+        readln(tf,s);
+        x2:=strtofloat(s);
+        readln(tf,s);
+        y:= strtofloat(s);
+        readln(tf,s);
+        y1:=strtofloat(s);
+        readln(tf,s);
+        y2:=strtofloat(s);
+        readln(tf,s);
+        z:= strtofloat(s);
+        readln(tf,s);
+        z1:=strtofloat(s);
+        readln(tf,s);
+        z2:=strtofloat(s);
+        readln(tf,s);
+
+
+		rigid.addAtom(PointND.create(x,y,z), pointND.create(x1, y1, z1), pointND.create(x2, y2, z2));
+        //dbg.write(rigid.atoms[high(rigid.atoms)].toText());
     	end;
     rigid.recalculateCenter();
     calculateSines();
