@@ -138,7 +138,7 @@ function LinkedList.advance(): LinkedNode;
     if (position<>nil) then
     	begin
     	result:=position;
-    	if (position.next<>nil) then
+    	//if (position.next<>nil) then
     	 	position:=position.next;
         end;
     end;
