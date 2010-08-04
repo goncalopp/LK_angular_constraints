@@ -1,21 +1,24 @@
 from sine import Sine
 from pointnd import PointND
+from sineinregion import SineInRegion
+from region import Region
+from math import pi
 
 class Intersection:
-	def __init__(self, sine1, sine2, intersection_point):
+	def __init__(self, sine1, sine2, angle_point):
 		self.sine1= sine1
 		self.sine2= sine2
-		self.intersection= intersection_point;
+		self.angle= angle_point;
 
 
 allsines= [[],[]]
 intersections= [[],[]] 
-sirs= allsines= [[],[]]
+sirs= [[],[]]
 
 def reset():
 	allsines= [[],[]]
 	intersections= [[],[]] 
-	sirs= allsines= [[],[]]
+	sirs= [[],[]]
 
 def  sineFromAtomDomain(atom, bound, coordinate):
 	s= Sine.fromPoint(atom.position, PointND([0,0,0]), coordinate)
@@ -44,7 +47,7 @@ def getFirstSine(bound):
 
 def getNextIntersectionIndex(bound, sine, offset):
 	for i in range(offset+1, len(intersections[bound])):
-		if sine==intersection[i].sine1 or sine==intersection[i].sine2:
+		if sine==intersections[bound][i].sine1 or sine==intersections[bound][i].sine2:
 			return i
 	return None
 
@@ -129,11 +132,11 @@ var currentsirs: array [0..1] of LinkedNode; // ..of SinewaveInRegion;
 '''
 
 def process():
-	k=lambda intersection: intersection.angle[0]
+	k=lambda intersection: intersection.angle
 	for bound in [0,1]:
 		intersections[bound].sort(key=k)
 		sine= 	getFirstSine(bound)													#s is highest or lowest sine, depending on bound
-		sir= SineInRegion(sine, Region(PointND(0), None))
+		sir= SineInRegion(sine, Region(PointND([0]), None))
 		
 		sirs[bound].append(sir);
 		iter= getNextIntersectionIndex(bound, sine, -1);
@@ -145,6 +148,6 @@ def process():
 
 			sirs[bound].append(sir)												   #add the constructed SIR to the list
 			iter=getNextIntersectionIndex(bound, s, iter)  						#find next intersection that has s
-		sir.region.bounds[1]= PointND(2*pi);
+		sir.region.bounds[1]= PointND([2*pi]);
 
 	#validregions();
