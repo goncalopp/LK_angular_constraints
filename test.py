@@ -55,17 +55,32 @@ assert  si.calculateZeros() == [1.1071487177940913, 4.2487413713838844]
 #----------------------
 
 r=1
-c1= PointND([1,2,3])
-c2= PointND([1,4,4])
+c1= PointND([2,3,3])
+c2= PointND([1,2,4])
 
 rigid= RigidGroup()
 rigid.addAtom(c1, c1-r, c1+r)
 rigid.addAtom(c2, c2-r, c2+r)
 rigid.recalculateCenter()
 
-assert rigid.center.c == [1,3,3.5]
-assert rigid.atoms[0].position.c == [0,-1,-0.5]
+assert rigid.center.c == [1.5,2.5,3.5]
+assert rigid.atoms[0].position.c == [0.5,0.5,-0.5]
 
 atomsine_calc.addAtomToSines(rigid.atoms[0], 0)
 atomsine_calc.addAtomToSines(rigid.atoms[1], 0)
-print atomsine_calc.allsines
+atomsine_calc.process()
+#print atomsine_calc.allsines
+#print atomsine_calc.sirs
+
+def sineToFunction(sine):
+    return '%f*sin(x+%f)+%f'%(sine.a, sine.p, sine.y)
+
+import Gnuplot
+g = Gnuplot.Gnuplot()
+txt=''
+for s in atomsine_calc.allsines[0]:
+    txt+=sineToFunction(s)+','
+g.plot(txt[:-1], xrange=['0','2*pi'])
+
+raw_input('Please press return to continue...\n')
+g.reset()
