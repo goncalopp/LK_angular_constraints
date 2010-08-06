@@ -17,13 +17,14 @@ class Sine:
 
 	def invert(self):
 		self.p= (self.p + pi) % pi2
+		self.y=-self.y
 		
 	def addwave(self, sine):
 		y= self.a*sin(self.p)+sine.a*sin(sine.p)
 		x= self.a*cos(self.p)+sine.a*cos(sine.p)
 		newa= sqrt(x*x + y*y)
 		newp= atan2(y,x)
-		newy= -sine.y+self.y
+		newy= sine.y+self.y
 		newsine= Sine(newa, newp, newy)
 		return newsine
 		
