@@ -12,7 +12,7 @@ class Region:
 		return self.c.__iter__()
 		
 	def __repr__(self):
-		return str(self.bounds)
+		return '<Region '+str(self.bounds)+'>'
 
 	def pointInside(self, point):
 		'''returns True iff point is inside region'''
