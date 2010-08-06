@@ -140,14 +140,14 @@ def process():
 		
 		sirs[bound].append(sir);
 		iter= getNextIntersectionIndex(bound, sine, -1);
-		while (iter):
+		while (iter<>None):
 			sine= otherIntersectionSine(intersections[bound][iter], sine)					#swap s to the other sine in intersection
-			p= PointND(intersections[bound][iter].intersection)						#p marks current intersection
+			p= PointND([intersections[bound][iter].angle])						#p marks current intersection
 			sir.region.bounds[1]= p 													#last SIR's region ends in p...
 			sir= SineInRegion(sine, Region(p, None))			  						 #and the current (with sinewave s) begins on p
 
 			sirs[bound].append(sir)												   #add the constructed SIR to the list
-			iter=getNextIntersectionIndex(bound, s, iter)  						#find next intersection that has s
+			iter=getNextIntersectionIndex(bound, sine, iter)  						#find next intersection that has s
 		sir.region.bounds[1]= PointND([2*pi]);
 
 	#validregions();
