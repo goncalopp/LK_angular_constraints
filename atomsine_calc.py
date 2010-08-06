@@ -135,19 +135,19 @@ def process():
 	k=lambda intersection: intersection.angle
 	for bound in [0,1]:
 		intersections[bound].sort(key=k)
-		sine= 	getFirstSine(bound)													#s is highest or lowest sine, depending on bound
+		sine= 	getFirstSine(bound)											#s is highest or lowest sine, depending on bound
 		sir= SineInRegion(sine, Region(PointND([0]), None))
 		
 		sirs[bound].append(sir);
 		iter= getNextIntersectionIndex(bound, sine, -1);
 		while (iter<>None):
-			sine= otherIntersectionSine(intersections[bound][iter], sine)					#swap s to the other sine in intersection
-			p= PointND([intersections[bound][iter].angle])						#p marks current intersection
-			sir.region.bounds[1]= p 													#last SIR's region ends in p...
-			sir= SineInRegion(sine, Region(p, None))			  						 #and the current (with sinewave s) begins on p
+			sine= otherIntersectionSine(intersections[bound][iter], sine)	#swap s to the other sine in intersection
+			p= PointND([intersections[bound][iter].angle])					#p marks current intersection
+			sir.region.bounds[1]= p 										#last SIR's region ends in p...
+			sir= SineInRegion(sine, Region(p, None))			  			#and the current (with sinewave s) begins on p
 
-			sirs[bound].append(sir)												   #add the constructed SIR to the list
-			iter=getNextIntersectionIndex(bound, sine, iter)  						#find next intersection that has s
+			sirs[bound].append(sir)											#add the constructed SIR to the list
+			iter=getNextIntersectionIndex(bound, sine, iter)  				#find next intersection that has sine
 		sir.region.bounds[1]= PointND([2*pi]);
 
 	#validregions();
