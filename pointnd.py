@@ -2,6 +2,10 @@ from math import sqrt, atan2, sin, cos
 
 class PointND:
 	def __init__(self, cl):
+		if not getattr(cl, '__iter__', False):
+			raise TypeError, "PointND must be created with a *list* of coordinates"
+		if not type(cl[0])==type(1.0) and not type(cl[0])==type(1):
+			raise TypeError, "PointND must be created with a list of *float*"
 		self.c=[]
 		for coor in cl:
 			self.c.append(coor)
