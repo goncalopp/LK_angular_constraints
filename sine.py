@@ -1,3 +1,4 @@
+from pointnd import PointND
 from math import pi,atan2,asin, sin, cos, sqrt
 pi2= 2*pi
 
@@ -53,9 +54,9 @@ class Sine:
 			z0= (pi  + tmp - self.p) % pi2
 			z1= (pi2 - tmp - self.p) % pi2
 			if z0<z1:
-				self.zeros= [z0,z1]
+				self.zeros= [PointND([z0]),PointND([z1])]
 			else:
-				self.zeros= [z1,z0]
+				self.zeros= [PointND([z1]),PointND([z0])]
 			return self.zeros
 			
 	@staticmethod
