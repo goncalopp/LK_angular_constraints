@@ -1,5 +1,8 @@
+from pointnd import PointND
 class Region:
 	def __init__(self, bound0, bound1):
+		if bound0<>None and bound1<>None and ((not isinstance(bound0, PointND)) or (not isinstance(bound1, PointND))):
+			raise TypeError, "Region must be created with two PointND" 
 		self.bounds= [bound0, bound1]
 		
 	def __getitem__(self, key):
@@ -9,7 +12,7 @@ class Region:
 		self.bounds[key]=value
 
 	def __iter__(self):
-		return self.c.__iter__()
+		return self.bounds.__iter__()
 		
 	def __repr__(self):
 		return '<Region '+str(self.bounds)+'>'
@@ -24,4 +27,4 @@ class Region:
 	def pointsInside(self, list):
 		'''return a list of the points that are inside the region,
 		from a set of given points'''
-		filter(self.pointInside, list)
+		return filter(self.pointInside, list)
