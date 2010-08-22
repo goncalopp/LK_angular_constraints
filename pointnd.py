@@ -54,6 +54,28 @@ class PointND:
 		
 	def __mul__(self, op):
 		return PointND(self).__imul__(op)
+
+	def __eq__(self, other):
+		if isinstance(other, PointND):
+			if len(self)!=len(other):
+				return False
+			for i in range(len(self)):
+				if self[i]<>other[i]:
+					return False
+			return True
+		return NotImplemented
+		
+	def __ne__(self, other):
+		if isinstance(other, PointND):
+			return not self.__eq__(other)
+		return NotImplemented
+		
+	def __cmp__(self, other):
+		try:
+			return self[0].__cmp__(other[0])
+		except:
+			return 0
+		
 		
 	
 				
