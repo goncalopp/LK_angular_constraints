@@ -57,30 +57,7 @@ def otherIntersectionSine(intersection, sine):
 	if intersection.sine2==sine:
 		return intersection.sine1
 
-def nextSir(indexes):
-	i, j= indexes[0], indexes[1]
-	try:
-		a= sirs[0][i]
-	except:
-		try:
-			b=sirs[1][j]
-			return 1
-		except:
-			return None
-	try:
-		b= sirs[1][j]
-	except:
-		return 0
 
-		
-	if sirs[0][i].region[1]<sirs[1][j].region[1]:
-		return 0
-	else:
-		return 1
-
-
-
-	
 def validRegions():
 
 	while (True):
