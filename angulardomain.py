@@ -4,7 +4,7 @@ from region import Region
 pi2= 2*pi
 
 class AngularDomain:
-	'''subdivides the 0--2pi interval into subintervals (regions)'''
+	'''subdivides the 0--2pi interval into ordered subintervals (regions)'''
 	def __init__(self):
 		self.regions=[]
 
@@ -23,11 +23,15 @@ class AngularDomain:
 	def __repr__(self):
 		s=["-"]*20
 		for r in self.regions:
-			s[r[0][0]]="|"
-			s[r[1][0]]="|"
+			s[int(r[0][0]*3)]="|"
+			s[int(r[1][0]*3)]="|"
 		return "".join(s)
 
-
+	def lookup(self, point):
+		'''returns the index of the region on this AngularDomain that contains point'''
+		for i,r in enumerate(self.regions):
+			if r.pointInside(p):
+				return i
 
 	def insertRegion(self, region):
 		self.regions.append(region)
