@@ -1,10 +1,10 @@
 from pointnd import PointND
 class Region:
-	def __init__(self, bound0, bound1=0, v=None):
+	def __init__(self, bound0, bound1=0, value=None):
 		if bound0!=None and bound1!=None and (not isinstance(bound0, PointND) or not isinstance(bound1, PointND)):
 			raise TypeError, "Region must be created with two PointND" 
 		self.bounds= [bound0, bound1]
-		self.value=v
+		self.value=value
 		
 	def __getitem__(self, key):
 		return self.bounds[key]

@@ -1,6 +1,6 @@
 from sine import Sine
 from pointnd import PointND
-from sineinregion import SineInRegion
+from angulardomain import AngularDomain
 from region import Region
 from math import pi
 
@@ -13,12 +13,12 @@ class Intersection:
 
 allsines= [[],[]]
 intersections= [[],[]] 
-sirs= [[],[]]
+angulardomains= [AngularDomain(),AngularDomain()]
 
 def reset():
 	allsines= [[],[]]
 	intersections= [[],[]] 
-	sirs= [[],[]]
+	angulardomains= [AngularDomain(),AngularDomain()]
 
 def  sineFromAtomDomain(atom, bound, coordinate):
 	s= Sine.fromPoint(atom.position, PointND([0,0,0]), coordinate)
@@ -57,38 +57,37 @@ def otherIntersectionSine(intersection, sine):
 	if intersection.sine2==sine:
 		return intersection.sine1
 
+def nextSir(indexes):
+	i, j= indexes[0], indexes[1]
+	try:
+		a= sirs[0][i]
+	except:
+		try:
+			b=sirs[1][j]
+			return 1
+		except:
+			return None
+	try:
+		b= sirs[1][j]
+	except:
+		return 0
 
-def merge(l1, l2):
-	'''merges 2 ordered lists, without repetitions'''
-	result = []
-	i=j=0
-	while i<len(l1) and j<len(l2):
-		if l1[i] < l2[j]:
-			if (not result) or l1[i]<>result[-1]:
-				result.append(l1[i])
-			i+= 1
-		else:
-			if (not result) or l2[i]<>result[-1]:
-				result.append(l2[j])
-			j+= 1
-	for x in range(i,len(l1)):
-		if (not result) or l1[x]<>result[-1]:
-				result.append(l1[x])
-	for y in range(j, len(l2)):
-		if (not result) or l2[y]<>result[-1]:
-				result.append(l2[y])
-	return result
+		
+	if sirs[0][i].region[1]<sirs[1][j].region[1]:
+		return 0
+	else:
+		return 1
+
+
 
 	
 def validRegions():
-	angles=[None, None]
-	for bound in [0,1]:
-		angles[bound]= [sir.region[0][0] for sir in sirs[bound]]
-		angles[bound].append(2*pi)
-	merged=merge(angles[0], angles[1])
-	return merged
-		
-		
+
+	while (True):
+		a=raw_input()
+		if not a:
+			break
+		print eval(a)
 	
 
 
@@ -96,19 +95,17 @@ def process():
 	k=lambda intersection: intersection.angle
 	for bound in [0,1]:
 		intersections[bound].sort(key=k)
-		sine= 	getFirstSine(bound)											#s is highest or lowest sine, depending on bound
-		sir= SineInRegion(sine, Region(PointND([0]), None))
-		
-		sirs[bound].append(sir);
+		sine=   getFirstSine(bound)									  #s is highest or lowest sine, depending on bound
+		region= Region(PointND([0]), None, value=sine)  #creates a region from 0 to Null, holding sine as value
+		angulardomains[bound].insertRegion(region)
 		iter= getNextIntersectionIndex(bound, sine, -1);
 		while (iter<>None):
-			sine= otherIntersectionSine(intersections[bound][iter], sine)	#swap s to the other sine in intersection
-			p= PointND([intersections[bound][iter].angle])					#p marks current intersection
-			sir.region.bounds[1]= p 										#last SIR's region ends in p...
-			sir= SineInRegion(sine, Region(p, None))			  			#and the current (with sinewave s) begins on p
-
-			sirs[bound].append(sir)											#add the constructed SIR to the list
-			iter=getNextIntersectionIndex(bound, sine, iter)  				#find next intersection that has sine
-		sir.region.bounds[1]= PointND([2*pi]);
+			sine= otherIntersectionSine(intersections[bound][iter], sine)   #swap s to the other sine in intersection
+			p= PointND([intersections[bound][iter].angle[0]])				#p marks current intersection
+			region.bounds[1]= p									  #last region ends in p...
+			region= Region(PointND(p), None, value=sine)			#and the current (with sinewave s) begins on p
+			angulardomains[bound].insertRegion(region)
+			iter=getNextIntersectionIndex(bound, sine, iter)				#find next intersection that has sine
+		region.bounds[1]= PointND([2*pi]);		#close last region
 
 	#validregions();

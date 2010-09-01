@@ -19,9 +19,12 @@ def plotSineList(gnuplotinstance, sinelist):
 	gnuplotinstance.plot(f, xrange=['0','2*pi'])
     
 
-def plotSirList(gnuplotinstance, sirlist):
-	f= ','.join([ sineToFunction(sir.sine, sir.region[0][0], sir.region[1][0]) for sir in sirlist])
-	gnuplotinstance.plot(f, xrange=['0','2*pi'])
+def plotAngularDomains(gnuplotinstance, angulardomains):
+	f=[]
+	for angulardomain in angulardomains:
+		for region in angulardomain:
+			f.append(sineToFunction(region.value, region[0][0], region[1][0]))
+	gnuplotinstance.plot(','.join(f), xrange=['0','2*pi'])
 
 
 
@@ -87,7 +90,7 @@ rigid.recalculateCenter()
 assert rigid.center.c == [3,4,5.5]
 assert rigid.atoms[0].position.c == [2,2,1.5]
 
-
+atomsine_calc.reset()
 atomsine_calc.addAtomToSines(rigid.atoms[0], 0)
 atomsine_calc.addAtomToSines(rigid.atoms[1], 0)
 
@@ -95,17 +98,11 @@ atomsine_calc.addAtomToSines(rigid.atoms[1], 0)
 
 atomsine_calc.process()
 
-assert atomsine_calc.sirs[0][0].sine==atomsine_calc.sirs[0][2].sine
-print atomsine_calc.validRegions()
-
-
-
+assert atomsine_calc.angulardomains[0][0].value==atomsine_calc.angulardomains[0][2].value
+#print atomsine_calc.validRegions()
 plotSineList(g1, atomsine_calc.allsines[0]+atomsine_calc.allsines[1])
-plotSirList(g2, atomsine_calc.sirs[0]+atomsine_calc.sirs[1])
-#todo represent sir in region
-
+plotAngularDomains(g2, atomsine_calc.angulardomains)
+atomsine_calc.angulardomains[0].doubleCut(atomsine_calc.angulardomains[1])
 #g.reset()
-
 #print atomsine_calc.allsines
-
 raw_input('Please press return to continue...\n')
