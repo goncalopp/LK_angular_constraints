@@ -56,6 +56,7 @@ def otherIntersectionSine(intersection, sine):
 		return intersection.sine2
 	if intersection.sine2==sine:
 		return intersection.sine1
+	raise Exception('Given sine does not belong to this intersection')
 
 
 def validRegions():
