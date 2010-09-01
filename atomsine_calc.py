@@ -60,13 +60,18 @@ def otherIntersectionSine(intersection, sine):
 
 
 def validRegions():
+	angulardomains[0].doubleCut(angulardomains[1])
 
-	while (True):
-		a=raw_input()
-		if not a:
-			break
-		print eval(a)
-	
+	i=0
+	while i<len(angulardomains[0]):
+		r1,r2=angulardomains[0][i],angulardomains[1][i]
+		sine1, sine2 = r1.value, r2.value
+		intersections= sine1.intersectWave(sine2).calculateZeros()
+		for intersection in intersections:
+			if r1.pointInside(intersection):
+				angulardomains[0].cutRegionOnPoint(i, intersection)
+				i=angulardomains[1].cutRegionOnPoint(i, intersection)
+		i+=1
 
 
 def process():
@@ -85,5 +90,4 @@ def process():
 			angulardomains[bound].insertRegion(region)
 			iter=getNextIntersectionIndex(bound, sine, iter)				#find next intersection that has sine
 		region.bounds[1]= PointND([2*pi]);		#close last region
-
 	#validregions();
