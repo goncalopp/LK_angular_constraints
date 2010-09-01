@@ -61,9 +61,9 @@ def otherIntersectionSine(intersection, sine):
 
 def validRegions():
 	angulardomains[0].doubleCut(angulardomains[1])
-
+	
 	i=0
-	while i<len(angulardomains[0]):
+	while i<len(angulardomains[0]):		#cuts where sines from both angulardomains intersect
 		r1,r2=angulardomains[0][i],angulardomains[1][i]
 		sine1, sine2 = r1.value, r2.value
 		intersections= sine1.intersectWave(sine2).calculateZeros()
@@ -72,7 +72,18 @@ def validRegions():
 				angulardomains[0].cutRegionOnPoint(i, intersection)
 				i=angulardomains[1].cutRegionOnPoint(i, intersection)
 		i+=1
+	
+	
+	gooddomain=AngularDomain()
+	for i in range(len(angulardomains[0])):
+		r1,r2 = angulardomains[0][i], angulardomains[1][i] 	#regions
+		s1,s2= r1.value, r2.value							#sines
+		midpoint= (r1[0][0]+r1[1][0])/2.0
+		if s1.valueat(midpoint)<=s2.valueat(midpoint):
+			gooddomain.insertRegion(r1)
 
+	return gooddomain
+		
 
 def process():
 	k=lambda intersection: intersection.angle

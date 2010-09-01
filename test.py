@@ -5,7 +5,6 @@ from atom import Atom
 from rigidgroup import RigidGroup
 import atomsine_calc
 
-
 from math import sqrt, atan2, pi
 import Gnuplot
 g1 = Gnuplot.Gnuplot()
@@ -25,6 +24,8 @@ def plotAngularDomains(gnuplotinstance, angulardomains):
 		for region in angulardomain:
 			f.append(sineToFunction(region.value, region[0][0], region[1][0]))
 	gnuplotinstance.plot(','.join(f), xrange=['0','2*pi'])
+
+
 
 
 
@@ -58,7 +59,7 @@ c-=0.1
 assert r.pointInside(c)
 
 
-#------------
+#---------------------------------------------------------------
 
 a= PointND([2,2,2])
 b= PointND([3,4,5])
@@ -76,7 +77,9 @@ s1.y=1
 s1.zeros_calculated=False
 assert [p[0] for p in s1.calculateZeros()] == [2.4398338318452781, 5.0193566824294438]
 
-#----------------------
+
+#----------------------------------------------------------
+
 
 r=1
 c1= PointND([5,6,7])
@@ -97,12 +100,12 @@ atomsine_calc.addAtomToSines(rigid.atoms[1], 0)
 #import pdb; pdb.set_trace()
 
 atomsine_calc.process()
+atomsine_calc.validRegions()
 
 assert atomsine_calc.angulardomains[0][0].value==atomsine_calc.angulardomains[0][2].value
-#print atomsine_calc.validRegions()
+
 plotSineList(g1, atomsine_calc.allsines[0]+atomsine_calc.allsines[1])
 plotAngularDomains(g2, atomsine_calc.angulardomains)
-atomsine_calc.angulardomains[0].doubleCut(atomsine_calc.angulardomains[1])
 #g.reset()
-#print atomsine_calc.allsines
 raw_input('Please press return to continue...\n')
+
