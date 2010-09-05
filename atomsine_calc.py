@@ -81,7 +81,7 @@ def validRegions():
 		s1,s2= r1.value, r2.value							#sines
 		midpoint= (r1[0][0]+r1[1][0])/2.0
 		if s1.valueat(midpoint)<=s2.valueat(midpoint):
-			gooddomain.insertRegion(r1)
+			gooddomain.insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r1.value))
 
 	return gooddomain
 		
