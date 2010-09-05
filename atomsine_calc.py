@@ -39,6 +39,7 @@ def addAtomToSines(atom, coordinate):
 
 def getFirstSine(bound):
 	k=lambda sine: sine.valueat(0)
+	
 	if bound==0:
 		return max(allsines[bound], key=k)
 	else:
@@ -86,6 +87,8 @@ def validRegions():
 		
 
 def process():
+	'''calculates the lowest upper bounds and the highest lower bounds along 0--2pi,
+	stores them on angulardomains'''
 	k=lambda intersection: intersection.angle
 	for bound in [0,1]:
 		intersections[bound].sort(key=k)

@@ -37,6 +37,8 @@ class AngularDomain:
 		self.regions.append(region)
 
 	def cutRegionOnPoint(self, regionindex, point):
+		'''takes a point and a region index, and cuts the region on that point,
+		inserting resulting regions in place''' 
 		newregions=self[regionindex].cutOnPoint(point)
 		self.regions.pop(regionindex)
 		for newregion in newregions:
@@ -58,3 +60,15 @@ class AngularDomain:
 				otherindex= other.cutRegionOnPoint(otherindex, r[1])
 		if doreverse:
 			other.doubleCut(self, doreverse=False)
+
+	def mergeAdjacentRegions(self):
+		'''joins adjacent regions'''
+		i=0
+		while i+1<len(self.regions):
+			r1= self.regions[i]
+			r2= self.regions[i+1]
+			if r1[1]==r2[0]:
+				r1[1]=r2[1]
+				self.regions.pop(i+1)
+			else:
+				i+=1
