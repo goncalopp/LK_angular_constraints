@@ -8,7 +8,7 @@ class Intersection:
 	def __init__(self, sine1, sine2, angle_point):
 		self.sine1= sine1
 		self.sine2= sine2
-		self.angle= angle_point;
+		self.angle= angle_point
 
 
 allsines= [[],[]]
