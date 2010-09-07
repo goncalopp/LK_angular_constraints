@@ -22,7 +22,7 @@ def reset():
 
 def  sineFromAtomDomain(atom, bound, coordinate):
 	s= Sine.fromPoint(atom.position, PointND([0,0,0]), coordinate)
-	s.y= atom.region[bound][coordinate]
+	s.y= atom.region[bound][(coordinate+2)%3]
 	return s
 
 
