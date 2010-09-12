@@ -13,6 +13,8 @@ class Region:
 
 	def __setitem__(self, key, value):
 		self.bounds[key]=value
+		if self[0]==self[1]:
+			raise Exception('Region starts and ends at the same point')
 
 	def __iter__(self):
 		return self.bounds.__iter__()
