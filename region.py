@@ -3,6 +3,8 @@ class Region:
 	def __init__(self, bound0, bound1=0, value=None):
 		if bound0!=None and bound1!=None and (not isinstance(bound0, PointND) or not isinstance(bound1, PointND)):
 			raise TypeError, "Region must be created with two PointND" 
+		if bound0==bound1:
+			raise Exception('Region starts and ends at the same point')
 		self.bounds= [bound0, bound1]
 		self.value=value
 		
