@@ -6,8 +6,7 @@ from math import pi
 
 class Intersection:
 	def __init__(self, sine1, sine2, angle_point):
-		self.sine1= sine1
-		self.sine2= sine2
+		self.sines=(sine1,sine2)
 		self.angle= angle_point
 
 
@@ -37,29 +36,6 @@ def addAtomToSines(atom, coordinate):
 		allsines[bound].append(newsine);
 
 
-def getFirstSine(bound):
-	k=lambda sine: sine.valueat(0)
-	
-	if bound==0:
-		return max(allsines[bound], key=k)
-	else:
-		return min(allsines[bound], key=k)
-
-
-def getNextIntersectionIndex(bound, sine, offset):
-	for i in range(offset+1, len(intersections[bound])):
-		if sine==intersections[bound][i].sine1 or sine==intersections[bound][i].sine2:
-			return i
-	return None
-
-def otherIntersectionSine(intersection, sine):
-	if intersection.sine1==sine:
-		return intersection.sine2
-	if intersection.sine2==sine:
-		return intersection.sine1
-	raise Exception('Given sine does not belong to this intersection')
-
-
 def validRegions():
 	angulardomains[0].doubleCut(angulardomains[1])
 	
@@ -76,7 +52,7 @@ def validRegions():
 	
 	
 	gooddomain=AngularDomain()
-	for i in range(len(angulardomains[0])):
+	for i in range(len(angulardomains[0])):	#calculates where the domains are valid (upper bound sine > lower bound sine)
 		r1,r2 = angulardomains[0][i], angulardomains[1][i] 	#regions
 		s1,s2= r1.value, r2.value							#sines
 		midpoint= (r1[0][0]+r1[1][0])/2.0
@@ -86,22 +62,82 @@ def validRegions():
 	return gooddomain
 		
 
-def process():
-	'''calculates the lowest upper bounds and the highest lower bounds along 0--2pi,
-	stores them on angulardomains'''
-	k=lambda intersection: intersection.angle
+
+
+def other(tuple, myobject):
+	'''taking a tuple of 2 objects, if "myobject" is in tuple,
+	returns the other object in the tuple, otherwise raises exception'''
+	for i in [0,1]:
+		if tuple[i]==myobject:
+			return tuple[(i+1)%2]
+	raise Exception('Given object does not belong to this tuple')
+
+	
+def calculate_intersections():
+	pass #done on addatomtosines
+
+def calculate_first_region(bound, sinelist, intersection_orderedlist):
+	'''auxiliary function to calculate_bound_limits. calculates the first
+	Region, with correct beggining (0) and sine that in minimum/maximum
+	in that Region, depending on Bound. Trims intersection_orderedlist
+	if it's first intersections are on angle 0'''
+	ending_intersections= intersection_orderedlist.peekMinimums()
+	if ending_intersections[0].angle==0.0: #current ending angle is 0, not what we want
+		intersection_orderedlist.popMinimums()	#remove the intersections on 0
+		ending_intersections= intersection_orderedlist.peekMinimums()	#and get the next ones
+	
+	beginning_angle=0.0
+	ending_angle= ending_intersections[0].angle[0] # "0" is arbitrary, since all the intersections here have the same angle
+	midpoint= (beginning_angle+ending_angle) / 2.0
+	
+	k=lambda sine: sine.valueat(midpoint)
+	if bound==0:
+		firstsine= max(sinelist, key=k)
+	else:
+		firstsine= min(sinelist, key=k)
+	return Region(  PointND([beginning_angle])  ,  PointND([ending_angle])  , value= firstsine)
+	
+def calculate_next_region(current_region, intersection_orderedlist):
+	'''auxiliary function to calculate_bound_limits. given the current
+	processed region, closes it and calculates the next one.'''
+	cr= current_region
+	current_sine= current_region.value #cs: current sine
+	eis=[] #eis: ending intersections
+	while len(eis)==0:
+		eis= intersection_orderedlist.popMinimums()
+		if len(eis)==0:
+			return None
+		eis= filter( lambda x: current_sine in x.sines, eis) # gives the intersections that have current_sine
+	if not len(eis)==1:
+		raise Exception('ALGORITHM ERROR: found more than one sine that intersects current_sine on the same angle')
+	ei= eis[0] #ei: ending intersection
+	
+	cr[1]= PointND(ei.angle)	#closes last Region
+	new_beggining=   PointND(ei.angle)
+	new_sine= other(ei.sines, cr.value)	#takes the other sine in the intersection
+	new_region= Region(new_beggining, None, value=new_sine)
+	return new_region
+	
+
+def calculate_bound_limits(sine_lists, intersection_orderedlists):
+	'''taking the sine list and intersection orderedlist *for each bound*,
+	calculates the lowest upper bounds and the highest lower bounds
+	along 0--2pi, stores them on angulardomains.
+	Consumes intersection orderedlists'''
+	angulardomains= [AngularDomain(), AngularDomain()] # one AngularDomain for each bound
 	for bound in [0,1]:
-		intersections[bound].sort(key=k)
-		sine=   getFirstSine(bound)									  #s is highest or lowest sine, depending on bound
-		region= Region(PointND([0]), None, value=sine)  #creates a region from 0 to Null, holding sine as value
-		angulardomains[bound].insertRegion(region)
-		iter= getNextIntersectionIndex(bound, sine, -1);
-		while (iter<>None):
-			sine= otherIntersectionSine(intersections[bound][iter], sine)   #swap s to the other sine in intersection
-			p= PointND([intersections[bound][iter].angle[0]])				#p marks current intersection
-			region.bounds[1]= p									  #last region ends in p...
-			region= Region(PointND(p), None, value=sine)			#and the current (with sinewave s) begins on p
-			angulardomains[bound].insertRegion(region)
-			iter=getNextIntersectionIndex(bound, sine, iter)				#find next intersection that has sine
-		region.bounds[1]= PointND([2*pi]);		#close last region
-	#validregions();
+		sl= sine_lists[bound]
+		iol= intersection_orderedlists[bound]
+		ad= angulardomains[bound]
+		
+		current_region= calculate_first_region(bound, sl, iol)
+		ad.insertRegion(current_region)
+		while len(iol)>0:
+			current_region= calculate_next_region(current_region, iol)
+			if current_region==None:
+				current_region= ad[-1]
+				break
+			ad.insertRegion(current_region)
+			
+		current_region[1]= PointND([2*pi])	#close last region
+	return angulardomains
