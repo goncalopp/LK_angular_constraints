@@ -1,7 +1,7 @@
 class OrderedList:
 	'''Ordered list, linear insert time'''
 	
-	def __init__(self, list, keyfunction= None, alreadyordered=False):
+	def __init__(self, list, keyfunction= lambda x:x, alreadyordered=False):
 		if not alreadyordered:
 			self.list= sorted(list, key=keyfunction)
 		self.keyfunction= keyfunction
@@ -28,10 +28,12 @@ class OrderedList:
 	def popMinimums(self):
 		'''returns and deletes minimum *values* from list,
 		i.e.: all the elements whose value is equal to the minimum'''
+		if len(self.list)==0:
+			return []
 		k= self.keyfunction
 		ret= [self.list[0]]
 		self.list.pop(0)
-		while k(self.list[0])==k(ret[0]):
+		while len(self.list) and k (self.list[0])==k(ret[0]):
 			ret.append(self.list[0])
 			self.list.pop(0)
 		return ret
@@ -39,10 +41,12 @@ class OrderedList:
 	def peekMinimums(self):
 		'''returns  minimum *values* from list,
 		i.e.: all the elements whose value is equal to the minimum'''
+		if len(self.list)==0:
+			return []
 		k= self.keyfunction
 		ret= [self.list[0]]
 		i=1
-		while k(self.list[i])==k(ret[0]):
+		while i<len(self.list) and k(self.list[i])==k(ret[0]):
 			ret.append(self.list[i])
 			i+=1
 		return ret
