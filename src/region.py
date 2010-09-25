@@ -44,7 +44,8 @@ class Region:
 		return all([(p in self) for p in region])
 		
 	def cutOnPoint(self, point):
-		'''cuts the region along the Point, gives a list of Regions'''
+		'''cuts the region along the Point, gives a list of Regions.
+		Works on one dimension only'''
 		if not self.pointInsideExcludingBounds(point):
 			return [self]
 		return [Region(self[0], PointND(point), self.value),Region(PointND(point), self[1], self.value)]
