@@ -1,10 +1,10 @@
 class OrderedList:
 	'''Ordered list, linear insert time'''
 	
-	def __init__(self, list, keyfunction= lambda x:x, alreadyordered=False):
+	def __init__(self, list, key= lambda x:x, alreadyordered=False):
 		if not alreadyordered:
-			self.list= sorted(list, key=keyfunction)
-		self.keyfunction= keyfunction
+			self.list= sorted(list, key=key)
+		self.keyfunction= key
 
 	def __len__(self):
 		return len(self.list)

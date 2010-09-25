@@ -46,31 +46,16 @@ rigid.addAtom(c3, c3-1*r, c3+2*r)
 rigid.recalculateCenter()
 
 
-atomsine_calc.reset()
-atomsine_calc.addAtomToSines(rigid.atoms[0], 2)
-atomsine_calc.addAtomToSines(rigid.atoms[1], 2)
-atomsine_calc.addAtomToSines(rigid.atoms[2], 2)
+tmp= atomsine_calc.do_it(rigid.atoms, 2)
 
+plotSineList(g1, tmp[0][0]+tmp[0][1])
+plotAngularDomains(g3, tmp[1])
 
-plotSineList(g1, atomsine_calc.allsines[0]+atomsine_calc.allsines[1])
+plotAngularDomains(g2, [tmp[2]])
+tmp[2].mergeAdjacentRegions()
 
-
-#atomsine_calc.process()
-i0=OrderedList(atomsine_calc.intersections[0], keyfunction=lambda x: x.angle)
-i1=OrderedList(atomsine_calc.intersections[1], keyfunction=lambda x: x.angle)
-
-atomsine_calc.angulardomains= atomsine_calc.calculate_bound_limits(atomsine_calc.allsines, [i0,i1])
-
-plotAngularDomains(g3, atomsine_calc.angulardomains)
-
-valid=atomsine_calc.validRegions()
-valid.mergeAdjacentRegions()
-
-for region in valid:
+for region in tmp[2]:
 	print region
-
-plotAngularDomains(g2, atomsine_calc.angulardomains)
-#plotAngularDomains(g3, [valid])
 
 
 #g.reset()
