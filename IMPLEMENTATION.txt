@@ -1,0 +1,32 @@
+implementation.txt
+
+orderedlist.py
+Implementation of a ordered linked list, with linear insert time
+
+pointnd.py
+This is the basis for all spatial (cartesian) operations in the project. The class PointND represents an N-Dimentional Point, N being a integer>0. PointNDs can be added, subtracted (creating a vector), multiplied by a numeric value ("scaled") and compared for equality, all in conventional language operators ('+','-'.'*','=')
+Also, functions are provided for calculating the (vector) norm, calculating distances between PointNDs, and rotating them over axes.
+
+region.py
+The Region class implements N-dimentional "regions", or "domains", taking two N-dimentional PointND. That is:
+if N=1, region represents a line segment
+if N=2, region represents a square or rectangle
+if N=3, region represents a cube, or cuboid
+if N=4, region represents a hypercube, or hyperrectangle
+etc...
+Functions are provided to check if a PointND is inside a Region, cutting a Region in two when N=1, and other related tasks.
+
+atom.py
+A Atom class instance contains an atom center (intance of PointND) and a associated domain (instance of Region)
+
+sine.py
+The Sine class represents a Sinewave of the form  a*sin(p+theta)+e, where a (amplitude), p (phase) and e (elevation) are constants. It has functions to calculate the zeros of the wave, calculate the wave value at a given theta, intersecting another wave, and extracting a wave representing the y-coordinate of a 3D point (PointND) rotating around a (cartesian) origin.
+
+angulardomain.py
+subdivides the 0--2pi interval into ordered subintervals (instances of Region)
+
+rigidgroup.py
+represents a rigid group of atoms, with functions to calculate its center and management of relative coordinates (to the center)
+
+atomsine_calc.py
+this is THE algorithm. For an axis, it calculates the acceptable rotation of an Atom group so that all the atom's are inside their domains. It contains a lot of auxiliary functions, documented in docstrings and comments.
