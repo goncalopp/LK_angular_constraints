@@ -10,15 +10,10 @@ class Intersection:
 		self.sines=(sine1,sine2)
 		self.angle= angle_point
 
-def  sineFromAtomDomain(atom, bound, coordinate):
-	s= Sine.fromPoint(atom.position, PointND([0,0,0]), coordinate)
-	s.y= atom.region[bound][(coordinate+2)%3]
-	return s
-
 def sinelistsFromAtomlist(atomlist, coordinate):
 	return [
-			[sineFromAtomDomain(atom, 0, coordinate) for atom in atomlist],
-			[sineFromAtomDomain(atom, 1, coordinate) for atom in atomlist]
+			[atom.toSine(0, coordinate) for atom in atomlist],
+			[atom.toSine(1, coordinate) for atom in atomlist]
 			]
 
 
