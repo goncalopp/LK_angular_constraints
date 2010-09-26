@@ -10,7 +10,7 @@ class Atom:
 	def __repr__(self):
 		return '<Atom '+str(self.position)+str(self.region)+'>'
 	
-	def  toSine(self, bound, coordinate):
+	def toSine(self, bound, coordinate):
 		s= Sine.fromPoint(self.position, PointND([0,0,0]), coordinate)
 		s.y= self.region[bound][(coordinate+2)%3]
 		return s
