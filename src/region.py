@@ -65,6 +65,8 @@ class Region:
 	def cutOnPoint(self, point):
 		'''cuts the region along the Point, gives a list of Regions.
 		Works on one dimension only'''
+		if len(self.bounds[0])>1 or len(self.bounds[1])>1:
+			raise Exception("Cant cut *multidimentional* Region on Point" )
 		if not self.pointInsideExcludingBounds(point):
 			return [self]
 		return [Region(self[0], PointND(point), self.value),Region(PointND(point), self[1], self.value)]
