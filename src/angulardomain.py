@@ -30,7 +30,7 @@ class AngularDomain:
 	def lookup(self, point):
 		'''returns the index of the region on this AngularDomain that contains point'''
 		for i,r in enumerate(self.regions):
-			if r.pointInside(p):
+			if r.pointInside(point):
 				return i
 
 	def insertRegion(self, region):
