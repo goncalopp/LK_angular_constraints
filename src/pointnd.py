@@ -7,6 +7,8 @@ class PointND:
 			return
 		if not getattr(cl, '__iter__', False):
 			raise TypeError, "PointND must be created with a *list* of coordinates"
+		if len(cl)<1:
+			raise Exception("Can't create a PointND with 0 coordinates")
 		if not type(cl[0])==type(1.0) and not type(cl[0])==type(1):
 			raise TypeError, "PointND must be created with a list of *float* or *int*"
 		self.c= cl[:]
@@ -73,10 +75,9 @@ class PointND:
 		
 	def __cmp__(self, other):
 		if isinstance(other, PointND):
-			try:
-				return cmp(self[0],other[0])
-			except:
-				return 0
+			if len(self)>1 or len(other)>1:
+					raise Exception('Trying to compare PointNDs with more than one coordinate')
+			return cmp(self[0],other[0])
 		else:
 			return cmp(self[0],other)
 		
