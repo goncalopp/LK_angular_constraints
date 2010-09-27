@@ -80,7 +80,7 @@ def calculate_intersections(sines):
 
 def calculate_first_region(bound, sinelist, intersection_orderedlist):
 	'''auxiliary function to calculate_bound_limits. calculates the first
-	Region, with correct beggining (0) and sine that in minimum/maximum
+	Region, with correct beggining (0) and sine that is minimum/maximum
 	in that Region, depending on Bound. Trims intersection_orderedlist
 	if it's first intersections are on angle 0'''
 	ending_intersections= intersection_orderedlist.peekMinimums()
