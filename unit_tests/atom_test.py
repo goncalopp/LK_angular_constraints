@@ -1,7 +1,3 @@
-def equal(a,b):
-	#round to 10 decimal places to prevend rounding errors
-	return round(a,10)==round(b,10)
-
 p1= PointND([1.5,8.4,1.87])
 
 origin=PointND([0,0,0])
