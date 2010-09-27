@@ -10,15 +10,10 @@ class Intersection:
 		self.sines=(sine1,sine2)
 		self.angle= angle_point
 
-def  sineFromAtomDomain(atom, bound, coordinate):
-	s= Sine.fromPoint(atom.position, PointND([0,0,0]), coordinate)
-	s.y= atom.region[bound][(coordinate+2)%3]
-	return s
-
 def sinelistsFromAtomlist(atomlist, coordinate):
 	return [
-			[sineFromAtomDomain(atom, 0, coordinate) for atom in atomlist],
-			[sineFromAtomDomain(atom, 1, coordinate) for atom in atomlist]
+			[atom.toSine(0, coordinate) for atom in atomlist],
+			[atom.toSine(1, coordinate) for atom in atomlist]
 			]
 
 
@@ -85,7 +80,7 @@ def calculate_intersections(sines):
 
 def calculate_first_region(bound, sinelist, intersection_orderedlist):
 	'''auxiliary function to calculate_bound_limits. calculates the first
-	Region, with correct beggining (0) and sine that in minimum/maximum
+	Region, with correct beggining (0) and sine that is minimum/maximum
 	in that Region, depending on Bound. Trims intersection_orderedlist
 	if it's first intersections are on angle 0'''
 	ending_intersections= intersection_orderedlist.peekMinimums()
@@ -149,15 +144,17 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 		current_region[1]= PointND([2*pi])	#close last region
 	return angulardomains
 
-def do_it(atomlist, coordinate):
+def do_it(atomlist, coordinate, debug=False):
 	sines= sinelistsFromAtomlist(atomlist, coordinate)
 	intersections= calculate_intersections(sines)
 	ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in [0,1] ]
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
-
-	return (sines, angulardomains, validdomains)	#debug
-	#return validdomain
+	validdomains.mergeAdjacentRegions()
+	
+	if debug:
+		return (sines, angulardomains, validdomains)	#debug
+	return validdomains
 	
 

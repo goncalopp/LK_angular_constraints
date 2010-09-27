@@ -1,3 +1,16 @@
+s1= Sine(2,3*pi+2, 0)
+assert s1.a==2
+assert s1.y==0
+assert s1.p==3*pi+2
+s1.simplifyPhase()
+assert s1.p== pi+2
+s1.invert()
+assert s1.a==2
+assert s1.p==2
+assert s1.y==0
+assert round(s1.valueat(2),10)== -1.5136049906
+
+
 a= PointND([2,2,2])
 b= PointND([3,4,5])
 s1= Sine.fromPoint(a, b, 0)

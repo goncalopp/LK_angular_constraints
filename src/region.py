@@ -22,6 +22,25 @@ class Region:
 	def __repr__(self):
 		return '<Region '+str(self.bounds)+'>'
 
+	def __eq__(self, other):
+		if isinstance(other, Region):
+			if self[0]==other[0] and self[1]==other[1]:
+					return True
+			return False
+		return NotImplemented
+		
+	def __ne__(self, other):
+		if isinstance(other, PointND):
+			return not self.__eq__(other)
+		return NotImplemented
+		
+	def __cmp__(self, other):
+		'''only compares region start'''
+		if isinstance(other, Region):
+			return cmp(self[0],other[0])
+		else:
+			return cmp(self[0],other)
+
 	def pointInsideExcludingBounds(self, point):
 		'''returns True iff point is inside region, excluding bounds'''
 		return all([point[i]<self[1][i] and point[i]>self[0][i] for i in range(len(self[0]))])
@@ -46,6 +65,8 @@ class Region:
 	def cutOnPoint(self, point):
 		'''cuts the region along the Point, gives a list of Regions.
 		Works on one dimension only'''
+		if len(self.bounds[0])>1 or len(self.bounds[1])>1:
+			raise Exception("Cant cut *multidimentional* Region on Point" )
 		if not self.pointInsideExcludingBounds(point):
 			return [self]
 		return [Region(self[0], PointND(point), self.value),Region(PointND(point), self[1], self.value)]

@@ -8,8 +8,6 @@ from math import sqrt, atan2, pi
 import Gnuplot
 g1 = Gnuplot.Gnuplot()
 g2 = Gnuplot.Gnuplot()
-g3 = Gnuplot.Gnuplot()
-
 
 def sineToFunction(sine, xmin=0, xmax=2*pi):
 	return  'x>=%f && x<=%f ? (%f*sin(x+%f)+%f) : 1/0'%(xmin, xmax, sine.a, sine.p, sine.y)
@@ -46,13 +44,10 @@ rigid.addAtom(c3, c3-1*r, c3+2*r)
 rigid.recalculateCenter()
 
 
-tmp= atomsine_calc.do_it(rigid.atoms, 2)
+tmp= atomsine_calc.do_it(rigid.atoms, 0, debug=True)
 
 plotSineList(g1, tmp[0][0]+tmp[0][1])
-plotAngularDomains(g3, tmp[1])
-
-plotAngularDomains(g2, [tmp[2]])
-tmp[2].mergeAdjacentRegions()
+plotAngularDomains(g2, tmp[1])
 
 for region in tmp[2]:
 	print region
@@ -60,4 +55,3 @@ for region in tmp[2]:
 
 #g.reset()
 raw_input('Please press return to continue...\n')
-
