@@ -144,15 +144,17 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 		current_region[1]= PointND([2*pi])	#close last region
 	return angulardomains
 
-def do_it(atomlist, coordinate):
+def do_it(atomlist, coordinate, debug=False):
 	sines= sinelistsFromAtomlist(atomlist, coordinate)
 	intersections= calculate_intersections(sines)
 	ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in [0,1] ]
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
-
-	return (sines, angulardomains, validdomains)	#debug
-	#return validdomain
+	validdomains.mergeAdjacentRegions()
+	
+	if debug:
+		return (sines, angulardomains, validdomains)	#debug
+	return validdomains
 	
 
