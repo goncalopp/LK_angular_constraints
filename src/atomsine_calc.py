@@ -133,15 +133,11 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 		ad= angulardomains[bound]
 		
 		current_region= calculate_first_region(bound, sl, iol)
-		ad.insertRegion(current_region)
-		while len(iol)>0:
-			current_region= calculate_next_region(current_region, iol)
-			if current_region==None:
-				current_region= ad[-1]
-				break
+		while current_region:
 			ad.insertRegion(current_region)
-			
-		current_region[1]= PointND([2*pi])	#close last region
+			current_region= calculate_next_region(current_region, iol)
+		ad[-1][1]= PointND([2*pi])	#close last region
+	
 	return angulardomains
 
 def do_it(atomlist, coordinate, debug=False):
