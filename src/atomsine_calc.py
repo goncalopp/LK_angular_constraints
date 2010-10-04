@@ -36,7 +36,7 @@ def sliceRegions(angulardomain_list):
 				ad0.cutRegionOnPoint(i, intersection)
 				i=ad1.cutRegionOnPoint(i, intersection)
 		i+=1
-	
+	assert len(ad0)==len(ad1)
 
 def validRegions(angulardomain_list):
 	'''given two angulardomains, calculates the valid regions, that is, the regions where
@@ -67,7 +67,7 @@ def other(tuple, myobject):
 def calculate_intersections(sines):
 	intersections=[[],[]]
 	for bound in [0,1]:
-		l=len(sines[bound])
+		l=len(sines[bound])		#DO GENERATOR HERE
 		for i in range(l):		#iterates over each sine
 			for j in range(i+1,l):	#iterates over each sine that is further on the list than sine1
 				sine1= sines[bound][i]
