@@ -58,6 +58,11 @@ class Sine:
 			else:
 				self.zeros= [PointND([z1]),PointND([z0])]
 			return self.zeros
+
+	def getMax(self):
+		return (pi/2 - self.p)%pi2
+	def getMin(self):
+		return (3*pi/2 - self.p)%pi2
 			
 	@staticmethod
 	def fromPoint(origin, point1, rotation_axis):
