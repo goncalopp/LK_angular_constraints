@@ -6,7 +6,7 @@ c3= PointND([-2.1,4.1,5.1])
 rigid= RigidGroup()
 rigid.addAtom(c1, c1-1*r, c1+1*r)
 rigid.addAtom(c2, c2-1*r, c2+1*r)
-rigid.addAtom(c3, c3-1*r, c3+2*r)
+rigid.addAtom(c3, c3-1*r, c3+1*r)
 rigid.recalculateCenter()
 
 #in this case, the group is limited in movement by c2
