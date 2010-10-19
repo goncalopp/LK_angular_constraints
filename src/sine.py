@@ -2,7 +2,7 @@ from pointnd import PointND
 from math import pi,atan2,asin, sin, cos, sqrt
 pi2= 2*pi
 
-class Sine:
+class Sine(object):
 	def __init__(self, amplitude=1.0, phase=0.0, y=0.0):
 		self.a= amplitude
 		self.p= phase
@@ -64,17 +64,16 @@ class Sine:
 	def getMin(self):
 		return (3*pi/2 - self.p)%pi2
 			
-	@staticmethod
-	def fromPoint(origin, point1, rotation_axis):
+	def fromPoint(self, origin, point1, rotation_axis):
 		'''given two 3D PointND, origion and point1, and a projection
 		axis, projects the points and calculates the sine that 
 		represents the variation of y-coordinate(sine) of point1 as it
 		rotates around origin'''
 		tmp= point1-origin
 		tmp[rotation_axis]=0
-		a= tmp.norm()
-		p= atan2(tmp[(rotation_axis+2)%3], tmp[(rotation_axis+1)%3])
-		y=0
-		s= Sine(a,p,y)
-		s.simplifyPhase()
-		return s
+		self.a= tmp.norm()
+		self.p= atan2(tmp[(rotation_axis+2)%3], tmp[(rotation_axis+1)%3])
+		self.y=0
+		self.zeros=[]
+		self.zeros_calculated= False
+		self.simplifyPhase()

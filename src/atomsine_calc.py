@@ -1,4 +1,4 @@
-from sine import Sine
+from atomsine import AtomSine
 from pointnd import PointND
 from angulardomain import AngularDomain
 from region import Region
@@ -10,10 +10,10 @@ class Intersection:
 		self.sines=(sine1,sine2)
 		self.angle= angle_point
 
-def sinelistsFromAtomlist(atomlist, coordinate):
+def atomsineListsFromAtomlist(atomlist, coordinate):
 	return [
-			[atom.toSine(0, coordinate) for atom in atomlist],
-			[atom.toSine(1, coordinate) for atom in atomlist]
+			[AtomSine(atom, 0, coordinate) for atom in atomlist],
+			[AtomSine(atom, 1, coordinate) for atom in atomlist]
 			]
 
 
@@ -141,7 +141,7 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 	return angulardomains
 
 def do_it(atomlist, coordinate, debug=False):
-	sines= sinelistsFromAtomlist(atomlist, coordinate)
+	sines= atomsineListsFromAtomlist(atomlist, coordinate)
 	intersections= calculate_intersections(sines)
 	ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in [0,1] ]
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
