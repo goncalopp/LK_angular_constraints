@@ -148,7 +148,22 @@ def do_it(atomlist, coordinate, debug=False):
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
 	validdomains.mergeAdjacentRegions()
+
 	
+	for bound in [0,1]:
+		for sine in sines[bound]:
+			minmax=[float("inf"), float("-inf")]
+			f1= [sine.getMinimizant, sine.getMaximizant]
+			f2= [min, max]
+			for region in validdomains:
+				if PointND([f1[bound]()]) in region:
+					value= sine.valueat(f1[bound]())
+				else:
+					value= f2[bound](sine.valueat(region[0][0]), sine.valueat(region[1][0]))
+				minmax[bound]=value
+
+			print "minmax",minmax
+		
 	if debug:
 		return (sines, angulardomains, validdomains)	#debug
 	return validdomains
