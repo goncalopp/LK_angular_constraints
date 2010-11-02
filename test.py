@@ -38,10 +38,24 @@ for i in xrange(200):
 	p= PointND([rd()*20-10, rd()*20-10, rd()*20-10])
 	p0= p-PointND([rd()+1, rd()+1, rd()+1])
 	p1= p+PointND([rd()+1, rd()+1, rd()+1])
-	rigid.addAtom(p, p0, p1)
+	#rigid.addAtom(p, p0, p1)
 
-
+c1= PointND([1.0,0.000001,2])
+c2= PointND([1.0,3.0,2])
+c3= PointND([1.0,3.0,-1])
+rigid.addAtom(c1,PointND([0,0,5]),PointND([2,2,8]))
+rigid.addAtom(c2,PointND([0,2,5]),PointND([2,4,7]))
+rigid.addAtom(c3,PointND([0,4,5]),PointND([2,6,7]))
 rigid.recalculateCenter()
 
+for atom in rigid.atoms:
+	print atom
 
-tmp= atomsine_calc.do_it(rigid.atoms, 0)
+#valid from 228.1963o-270.008o, or 3.98266-4.71239 in radians
+#5-5.81282
+#blender: first atom should be reduced to roughly 6.236-7
+
+tmp= atomsine_calc.do_it(rigid.atoms, 0, debug= True)
+plotAngularDomains(g1, tmp[1])
+plotSineList(g2, tmp[0][0]+tmp[0][1])
+raw_input()

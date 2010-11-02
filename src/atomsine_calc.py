@@ -152,17 +152,23 @@ def do_it(atomlist, coordinate, debug=False):
 	
 	for bound in [0,1]:
 		for sine in sines[bound]:
+			#print "calculating bound %i, %s"%(bound, str(sine))
 			minmax=[float("inf"), float("-inf")]
 			f1= [sine.getMinimizant, sine.getMaximizant]
-			f2= [min, max]
+			f2= [max, min]
 			for region in validdomains:
 				if PointND([f1[bound]()]) in region:
 					value= sine.valueat(f1[bound]())
+					#print "max/min of sine in region segment"
 				else:
-					value= f2[bound](sine.valueat(region[0][0]), sine.valueat(region[1][0]))
+					bvalue=sine.valueat(region[0][0])
+					evalue=sine.valueat(region[1][0])
+					#print "values at beggining/end:", bvalue, evalue
+					value= f2[bound](bvalue, evalue)
+
 				minmax[bound]=value
 
-			print "minmax",minmax
+			print "minmax", minmax
 		
 	if debug:
 		return (sines, angulardomains, validdomains)	#debug
