@@ -4,15 +4,15 @@ assert s1.y==0
 assert s1.p==3*pi+2
 s1.simplifyPhase()
 assert s1.p== pi+2
-assert s1.getMax()==3*pi/2-2
-assert s1.getMin()==3*pi/2-2+pi
+assert s1.getMaximizant()==3*pi/2-2
+assert s1.getMinimizant()==3*pi/2-2+pi
 s1.invert()
 assert s1.a==2
 assert s1.p==2
 assert s1.y==0
 assert equal(s1.valueat(2), -1.5136049906)
-assert s1.getMax()==5*pi/2-2
-assert s1.getMin()==3*pi/2-2
+assert s1.getMaximizant()==5*pi/2-2
+assert s1.getMinimizant()==3*pi/2-2
 
 a= PointND([2,2,2])
 b= PointND([3,4,5])
