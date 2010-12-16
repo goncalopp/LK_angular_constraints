@@ -43,14 +43,16 @@ def validRegions(angulardomain_list):
 	the sine segment in the lower bound is lower than the upper bound sine segment'''
 	ad0, ad1= angulardomain_list[0], angulardomain_list[1]
 	
-	gooddomain=AngularDomain()
+	gooddomains=[AngularDomain(),AngularDomain()]
 	for i in range(len(ad0)):	#calculates where the domains are valid (upper bound sine > lower bound sine)
 		r1,r2 = ad0[i], ad1[i] 	#regions
 		s1,s2= r1.value, r2.value							#sines
 		midpoint= (r1[0][0]+r1[1][0])/2.0
 		if s1.valueat(midpoint)<=s2.valueat(midpoint):
-			gooddomain.insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r1.value))
-	return gooddomain
+			gooddomains[0].insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r1.value))
+			gooddomains[1].insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r2.value))
+			
+	return gooddomains
 		
 
 
@@ -136,9 +138,30 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 		while current_region:
 			ad.insertRegion(current_region)
 			current_region= calculate_next_region(current_region, iol)
+		
 		ad[-1][1]= PointND([2*pi])	#close last region
 	
 	return angulardomains
+
+def calculate_atom_limits(validdomains, sines):
+	sineslimits=[[],[]]
+	functions=[min,max]
+	for bound in [0,1]:
+		for i in range(1):#range(len(validdomains[bound])):
+			#sineslimits= [(bound-0.5)*9999999999]*(len[sines[bound]])
+			r= validdomains[bound][i]
+			atomsine= r.value
+			for j,sine in enumerate(sines[bound]):
+				#if sine.atom<>atomsine.atom:
+				addwave= sine.intersectWave(atomsine)
+				
+				if j==2:	#removeme
+					#print addwave, sine, atomsine
+					sineslimits[bound].append(addwave)
+				
+	return sineslimits
+
+
 
 def do_it(atomlist, coordinate, debug=False):
 	sines= atomsineListsFromAtomlist(atomlist, coordinate)
@@ -147,7 +170,9 @@ def do_it(atomlist, coordinate, debug=False):
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
-	validdomains.mergeAdjacentRegions()
+	tmp= calculate_atom_limits(validdomains, sines)
+	
+	#validdomains.mergeAdjacentRegions()
 
 	
 	for bound in [0,1]:
@@ -165,7 +190,7 @@ def do_it(atomlist, coordinate, debug=False):
 			print "minmax",minmax
 		
 	if debug:
-		return (sines, angulardomains, validdomains)	#debug
+		return (sines, angulardomains, validdomains, tmp)	#debug
 	return validdomains
 	
 
