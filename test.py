@@ -8,8 +8,8 @@ from math import sqrt, atan2, pi
 import Gnuplot
 g1 = Gnuplot.Gnuplot()
 g2 = Gnuplot.Gnuplot()
-g1.set_string("nokey")   #remove legend
-g2.set_string("nokey")   #remove legend
+#g1.set_string("nokey")   #remove legend
+#g2.set_string("nokey")   #remove legend
 
 
 def sineToFunction(sine, xmin=0, xmax=2*pi):
@@ -50,13 +50,11 @@ for i in xrange(200):
 	#rigid.addAtom(p, p0, p1)
 
 #-------------
-                                                                
-c1= PointND([1.0,0.000001,2])
-c2= PointND([1.0,3.0,2])
-c3= PointND([1.0,3.0,-1])
-rigid.addAtom(c1,PointND([0,0,5]),PointND([2,2,8]))
-rigid.addAtom(c2,PointND([0,2,5]),PointND([2,4,7]))
-rigid.addAtom(c3,PointND([0,4,5]),PointND([2,6,7]))
+
+c1= PointND([-3,0,0])
+c2= PointND([3,0,0])
+rigid.addAtom(c1,c1-1, c1+1)
+rigid.addAtom(c2,c2-8,c2+8)
 rigid.recalculateCenter()
 
 #for atom in rigid.atoms:
@@ -71,12 +69,17 @@ rigid.recalculateCenter()
 #5-5.81282
 #blender: first atom should be reduced to roughly 6.236-7
 
-sines, angulardomains, validdomains, tmp= atomsine_calc.do_it(rigid.atoms, 0, debug= True)
+sines, angulardomains, validdomains, tmp= atomsine_calc.do_it(rigid.atoms, 2, debug= True)
 
 
 
-#plotAngularDomains(g1, validdomains)
-#plotSineList(g2, sines[0]+sines[1])
-#plotSineList(g2, tmp[0]+tmp[1])
-#raw_input()
-printSineList(tmp[0]+tmp[1])
+plotAngularDomains(g1, validdomains)
+print [[i for i in f] for f in validdomains]
+print sines[0][0].y
+from src.sine import Sine
+s1= Sine(0,0,0)
+s1.fromPoint(PointND([0,0,0]), c2, 2)
+plotSineList(g2, [sines[1][0].addwave(s1)])
+plotSineList(g1, sines[0]+sines[1])
+#g1.hardcopy('gp_test.ps', enhanced=1, color=1)
+raw_input()
