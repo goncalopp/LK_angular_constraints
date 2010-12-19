@@ -151,7 +151,7 @@ def do_it(atomlist, coordinate, debug=False):
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
-	#validdomains.mergeAdjacentRegions()
+	validdomains.mergeAdjacentRegions()
 	
 	if debug:
 		return (sines, angulardomains, validdomains)	#debug
