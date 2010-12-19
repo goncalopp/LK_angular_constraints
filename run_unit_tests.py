@@ -2,6 +2,7 @@ from src.region import Region
 from src.pointnd import PointND
 from src.sine import Sine
 from src.atom import Atom
+from src.atomsine import AtomSine
 from src.rigidgroup import RigidGroup
 from src.orderedlist import OrderedList
 from src.angulardomain import AngularDomain

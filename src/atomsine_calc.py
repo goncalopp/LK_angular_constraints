@@ -1,4 +1,4 @@
-from sine import Sine
+from atomsine import AtomSine
 from pointnd import PointND
 from angulardomain import AngularDomain
 from region import Region
@@ -10,10 +10,10 @@ class Intersection:
 		self.sines=(sine1,sine2)
 		self.angle= angle_point
 
-def sinelistsFromAtomlist(atomlist, coordinate):
+def atomsineListsFromAtomlist(atomlist, coordinate):
 	return [
-			[atom.toSine(0, coordinate) for atom in atomlist],
-			[atom.toSine(1, coordinate) for atom in atomlist]
+			[AtomSine(atom, 0, coordinate) for atom in atomlist],
+			[AtomSine(atom, 1, coordinate) for atom in atomlist]
 			]
 
 
@@ -36,7 +36,7 @@ def sliceRegions(angulardomain_list):
 				ad0.cutRegionOnPoint(i, intersection)
 				i=ad1.cutRegionOnPoint(i, intersection)
 		i+=1
-	
+	assert len(ad0)==len(ad1)
 
 def validRegions(angulardomain_list):
 	'''given two angulardomains, calculates the valid regions, that is, the regions where
@@ -67,7 +67,7 @@ def other(tuple, myobject):
 def calculate_intersections(sines):
 	intersections=[[],[]]
 	for bound in [0,1]:
-		l=len(sines[bound])
+		l=len(sines[bound])		#DO GENERATOR HERE
 		for i in range(l):		#iterates over each sine
 			for j in range(i+1,l):	#iterates over each sine that is further on the list than sine1
 				sine1= sines[bound][i]
@@ -84,14 +84,17 @@ def calculate_first_region(bound, sinelist, intersection_orderedlist):
 	in that Region, depending on Bound. Trims intersection_orderedlist
 	if it's first intersections are on angle 0'''
 	ending_intersections= intersection_orderedlist.peekMinimums()
-	if ending_intersections[0].angle==0.0: #current ending angle is 0, not what we want
-		intersection_orderedlist.popMinimums()	#remove the intersections on 0
-		ending_intersections= intersection_orderedlist.peekMinimums()	#and get the next ones
-	
-	beginning_angle=0.0
-	ending_angle= ending_intersections[0].angle[0] # "0" is arbitrary, since all the intersections here have the same angle
+	if ending_intersections:
+		if ending_intersections[0].angle==0.0: #current ending angle is 0, not what we want
+			intersection_orderedlist.popMinimums()	#remove the intersections on 0
+			ending_intersections= intersection_orderedlist.peekMinimums()	#and get the next ones
+		
+		beginning_angle=0.0
+		ending_angle= ending_intersections[0].angle[0] # "0" is arbitrary, since all the intersections here have the same angle
+	else:
+		beginning_angle=0.0
+		ending_angle= 2*pi
 	midpoint= (beginning_angle+ending_angle) / 2.0
-	
 	k=lambda sine: sine.valueat(midpoint)
 	if bound==0:
 		firstsine= max(sinelist, key=k)
@@ -133,25 +136,22 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 		ad= angulardomains[bound]
 		
 		current_region= calculate_first_region(bound, sl, iol)
-		ad.insertRegion(current_region)
-		while len(iol)>0:
-			current_region= calculate_next_region(current_region, iol)
-			if current_region==None:
-				current_region= ad[-1]
-				break
+		while current_region:
 			ad.insertRegion(current_region)
-			
-		current_region[1]= PointND([2*pi])	#close last region
+			current_region= calculate_next_region(current_region, iol)
+		if len(ad)>0:
+			ad[-1][1]= PointND([2*pi])	#close last region
+	
 	return angulardomains
 
 def do_it(atomlist, coordinate, debug=False):
-	sines= sinelistsFromAtomlist(atomlist, coordinate)
+	sines= atomsineListsFromAtomlist(atomlist, coordinate)
 	intersections= calculate_intersections(sines)
 	ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in [0,1] ]
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
-	validdomains.mergeAdjacentRegions()
+	#validdomains.mergeAdjacentRegions()
 	
 	if debug:
 		return (sines, angulardomains, validdomains)	#debug

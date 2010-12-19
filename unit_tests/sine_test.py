@@ -4,18 +4,23 @@ assert s1.y==0
 assert s1.p==3*pi+2
 s1.simplifyPhase()
 assert s1.p== pi+2
+assert s1.getMaximizant()==3*pi/2-2
+assert s1.getMinimizant()==3*pi/2-2+pi
 s1.invert()
 assert s1.a==2
 assert s1.p==2
 assert s1.y==0
-assert round(s1.valueat(2),10)== -1.5136049906
-
+assert equal(s1.valueat(2), -1.5136049906)
+assert s1.getMaximizant()==5*pi/2-2
+assert s1.getMinimizant()==3*pi/2-2
 
 a= PointND([2,2,2])
 b= PointND([3,4,5])
-s1= Sine.fromPoint(a, b, 0)
-s2= Sine.fromPoint(a, b, 1)
-s3= Sine.fromPoint(a, b, 2)
+s1.fromPoint(a, b, 0)
+s2= Sine()
+s2.fromPoint(a, b, 1)
+s3= Sine()
+s3.fromPoint(a, b, 2)
 assert s1.p == atan2(3,2)
 assert s2.p == atan2(1,3)
 assert s3.p == atan2(2,1)
