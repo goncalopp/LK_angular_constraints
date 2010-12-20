@@ -65,6 +65,8 @@ class Sine(object):
 	def getMinimizant(self):
 		return (3*pi/2 - self.p)%pi2
 	
+	
+	
 	def fromPoint(self, origin, point1, rotation_axis):
 		'''given two 3D PointND, origion and point1, and a projection
 		axis, projects the points and calculates the sine that 
@@ -78,3 +80,17 @@ class Sine(object):
 		self.zeros=[]
 		self.zeros_calculated= False
 		self.simplifyPhase()
+
+	def minInRegion(self,region):
+		angles= [region[0][0], region[1][0]]
+		m= self.getMinimizant()
+		if PointND([m]) in region:
+			angles.append(m)
+		return min(map(self.valueat, angles))
+	
+	def maxInRegion(self, region):
+		angles= [region[0][0], region[1][0]]
+		m= self.getMaximizant()
+		if PointND([m]) in region:
+			angles.append(m)
+		return max(map(self.valueat, angles)) 
