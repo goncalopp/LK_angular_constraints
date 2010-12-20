@@ -92,6 +92,10 @@ class PointND:
 		tmp-point
 		return tmp.norm()
 
+	def angle(self):
+		'''Returns angle point-origin makes with x-axis. point must be 2D.'''
+		return atan2(self.c[1], self.c[0])
+
 	def project(self, coordinate):
 		'''projects a point on a coordinate.
 		Example: projecting point (3,5,1) over coordinate (1) (y-plane) gives (1,3)'''
@@ -107,7 +111,7 @@ class PointND:
 	def rotateOver2D(self, otherpoint, angle):
 		vector= self-otherpoint
 		d= vector.norm();
-		current_angle= atan2(vector[1], vector[0])
+		current_angle= vector.angle()
 		self[0]=   otherpoint[0]+d*cos(current_angle+angle)
 		self[1]=   otherpoint[1]+d*sin(current_angle+angle)
 		
