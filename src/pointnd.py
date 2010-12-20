@@ -91,20 +91,34 @@ class PointND:
 		tmp= PointND(self)
 		tmp-point
 		return tmp.norm()
+
+	def projection(self, coordinate):
+		'''projects a point on a coordinate.
+		Example: projecting point (3,5,1) over coordinate (1) (y-plane) gives (1,3)'''
+		c= self.c
+		n= coordinate
+		return PointND( c[n+1:]+c[:n] )
+
+
+	def deprojection(self, coordinate, value):
+		c= self.c
+		n= len(c)-coordinate
+		return PointND( c[n:]+[value]+c[:n] )
+
+
+	def rotateOver2D(self, otherpoint, angle):
+		vector= self-otherpoint
+		d= vector.norm();
+		current_angle= atan2(vector[1], vector[0])
+		self[0]=   otherpoint[0]+d*cos(current_angle+angle)
+		self[1]=   otherpoint[1]+d*sin(current_angle+angle)
 		
-	def rotateOver3D(rotationaxis, point, angle):
-		ce=  rotationaxis   #excluded coordinate
-		c0=  (ce+1) % 3;  #first coordinate to process
-		c1=  (ce+2) % 3;  #second coordinate to process
-
-		vector=  PointND(self)
-		vector-=	point
-		vector[ce]= 0;				#project the vector into the plane of rotation...
-		d=		vector.norm();		  #so we can calculate the distance in the plane
-		current_angle= atan2(vector[c1], vector[c0])
-
-		self[c0]=   point[c0]+d*cos(current_angle+angle)
-		self[c1]=   point[c1]+d*sin(current_angle+angle)
+	def rotateOver3D(self, otherpoint, rotationaxis, angle):
+		tp= self.projection(rotationaxis)
+		op= otherpoint.projection(rotationaxis)
+		tp.rotateOver2D(op, angle)
+		deprojected= tp.deprojection(rotationaxis, self[rotationaxis])
+		self.c= deprojected.c
 
 
 	def rotate3D(rotationaxis, angle):
