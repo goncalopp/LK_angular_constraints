@@ -11,7 +11,7 @@ class PointND:
 			raise Exception("Can't create a PointND with 0 coordinates")
 		if not type(cl[0])==type(1.0) and not type(cl[0])==type(1):
 			raise TypeError, "PointND must be created with a list of *float* or *int*"
-		self.c= cl[:]
+		self.c= cl
 	
 	def __len__(self):
 		return len(self.c)
