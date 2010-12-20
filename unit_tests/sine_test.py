@@ -1,9 +1,7 @@
 s1= Sine(2,3*pi+2, 0)
 assert s1.a==2
 assert s1.y==0
-assert s1.p==3*pi+2
-s1.simplifyPhase()
-assert s1.p== pi+2
+assert s1.p==pi+2	#phase should be simplified
 assert s1.getMaximizant()==3*pi/2-2
 assert s1.getMinimizant()==3*pi/2-2+pi
 s1.invert()

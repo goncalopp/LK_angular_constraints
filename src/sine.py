@@ -9,6 +9,7 @@ class Sine(object):
 		self.y= y
 		self.zeros=[]
 		self.zeros_calculated= False
+		self.simplifyPhase()
 		
 	def __repr__(self):
 		return '<Sine a=%f p=%f y=%f>'%(self.a, self.p, self.y)
