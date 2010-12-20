@@ -92,19 +92,17 @@ class PointND:
 		tmp-point
 		return tmp.norm()
 
-	def projection(self, coordinate):
+	def project(self, coordinate):
 		'''projects a point on a coordinate.
 		Example: projecting point (3,5,1) over coordinate (1) (y-plane) gives (1,3)'''
 		c= self.c
 		n= coordinate
-		return PointND( c[n+1:]+c[:n] )
+		self.c= c[n+1:]+c[:n]
 
-
-	def deprojection(self, coordinate, value):
+	def deproject(self, coordinate, value):
 		c= self.c
 		n= len(c)-coordinate
-		return PointND( c[n:]+[value]+c[:n] )
-
+		self.c= c[n:]+[value]+c[:n]
 
 	def rotateOver2D(self, otherpoint, angle):
 		vector= self-otherpoint
@@ -114,13 +112,16 @@ class PointND:
 		self[1]=   otherpoint[1]+d*sin(current_angle+angle)
 		
 	def rotateOver3D(self, otherpoint, rotationaxis, angle):
-		tp= self.projection(rotationaxis)
-		op= otherpoint.projection(rotationaxis)
-		tp.rotateOver2D(op, angle)
-		deprojected= tp.deprojection(rotationaxis, self[rotationaxis])
-		self.c= deprojected.c
+		tmp= self[rotationaxis]
+		self.project(rotationaxis)
+		
+		op= PointND(otherpoint)
+		op.project(rotationaxis)
+		
+		self.rotateOver2D(op, angle)
+		self.deproject(rotationaxis, tmp)
 
 
-	def rotate3D(rotationaxis, angle):
-		origin= PointND(0,0,0)
-		rotateOver3D(rotationaxis, origin, angle)
+	def rotate3D(self, rotationaxis, angle):
+		origin= PointND([0,0,0])
+		self.rotateOver3D(origin, rotationaxis, angle)
