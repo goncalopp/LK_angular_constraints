@@ -1,4 +1,5 @@
 from atomsine import AtomSine
+from sine import Sine
 from pointnd import PointND
 from angulardomain import AngularDomain
 from region import Region
@@ -146,23 +147,20 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 	
 	return angulardomains
 
-def calculate_atom_limits(validdomains, sines):
-	sineslimits=[[],[]]
-	functions=[min,max]
-	for bound in [0,1]:
-		for i in range(1):#range(len(validdomains[bound])):
-			#sineslimits= [(bound-0.5)*9999999999]*(len[sines[bound]])
-			r= validdomains[bound][i]
-			atomsine= r.value
-			for j,sine in enumerate(sines[bound]):
-				#if sine.atom<>atomsine.atom:
-				addwave= sine.intersectWave(atomsine)
+
+def calculate_atom_limits(validdomains, sines, coordinate):
+	for bound in (0,1):
+		for region in validdomains[bound]:
+			limiting_sine= region.value
+			for atom_sine in sines[bound]:
+				atom= atom_sine.atom
+				tmp_sine= Sine().fromPoint(None, atom.position, coordinate) #TODO: maybe use AtomSine
+				limits_sine= tmp_sine.addwave(limiting_sine)
+				print id(limiting_sine.atom), id(atom)
+				print limits_sine.minInRegion(region)
+				print limits_sine.maxInRegion(region)
 				
-				if j==2:	#removeme
-					#print addwave, sine, atomsine
-					sineslimits[bound].append(addwave)
-				
-	return sineslimits
+	#return sineslimits
 
 
 
@@ -173,6 +171,7 @@ def do_it(atomlist, coordinate, debug=False):
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
+	calculate_atom_limits(validdomains, sines, coordinate)
 	#validdomains.mergeAdjacentRegions()
 	
 	if debug:

@@ -43,43 +43,20 @@ from random import random as rd
 r=1
 rigid= RigidGroup()
 
-for i in xrange(200):
-	p= PointND([rd()*20-10, rd()*20-10, rd()*20-10])
-	p0= p-PointND([rd()+1, rd()+1, rd()+1])
-	p1= p+PointND([rd()+1, rd()+1, rd()+1])
-	#rigid.addAtom(p, p0, p1)
 
 #-------------
 
-c1= PointND([-3,0,0])
-c2= PointND([3,0,0])
+c1= PointND([-2,0,0])
+c2= PointND([2,0,0])
 rigid.addAtom(c1,c1-1, c1+1)
 rigid.addAtom(c2,c2-8,c2+8)
 rigid.recalculateCenter()
 
-#for atom in rigid.atoms:
-#	print atom
-
-#valid from 228.1963o-270.008o, or 3.98266-4.71239 in radians
-#papel: atomos 2 e 3 amplitude 2; ate 270o certos (atomos 1 e 2 verticais)
-#facilita visualizacao a rotacao em torno do atomo 2
-#regiao valida tem 2 segmentos:
-#	primeiro segmento: limitado por atomos 2-3, amplitude inicial:2, amplitude final: ?
-#	segundo  segmento: limitado por atomos 1-2, amplitude inicial:?, amplitude final: 3
-#5-5.81282
-#blender: first atom should be reduced to roughly 6.236-7
-
-sines, angulardomains, validdomains, tmp= atomsine_calc.do_it(rigid.atoms, 2, debug= True)
+sines, angulardomains, validdomains= atomsine_calc.do_it(rigid.atoms, 2, debug= True)
 
 
 
 plotAngularDomains(g1, validdomains)
-print [[i for i in f] for f in validdomains]
-print sines[0][0].y
-from src.sine import Sine
-s1= Sine(0,0,0)
-s1.fromPoint(PointND([0,0,0]), c2, 2)
-plotSineList(g2, [sines[1][0].addwave(s1)])
-plotSineList(g1, sines[0]+sines[1])
+plotSineList(g2, sines[0]+sines[1])
 #g1.hardcopy('gp_test.ps', enhanced=1, color=1)
 raw_input()
