@@ -9,6 +9,7 @@ class Sine(object):
 		self.y= y
 		self.zeros=[]
 		self.zeros_calculated= False
+		self.simplifyPhase()
 		
 	def __repr__(self):
 		return '<Sine a=%f p=%f y=%f>'%(self.a, self.p, self.y)
@@ -63,17 +64,33 @@ class Sine(object):
 		return (pi/2 - self.p)%pi2
 	def getMinimizant(self):
 		return (3*pi/2 - self.p)%pi2
-			
+	
+	
+	
 	def fromPoint(self, origin, point1, rotation_axis):
 		'''given two 3D PointND, origion and point1, and a projection
 		axis, projects the points and calculates the sine that 
 		represents the variation of y-coordinate(sine) of point1 as it
 		rotates around origin'''
-		tmp= point1-origin
-		tmp[rotation_axis]=0
-		self.a= tmp.norm()
-		self.p= atan2(tmp[(rotation_axis+2)%3], tmp[(rotation_axis+1)%3])
+		vector= point1-origin
+		vector.project(rotation_axis)
+		self.a= vector.norm()
+		self.p= vector.angle()
 		self.y=0
 		self.zeros=[]
 		self.zeros_calculated= False
 		self.simplifyPhase()
+
+	def minInRegion(self,region):
+		angles= [region[0][0], region[1][0]]
+		m= self.getMinimizant()
+		if PointND([m]) in region:
+			angles.append(m)
+		return min(map(self.valueat, angles))
+	
+	def maxInRegion(self, region):
+		angles= [region[0][0], region[1][0]]
+		m= self.getMaximizant()
+		if PointND([m]) in region:
+			angles.append(m)
+		return max(map(self.valueat, angles)) 

@@ -11,7 +11,7 @@ class PointND:
 			raise Exception("Can't create a PointND with 0 coordinates")
 		if not type(cl[0])==type(1.0) and not type(cl[0])==type(1):
 			raise TypeError, "PointND must be created with a list of *float* or *int*"
-		self.c= cl[:]
+		self.c= cl
 	
 	def __len__(self):
 		return len(self.c)
@@ -91,22 +91,41 @@ class PointND:
 		tmp= PointND(self)
 		tmp-point
 		return tmp.norm()
+
+	def angle(self):
+		'''Returns angle point-origin makes with x-axis. point must be 2D.'''
+		return atan2(self.c[1], self.c[0])
+
+	def project(self, coordinate):
+		'''projects a point on a coordinate.
+		Example: projecting point (3,5,1) over coordinate (1) (y-plane) gives (1,3)'''
+		c= self.c
+		n= coordinate
+		self.c= c[n+1:]+c[:n]
+
+	def deproject(self, coordinate, value):
+		c= self.c
+		n= len(c)-coordinate
+		self.c= c[n:]+[value]+c[:n]
+
+	def rotateOver2D(self, otherpoint, angle):
+		vector= self-otherpoint
+		d= vector.norm();
+		current_angle= vector.angle()
+		self[0]=   otherpoint[0]+d*cos(current_angle+angle)
+		self[1]=   otherpoint[1]+d*sin(current_angle+angle)
 		
-	def rotateOver3D(rotationaxis, point, angle):
-		ce=  rotationaxis   #excluded coordinate
-		c0=  (ce+1) % 3;  #first coordinate to process
-		c1=  (ce+2) % 3;  #second coordinate to process
-
-		vector=  PointND(self)
-		vector-=	point
-		vector[ce]= 0;				#project the vector into the plane of rotation...
-		d=		vector.norm();		  #so we can calculate the distance in the plane
-		current_angle= atan2(vector[c1], vector[c0])
-
-		self[c0]=   point[c0]+d*cos(current_angle+angle)
-		self[c1]=   point[c1]+d*sin(current_angle+angle)
+	def rotateOver3D(self, otherpoint, rotationaxis, angle):
+		tmp= self[rotationaxis]
+		self.project(rotationaxis)
+		
+		op= PointND(otherpoint)
+		op.project(rotationaxis)
+		
+		self.rotateOver2D(op, angle)
+		self.deproject(rotationaxis, tmp)
 
 
-	def rotate3D(rotationaxis, angle):
-		origin= PointND(0,0,0)
-		rotateOver3D(rotationaxis, origin, angle)
+	def rotate3D(self, rotationaxis, angle):
+		origin= PointND([0,0,0])
+		self.rotateOver3D(origin, rotationaxis, angle)
