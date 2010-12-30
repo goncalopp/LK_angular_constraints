@@ -31,11 +31,10 @@ class OrderedList:
 		if len(self.list)==0:
 			return []
 		k= self.keyfunction
-		ret= [self.list[0]]
-		self.list.pop(0)
-		while len(self.list) and k (self.list[0])==k(ret[0]):
-			ret.append(self.list[0])
-			self.list.pop(0)
+		ret= [self.list.pop(0)]
+		minimum= k(ret[0])
+		while len(self.list) and k(self.list[0])==minimum:
+			ret.append(self.list.pop(0))
 		return ret
 
 	def peekMinimums(self):
@@ -45,8 +44,9 @@ class OrderedList:
 			return []
 		k= self.keyfunction
 		ret= [self.list[0]]
+		minimum= k(ret[0])
 		i=1
-		while i<len(self.list) and k(self.list[i])==k(ret[0]):
+		while i<len(self.list) and k(self.list[i])==minimum:
 			ret.append(self.list[i])
 			i+=1
 		return ret

@@ -4,6 +4,7 @@ from angulardomain import AngularDomain
 from region import Region
 from orderedlist import OrderedList
 from math import pi
+from itertools import combinations
 
 class Intersection:
 	def __init__(self, sine1, sine2, angle_point):
@@ -11,21 +12,17 @@ class Intersection:
 		self.angle= angle_point
 
 def atomsineListsFromAtomlist(atomlist, coordinate):
-	return [
-			[AtomSine(atom, 0, coordinate) for atom in atomlist],
-			[AtomSine(atom, 1, coordinate) for atom in atomlist]
-			]
-
+	'''given an atom list, gives a list of two lists of atomsine;
+	the first is the lower bound, the second is the upper bound'''
+	return [[AtomSine(atom, i, coordinate) for atom in atomlist] for i in (0,1)]
 
 def sliceRegions(angulardomain_list):
-	'''takes two angular domains (for lower/upper sine segments), slices them
+	'''takes two angular domains (for lower/upper vound sine segments), slices them
 	so they are cut in the same points and slices them in their intersection points.
 	Everything is done in-place (inputs objects of function are modified)'''
 	ad0, ad1= angulardomain_list[0], angulardomain_list[1]
-
 	ad0.doubleCut(ad1)
 
-	
 	i=0
 	while i<len(ad0):		#cuts where sines from both angulardomains intersect
 		r1,r2=ad0[i], ad1[i]
@@ -44,10 +41,9 @@ def validRegions(angulardomain_list):
 	ad0, ad1= angulardomain_list[0], angulardomain_list[1]
 	
 	gooddomain=AngularDomain()
-	for i in range(len(ad0)):	#calculates where the domains are valid (upper bound sine > lower bound sine)
-		r1,r2 = ad0[i], ad1[i] 	#regions
+	for r1,r2 in zip(ad0,ad1):	#calculates where the domains are valid (upper bound sine > lower bound sine)
 		s1,s2= r1.value, r2.value							#sines
-		midpoint= (r1[0][0]+r1[1][0])/2.0
+		midpoint= r1.midpoint()[0]
 		if s1.valueat(midpoint)<=s2.valueat(midpoint):
 			gooddomain.insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r1.value))
 	return gooddomain
@@ -67,15 +63,11 @@ def other(tuple, myobject):
 def calculate_intersections(sines):
 	intersections=[[],[]]
 	for bound in (0,1):
-		l=len(sines[bound])		#DO GENERATOR HERE
-		for i in range(l):		#iterates over each sine
-			for j in range(i+1,l):	#iterates over each sine that is further on the list than sine1
-				sine1= sines[bound][i]
-				sine2= sines[bound][j]
-				#the pair (sine1,sine2) iterates over all possible pairs of atoms
+		for sine1, sine2 in combinations(sines[bound], 2):
 				intersectionsine= sine1-sine2
 				zeros= intersectionsine.calculateZeros()
-				intersections[bound].extend([ Intersection(sine1, sine2, zero) for zero in zeros])
+				intersection_list= [ Intersection(sine1, sine2, zero) for zero in zeros]
+				intersections[bound].extend( intersection_list )
 	return intersections
 
 def calculate_first_region(bound, sinelist, intersection_orderedlist):
@@ -91,7 +83,7 @@ def calculate_first_region(bound, sinelist, intersection_orderedlist):
 		
 		beginning_angle=0.0
 		ending_angle= ending_intersections[0].angle[0] # "0" is arbitrary, since all the intersections here have the same angle
-	else:
+	else:		#there are no intersections
 		beginning_angle=0.0
 		ending_angle= 2*pi
 	midpoint= (beginning_angle+ending_angle) / 2.0
@@ -106,7 +98,7 @@ def calculate_next_region(current_region, intersection_orderedlist):
 	'''auxiliary function to calculate_bound_limits. given the current
 	processed region, closes it and calculates the next one.'''
 	cr= current_region
-	current_sine= current_region.value #cs: current sine
+	current_sine= current_region.value
 	eis=[] #eis: ending intersections
 	while len(eis)==0:
 		eis= intersection_orderedlist.popMinimums()

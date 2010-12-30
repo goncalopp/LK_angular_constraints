@@ -81,3 +81,6 @@ class Region:
 		for r in regions:
 			final+=r.cutOnPoints(newlist)
 		return final
+
+	def midpoint(self):
+		return (self[0]+self[1])*0.5
