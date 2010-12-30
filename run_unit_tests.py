@@ -7,6 +7,7 @@ from src.rigidgroup import RigidGroup
 from src.orderedlist import OrderedList
 from src.angulardomain import AngularDomain
 from src import atomsine_calc
+from src.orderedlist import OrderedList
 
 from math import sqrt, atan2, atan, pi
 from os import listdir
