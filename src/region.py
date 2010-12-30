@@ -14,8 +14,6 @@ class Region:
 
 	def __setitem__(self, key, value):
 		self.bounds[key]=value
-		if self[0]==self[1]:
-			raise Exception('Region starts and ends at the same point')
 
 	def __iter__(self):
 		return self.bounds.__iter__()
@@ -73,14 +71,11 @@ class Region:
 		return [Region(self[0], PointND(point), self.value),Region(PointND(point), self[1], self.value)]
 
 	def cutOnPoints(self, pointlist):
-		regions=self.cutOnPoint(pointlist[0])
-		if len(pointlist)==1:
-			return regions
+		if len(pointlist)==0:
+			return [self]
+		regions= self.cutOnPoint(pointlist[0])
 		newlist=pointlist[1:]
-		final=[]
-		for r in regions:
-			final+=r.cutOnPoints(newlist)
-		return final
+		return [r.cutOnPoints(newlist) for t in regions]
 
 	def midpoint(self):
 		return (self[0]+self[1])*0.5
