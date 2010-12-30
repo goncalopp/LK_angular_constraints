@@ -58,7 +58,7 @@ def validRegions(angulardomain_list):
 def other(tuple, myobject):
 	'''taking a tuple of 2 objects, if "myobject" is in tuple,
 	returns the other object in the tuple, otherwise raises exception'''
-	for i in [0,1]:
+	for i in (0,1):
 		if tuple[i]==myobject:
 			return tuple[(i+1)%2]
 	raise Exception('Given object does not belong to this tuple')
@@ -66,7 +66,7 @@ def other(tuple, myobject):
 	
 def calculate_intersections(sines):
 	intersections=[[],[]]
-	for bound in [0,1]:
+	for bound in (0,1):
 		l=len(sines[bound])		#DO GENERATOR HERE
 		for i in range(l):		#iterates over each sine
 			for j in range(i+1,l):	#iterates over each sine that is further on the list than sine1
@@ -130,7 +130,7 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 	along 0--2pi, stores them on angulardomains.
 	Consumes intersection orderedlists'''
 	angulardomains= [AngularDomain(), AngularDomain()] # one AngularDomain for each bound
-	for bound in [0,1]:
+	for bound in (0,1):
 		sl= sine_lists[bound]
 		iol= intersection_orderedlists[bound]
 		ad= angulardomains[bound]
@@ -147,7 +147,7 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 def do_it(atomlist, coordinate, debug=False):
 	sines= atomsineListsFromAtomlist(atomlist, coordinate)
 	intersections= calculate_intersections(sines)
-	ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in [0,1] ]
+	ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in (0,1) ]
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
