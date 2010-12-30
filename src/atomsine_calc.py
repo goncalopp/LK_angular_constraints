@@ -30,7 +30,7 @@ def sliceRegions(angulardomain_list):
 	while i<len(ad0):		#cuts where sines from both angulardomains intersect
 		r1,r2=ad0[i], ad1[i]
 		sine1, sine2 = r1.value, r2.value
-		intersections= sine1.intersectWave(sine2).calculateZeros()
+		intersections= (sine1-sine2).calculateZeros()
 		for intersection in intersections:
 			if r1.pointInside(intersection):
 				ad0.cutRegionOnPoint(i, intersection)
@@ -73,7 +73,7 @@ def calculate_intersections(sines):
 				sine1= sines[bound][i]
 				sine2= sines[bound][j]
 				#the pair (sine1,sine2) iterates over all possible pairs of atoms
-				intersectionsine= sine1.intersectWave(sine2)
+				intersectionsine= sine1-sine2
 				zeros= intersectionsine.calculateZeros()
 				intersections[bound].extend([ Intersection(sine1, sine2, zero) for zero in zeros])
 	return intersections

@@ -4,9 +4,14 @@ pi2= 2*pi
 
 class Sine(object):
 	def __init__(self, amplitude=1.0, phase=0.0, y=0.0):
-		self.a= amplitude
-		self.p= phase
-		self.y= y
+		if isinstance(amplitude, Sine):		#cloning...
+			self.a= amplitude.a
+			self.p= amplitude.p
+			self.y= amplitude.y
+		else:															#creating new
+			self.a= amplitude
+			self.p= phase
+			self.y= y
 		self.zeros=[]
 		self.zeros_calculated= False
 		self.simplifyPhase()
@@ -16,25 +21,31 @@ class Sine(object):
 		
 	def simplifyPhase(self):
 		self.p%= pi2;
-
+	
 	def invert(self):
 		self.p= (self.p + pi) % pi2
 		self.y=-self.y
-		
-	def addwave(self, sine):
-		y= self.a*sin(self.p)+sine.a*sin(sine.p)
-		x= self.a*cos(self.p)+sine.a*cos(sine.p)
-		newa= sqrt(x*x + y*y)
-		newp= atan2(y,x)
-		newy= sine.y+self.y
-		newsine= Sine(newa, newp, newy)
-		return newsine
-		
-	def intersectWave(self, sine):
+	
+	def __iadd__(self, other):
+		y= self.a*sin(self.p)+other.a*sin(other.p)
+		x= self.a*cos(self.p)+other.a*cos(other.p)
+		self.a= sqrt(x*x + y*y)
+		self.p= atan2(y,x)
+		self.y+= other.y
+		return self
+	
+	def __isub__(self, other):
 		self.invert()
-		newsine= self.addwave(sine)
+		self+= other
 		self.invert()
-		return newsine
+		return self
+	
+	def __add__(self, other):
+		return Sine(self).__iadd__(other)
+	
+	def __sub__(self, other):
+		return Sine(self).__isub__(other)
+
 
 	def valueat(self, angle):
 		return self.a*sin(angle+self.p)+self.y;

@@ -15,6 +15,12 @@ def equal(a,b):
 	#round to 10 decimal places to prevend rounding errors
 	return round(a,10)==round(b,10)
 
+def equal_list(a,b):
+	if len(a)!=len(b):
+		return False
+	return all([equal(x[0],x[1]) for x in zip(a,b)])
+	
+
 
 dir='unit_tests/'
 for file in listdir(dir):
