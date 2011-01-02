@@ -41,10 +41,11 @@ class Region:
 			return cmp(self[0],other)
 
 	def pointInsideExcludingBounds(self, point):
-		'''returns True iff point is inside region, excluding bounds'''
+		'''returns True iff given point is inside this (open) region'''
 		return all([point[i]<self[1][i] and point[i]>self[0][i] for i in range(len(self[0]))])
 
 	def pointInsideIncludingBounds(self, point):
+		'''returns true iff given point is inside this (closed) region'''
 		return all([point[i]<=self[1][i] and point[i]>=self[0][i] for i in range(len(self[0]))])
 
 	def pointInside(self, point):
@@ -59,6 +60,7 @@ class Region:
 		return self.pointInsideIncludingBounds(point)
 	
 	def containsRegion(self, region):
+		'''returns true if current region completely contains another region'''
 		return all([(p in self) for p in region])
 		
 	def cutOnPoint(self, point):
@@ -71,6 +73,7 @@ class Region:
 		return [Region(self[0], PointND(point), self.value),Region(PointND(point), self[1], self.value)]
 
 	def cutOnPoints(self, pointlist):
+		'''similar to cutOnPoint, but for a list of cutting points'''
 		if len(pointlist)==0:
 			return [self]
 		regions= self.cutOnPoint(pointlist[0])
@@ -78,4 +81,5 @@ class Region:
 		return [r.cutOnPoints(newlist) for t in regions]
 
 	def midpoint(self):
+		'''the midpoint of the region'''
 		return (self[0]+self[1])*0.5

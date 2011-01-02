@@ -2,6 +2,8 @@ from sine import Sine
 from pointnd import PointND
 
 class AtomSine(Sine):
+	'''descends from sine, represents the position of a atom's (or it's
+	limit) coordinate while it rotates'''
 	def __init__(self, atom, bound, coordinate):
 		super(AtomSine, self).fromPoint(atom.position, PointND([0,0,0]), coordinate)
 		self.y= atom.region[bound][(coordinate+2)%3]

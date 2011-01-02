@@ -1,5 +1,5 @@
 class OrderedList:
-	'''Ordered list, linear insert time'''
+	'''custom ordered list with some useful methods for this problem'''
 	
 	def __init__(self, list, key= lambda x:x, alreadyordered=False):
 		if not alreadyordered:

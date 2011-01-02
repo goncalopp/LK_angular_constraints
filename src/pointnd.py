@@ -1,6 +1,7 @@
 from math import sqrt, atan2, sin, cos
 
 class PointND:
+	'''Represents a N-Dimentional point, where N is arbitrary.'''
 	def __init__(self, cl):
 		if isinstance(cl, PointND): #make clone
 			self.c= cl.c[:]
@@ -80,52 +81,64 @@ class PointND:
 			return cmp(self[0],other[0])
 		else:
 			return cmp(self[0],other)
-		
-		
 	
-				
+	
 	def norm(self):
-		 return sqrt(sum(n*n for n in self.c))
-		 
+		'''returns the norm of the vector this point forms with the origin'''
+		return sqrt(sum(n*n for n in self.c))
+	
 	def distance(self, point):
+		'''returns the euclidian distance to another PointND'''
 		tmp= PointND(self)
 		tmp-point
 		return tmp.norm()
-
+	
 	def angle(self):
 		'''Returns angle point-origin makes with x-axis. point must be 2D.'''
 		return atan2(self.c[1], self.c[0])
-
+	
 	def project(self, coordinate):
-		'''projects a point on a coordinate.
+		'''projects a N-dimentional point over a coordinate ("ortographic").
 		Example: projecting point (3,5,1) over coordinate (1) (y-plane) gives (1,3)'''
 		c= self.c
 		n= coordinate
 		self.c= c[n+1:]+c[:n]
-
+		return self
+	
 	def deproject(self, coordinate, value):
+		'''De-projects a pointND, given the value of the projected coordinate.
+		Example: let p be a 3D PointND;   p == p.project(1).deproject(1,5)'''
 		c= self.c
 		n= len(c)-coordinate
 		self.c= c[n:]+[value]+c[:n]
+		return self
 
+	def rotate2D(self, angle):
+		'''rotates 2D point over origin'''
+		s,c= sin(angle), cos(angle)
+		tmp= self[0]*s+self[1]*c
+		self[0]= self[0]*c-self[1]*s
+		self[1]= tmp
+	
 	def rotateOver2D(self, otherpoint, angle):
-		vector= self-otherpoint
-		d= vector.norm();
-		current_angle= vector.angle()
-		self[0]=   otherpoint[0]+d*cos(current_angle+angle)
-		self[1]=   otherpoint[1]+d*sin(current_angle+angle)
+		'''rotates 2D point over another 2D point'''
+		self-= otherpoint
+		self.rotate2D(angle)
+		self+= otherpoint
 		
-	def rotateOver3D(self, otherpoint, rotationaxis, angle):
+	
+	def rotate3D(self, rotationaxis, angle):
+		'''rotate 3D point over rotationaxis'''
 		tmp= self[rotationaxis]
 		self.project(rotationaxis)
-		
-		op= PointND(otherpoint)
-		op.project(rotationaxis)
-		
-		self.rotateOver2D(op, angle)
+		self.rotate2D(angle)
 		self.deproject(rotationaxis, tmp)
+	
+	def rotateOver3D(self, otherpoint, rotationaxis, angle):
+		'''rotate 3D point over another 3D point, along an axis'''
+		self-= otherpoint
+		self.rotate3D(rotationaxis, angle)
+		self+=otherpoint
 
 
-	def rotate3D(self, rotationaxis, angle):
-		origin= PointND([0,0,0])
-		self.rotateOver3D(origin, rotationaxis, angle)
+

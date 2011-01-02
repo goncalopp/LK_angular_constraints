@@ -61,6 +61,9 @@ def other(tuple, myobject):
 
 	
 def calculate_intersections(sines):
+	'''calculates the intersections between each pair of (lower-bound and
+	upper bound)sines. Returns two lists (for lower and upper bounds) of
+	intersections, ordered.'''
 	intersections=[[],[]]
 	for bound in (0,1):
 		for sine1, sine2 in combinations(sines[bound], 2):

@@ -3,6 +3,7 @@ from math import pi,atan2,asin, sin, cos, sqrt
 pi2= 2*pi
 
 class Sine(object):
+	'''Represents a sine wave of fixed frequency 1/(2*pi)'''
 	def __init__(self, amplitude=1.0, phase=0.0, y=0.0):
 		if isinstance(amplitude, Sine):		#cloning...
 			self.a= amplitude.a
@@ -29,8 +30,8 @@ class Sine(object):
 	def __iadd__(self, other):
 		y= self.a*sin(self.p)+other.a*sin(other.p)
 		x= self.a*cos(self.p)+other.a*cos(other.p)
-		self.a= sqrt(x*x + y*y)
-		self.p= atan2(y,x)
+		self.a=  sqrt(x*x + y*y)
+		self.p=  atan2(y,x)
 		self.y+= other.y
 		return self
 	
@@ -93,6 +94,8 @@ class Sine(object):
 		self.simplifyPhase()
 
 	def minInRegion(self,region):
+		'''returns the minimum value this sine takes inside a 1D region.
+		assumes region is inside 0--2pi region'''
 		angles= [region[0][0], region[1][0]]
 		m= self.getMinimizant()
 		if PointND([m]) in region:
@@ -100,6 +103,7 @@ class Sine(object):
 		return min(map(self.valueat, angles))
 	
 	def maxInRegion(self, region):
+		'''similar to minInRegion, for maximum'''
 		angles= [region[0][0], region[1][0]]
 		m= self.getMaximizant()
 		if PointND([m]) in region:

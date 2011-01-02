@@ -3,6 +3,7 @@ from atom import Atom
 from math import pi, trunc
 
 class RigidGroup:
+	'''Represents a rigid group of atoms'''
 	def __init__(self):
 		self.center= PointND([0,0,0])
 		self.atoms=[]
