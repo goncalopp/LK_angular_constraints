@@ -30,3 +30,33 @@ except:
 a=PointND([2])
 b=PointND([5])
 assert a<b
+
+
+#ROTATION TESTS--------------------------
+a= PointND([1,0])
+a.rotate2D(pi/4)
+assert equal(a[0],a[1])
+assert equal(a[0], 0.70710678118654757)	#sqrt(2)
+a.rotate2D(pi/4)
+assert equal(a[0], 0)
+assert equal(a[1],1)
+a= PointND([5,5])
+a.rotate2D(pi/4)
+assert equal(a[1], 7.07106781187) #sqrt(50)
+
+a= PointND([0,6])
+b= PointND([0,3])
+a.rotateOver2D(b, pi/2)
+assert equal(a[0], -3)
+assert equal(a[1], 3)
+
+a= PointND([3,4,5])
+b= PointND([2,1,4])
+a.rotateOver3D(b, 0, pi)
+assert equal(a[0], 3)
+assert equal(a[1], -2)
+assert equal(a[2], 3)
+
+
+
+
