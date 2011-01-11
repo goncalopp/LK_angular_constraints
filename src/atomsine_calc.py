@@ -40,13 +40,14 @@ def validRegions(angulardomain_list):
 	'''given two angulardomains, calculates the valid regions, that is, the regions where
 	the sine segment in the lower bound is lower than the upper bound sine segment'''
 	ad0, ad1= angulardomain_list[0], angulardomain_list[1]
-	gooddomain=AngularDomain()
+	gooddomains=[AngularDomain(), AngularDomain()]
 	for r1,r2 in zip(ad0,ad1):	#calculates where the domains are valid (upper bound sine > lower bound sine)
 		s1,s2= r1.value, r2.value							#sines
 		midpoint= r1.midpoint()[0]
 		if s1.valueat(midpoint)<=s2.valueat(midpoint):
-			gooddomain.insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r1.value))
-	return gooddomain
+			gooddomains[0].insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r1.value))
+			gooddomains[1].insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r2.value))
+	return gooddomains
 
 
 
@@ -166,7 +167,7 @@ def do_it(atomlist, coordinate, debug=False):
 	angulardomains= calculate_bound_limits(sines, ordered_intersections)
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
-	validdomains.mergeAdjacentRegions()
+	#validdomains.mergeAdjacentRegions()
 	#calculate_atom_limits(validdomains, sines, coordinate)
 	
 	if debug:
