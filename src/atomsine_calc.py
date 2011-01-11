@@ -1,4 +1,5 @@
 from atomsine import AtomSine
+from sine import Sine
 from pointnd import PointND
 from angulardomain import AngularDomain
 from region import Region
@@ -39,7 +40,6 @@ def validRegions(angulardomain_list):
 	'''given two angulardomains, calculates the valid regions, that is, the regions where
 	the sine segment in the lower bound is lower than the upper bound sine segment'''
 	ad0, ad1= angulardomain_list[0], angulardomain_list[1]
-	
 	gooddomain=AngularDomain()
 	for r1,r2 in zip(ad0,ad1):	#calculates where the domains are valid (upper bound sine > lower bound sine)
 		s1,s2= r1.value, r2.value							#sines
@@ -47,7 +47,6 @@ def validRegions(angulardomain_list):
 		if s1.valueat(midpoint)<=s2.valueat(midpoint):
 			gooddomain.insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r1.value))
 	return gooddomain
-		
 
 
 
@@ -139,6 +138,27 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 	
 	return angulardomains
 
+
+def calculate_atom_limits(validdomains, sines, coordinate):
+	sines_minmax={}	#dictionary. key: atom. value: list of float [min,max]
+	for bound in (0,1):
+		for region in validdomains[bound]:
+			limiting_sine= region.value
+			for atom_sine in sines[bound]:
+				atom= atom_sine.atom
+				tmp_sine= Sine().fromPoint(None, atom.position, coordinate) #TODO: maybe use AtomSine
+				limits_sine= tmp_sine.addwave(limiting_sine)
+				if not atom in sines_minmax:
+					sines_minmax[atom]= [float('inf'), -float('inf')]
+				minmax= sines_minmax[atom]
+				if bound==0:
+					minmax[0]= min(minmax[0], limits_sine.minInRegion(region))
+				if bound==1:
+					minmax[1]= max(minmax[1], limits_sine.maxInRegion(region))
+	return sines_minmax
+
+
+
 def do_it(atomlist, coordinate, debug=False):
 	sines= atomsineListsFromAtomlist(atomlist, coordinate)
 	intersections= calculate_intersections(sines)
@@ -147,6 +167,7 @@ def do_it(atomlist, coordinate, debug=False):
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
 	validdomains.mergeAdjacentRegions()
+	#calculate_atom_limits(validdomains, sines, coordinate)
 	
 	if debug:
 		return (sines, angulardomains, validdomains)	#debug

@@ -84,7 +84,10 @@ class Sine(object):
 		axis, projects the points and calculates the sine that 
 		represents the variation of y-coordinate(sine) of point1 as it
 		rotates around origin'''
-		vector= point1-origin
+		if origin!=None:
+			vector= point1-origin
+		else:
+			vector= PointND(point1)
 		vector.project(rotation_axis)
 		self.a= vector.norm()
 		self.p= vector.angle()
@@ -92,6 +95,7 @@ class Sine(object):
 		self.zeros=[]
 		self.zeros_calculated= False
 		self.simplifyPhase()
+		return self			# so we can do "new_s= Sine().fromPoint()"
 
 	def minInRegion(self,region):
 		'''returns the minimum value this sine takes inside a 1D region.
