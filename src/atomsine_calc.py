@@ -149,6 +149,7 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 
 
 def calculate_atom_limits(validdomains, sines, coordinate):
+	sines_minmax={}	#dictionary. key: atom. value: list of float [min,max]
 	for bound in (0,1):
 		for region in validdomains[bound]:
 			limiting_sine= region.value
@@ -156,11 +157,14 @@ def calculate_atom_limits(validdomains, sines, coordinate):
 				atom= atom_sine.atom
 				tmp_sine= Sine().fromPoint(None, atom.position, coordinate) #TODO: maybe use AtomSine
 				limits_sine= tmp_sine.addwave(limiting_sine)
-				print id(limiting_sine.atom), id(atom)
-				print limits_sine.minInRegion(region)
-				print limits_sine.maxInRegion(region)
-				
-	#return sineslimits
+				if not atom in sines_minmax:
+					sines_minmax[atom]= [float('inf'), -float('inf')]
+				minmax= sines_minmax[atom]
+				if bound==0:
+					minmax[0]= min(minmax[0], limits_sine.minInRegion(region))
+				if bound==1:
+					minmax[1]= max(minmax[1], limits_sine.maxInRegion(region))
+	return sines_minmax
 
 
 
