@@ -148,7 +148,7 @@ def calculate_atom_limits(validdomains, sines, coordinate):
 			for atom_sine in sines[bound]:
 				atom= atom_sine.atom
 				tmp_sine= Sine().fromPoint(None, atom.position, coordinate) #TODO: maybe use AtomSine
-				limits_sine= tmp_sine.addwave(limiting_sine)
+				limits_sine= tmp_sine + limiting_sine
 				if not atom in sines_minmax:
 					sines_minmax[atom]= [float('inf'), -float('inf')]
 				minmax= sines_minmax[atom]
@@ -168,10 +168,10 @@ def do_it(atomlist, coordinate, debug=False):
 	sliceRegions(angulardomains)
 	validdomains= validRegions(angulardomains)
 	#validdomains.mergeAdjacentRegions()
-	#calculate_atom_limits(validdomains, sines, coordinate)
+	newlimits= calculate_atom_limits(validdomains, sines, coordinate)
 	
 	if debug:
-		return (sines, angulardomains, validdomains)	#debug
+		return (sines, angulardomains, validdomains, newlimits)	#debug
 	return validdomains
 	
 
