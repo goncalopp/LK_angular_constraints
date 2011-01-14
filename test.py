@@ -54,7 +54,7 @@ for i in xrange(200):
 c1= PointND([-3,0,0])
 c2= PointND([3,0,0])
 rigid.addAtom(c1,c1-1, c1+1)
-rigid.addAtom(c2,c2-8,c2+8)
+rigid.addAtom(c2,c2-9,c2+9)
 rigid.recalculateCenter()
 
 #for atom in rigid.atoms:
@@ -69,17 +69,14 @@ rigid.recalculateCenter()
 #5-5.81282
 #blender: first atom should be reduced to roughly 6.236-7
 
-sines, angulardomains, validdomains, tmp= atomsine_calc.do_it(rigid.atoms, 2, debug= True)
+sines, angulardomains, validdomains, newlimits= atomsine_calc.do_it(rigid.atoms, 2, debug= True)
 
-
+for i in newlimits:
+	print i, newlimits[i]
 
 plotAngularDomains(g1, validdomains)
-print [[i for i in f] for f in validdomains]
-print sines[0][0].y
 from src.sine import Sine
-s1= Sine(0,0,0)
-s1.fromPoint(PointND([0,0,0]), c2, 2)
-plotSineList(g2, [sines[1][0].addwave(s1)])
-plotSineList(g1, sines[0]+sines[1])
+
+plotSineList(g2, sines[0]+sines[1])
 #g1.hardcopy('gp_test.ps', enhanced=1, color=1)
 raw_input()
