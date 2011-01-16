@@ -141,6 +141,8 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 
 
 def calculate_atom_limits(validdomains, sines, coordinate):
+	'''given the list of valid angles and the list of sines, calculates
+	the reduced atom limits; returns them in a dictionary of atom'''
 	sines_minmax={}	#dictionary. key: atom. value: list of float [min,max]
 	for bound in (0,1):
 		for region in validdomains[bound]:
@@ -161,6 +163,12 @@ def calculate_atom_limits(validdomains, sines, coordinate):
 
 
 def do_it(atomlist, coordinate, debug=False):
+	'''main function. Given an atom list and a coordinate, calculates the
+	sine waves associated to the variation of that coordinate when each
+	atom rotates, and using those it calculates on which rotations the
+	atoms are on valid positions (inside their domains). Using that data,
+	each atom domain is reduced to the strictly necessary, ensuring no
+	valid group positions are lost.'''
 	sines= atomsineListsFromAtomlist(atomlist, coordinate)
 	intersections= calculate_intersections(sines)
 	ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in (0,1) ]
