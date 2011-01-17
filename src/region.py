@@ -83,3 +83,18 @@ class Region:
 	def midpoint(self):
 		'''the midpoint of the region'''
 		return (self[0]+self[1])*0.5
+
+	def intersect(self,other):
+		'''intersects this region with another, stores result on itself'''
+		if self[0]<other[0]:
+			if self[1]>other[1]:					#self contains other
+				self[0]= PointND(other[0])
+				self[1]= PointND(other[1])
+			else:
+				self[0]= PointND(other[0])
+		else:
+			if self[1]>other[1]:
+				self[1]= PointND(other[1])
+			else:													#other contains self
+				pass
+
