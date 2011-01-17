@@ -9,6 +9,12 @@ from atom import Atom
 from math import pi, trunc
 from itertools import combinations
 
+def other(tuple, myobject):
+	'''taking a tuple of 2 objects, if "myobject" is in tuple,
+	returns the other object in the tuple, otherwise raises exception'''
+	assert len(tuple)==2
+	return tuple[(tuple.index(myobject)+1)%2]
+
 class RigidGroup:
 	'''Represents a rigid group of atoms'''
 	def __init__(self):
@@ -59,9 +65,9 @@ class RigidGroup:
 
 		i=0
 		while i<len(ad0):		#cuts where sines from both angulardomains intersect
-			r1,r2=ad0[i], ad1[i]				#regions
-			s1, s2 = r1.value, r2.value	#sines
-			intersections= (s1-s2).calculateZeros()
+			r1,r2=ad0[i], ad1[i]
+			sine1, sine2 = r1.value, r2.value
+			intersections= (sine1-sine2).calculateZeros()
 			for intersection in intersections:
 				if r1.pointInside(intersection):
 					ad0.cutRegionOnPoint(i, intersection)
@@ -82,14 +88,6 @@ class RigidGroup:
 				gooddomains[0].insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r1.value))
 				gooddomains[1].insertRegion(Region(PointND(r1[0]),PointND(r1[1]), value=r2.value))
 		return gooddomains
-
-
-	@staticmethod
-	def other(tuple, myobject):
-		'''taking a tuple of 2 objects, if "myobject" is in tuple,
-		returns the other object in the tuple, otherwise raises exception'''
-		assert len(tuple)==2
-		return tuple[(tuple.index(myobject)+1)%2]
 	
 	@staticmethod
 	def calculate_intersections(sines):
@@ -112,13 +110,15 @@ class RigidGroup:
 		in that Region, depending on Bound. Trims intersection_orderedlist
 		if it's first intersections are on angle 0'''
 		ending_intersections= intersection_orderedlist.peekMinimums()
-		beginning_angle=0.0
 		if ending_intersections:
 			if ending_intersections[0].angle==0.0: #current ending angle is 0, not what we want
 				intersection_orderedlist.popMinimums()	#remove the intersections on 0
 				ending_intersections= intersection_orderedlist.peekMinimums()	#and get the next ones
+			
+			beginning_angle=0.0
 			ending_angle= ending_intersections[0].angle[0] # "0" is arbitrary, since all the intersections here have the same angle
 		else:		#there are no intersections
+			beginning_angle=0.0
 			ending_angle= 2*pi
 		midpoint= (beginning_angle+ending_angle) / 2.0
 		k=lambda sine: sine.valueat(midpoint)
@@ -133,20 +133,20 @@ class RigidGroup:
 		'''auxiliary function to calculate_bound_limits. given the current
 		processed region, closes it and calculates the next one.'''
 		cr= current_region
-		cs= cr.value	#current sine
+		current_sine= current_region.value
 		eis=[] #eis: ending intersections
 		while len(eis)==0:
 			eis= intersection_orderedlist.popMinimums()
 			if len(eis)==0:
 				return None
-			eis= filter( lambda x: cs in x.sines, eis) # gives the intersections that have current_sine
+			eis= filter( lambda x: current_sine in x.sines, eis) # gives the intersections that have current_sine
 		if not len(eis)==1:
 			raise Exception('ALGORITHM ERROR: found more than one sine that intersects current_sine on the same angle')
 		ei= eis[0] #ei: ending intersection
 		
 		cr[1]= PointND(ei.angle)	#closes last Region
-		new_beggining= PointND(ei.angle)
-		new_sine= RigidGroup.other(ei.sines, cs)	#takes the other sine in the intersection
+		new_beggining=   PointND(ei.angle)
+		new_sine= other(ei.sines, cr.value)	#takes the other sine in the intersection
 		new_region= Region(new_beggining, None, value=new_sine)
 		return new_region
 		
@@ -181,7 +181,7 @@ class RigidGroup:
 				limiting_sine= region.value
 				for atom_sine in sines[bound]:
 					atom= atom_sine.atom
-					tmp_sine= AtomSine(atom, coordinate)
+					tmp_sine= Sine().fromPoint(None, atom.position, coordinate) #TODO: maybe use AtomSine
 					limits_sine= tmp_sine + limiting_sine
 					if not atom in sines_minmax:
 						sines_minmax[atom]= [float('inf'), -float('inf')]
@@ -215,4 +215,3 @@ class RigidGroup:
 			return (sines, angulardomains, validdomains, newlimits)	#debug
 		return validdomains
 	
-
