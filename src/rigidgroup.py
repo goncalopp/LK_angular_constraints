@@ -88,10 +88,8 @@ class RigidGroup:
 	def other(tuple, myobject):
 		'''taking a tuple of 2 objects, if "myobject" is in tuple,
 		returns the other object in the tuple, otherwise raises exception'''
-		for i in (0,1):
-			if tuple[i]==myobject:
-				return tuple[(i+1)%2]
-		raise Exception('Given object does not belong to this tuple')
+		assert len(tuple)==2
+		return tuple[(tuple.index(myobject)+1)%2]
 	
 	@staticmethod
 	def calculate_intersections(sines):
