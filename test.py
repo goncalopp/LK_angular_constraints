@@ -69,7 +69,7 @@ rigid.recalculateCenter()
 #5-5.81282
 #blender: first atom should be reduced to roughly 6.236-7
 
-sines, angulardomains, validdomains, newlimits= atomsine_calc.do_it(rigid.atoms, 2, debug= True)
+sines, angulardomains, validdomains, newlimits= rigid.solve_instance(2, debug= True)
 
 for i in newlimits:
 	print i, newlimits[i]
