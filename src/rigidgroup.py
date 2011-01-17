@@ -122,16 +122,16 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 		iol= intersection_orderedlists[bound]
 		ad= angulardomains[bound]
 		
-		current_region= RigidGroup.calculate_first_region(bound, sl, iol)
+		current_region= calculate_first_region(bound, sl, iol)
 		while current_region:
 			ad.insertRegion(current_region)
-			current_region= RigidGroup.calculate_next_region(current_region, iol)
+			current_region= calculate_next_region(current_region, iol)
 		if len(ad)>0:
 			ad[-1][1]= PointND([2*pi])	#close last region
 	
 	return angulardomains
 
-y
+
 def calculate_atom_limits(validdomains, sines, coordinate):
 	'''given the list of valid angles and the list of sines, calculates
 	the reduced atom limits; returns them in a dictionary of atom'''
@@ -204,13 +204,13 @@ class RigidGroup:
 		valid group positions are lost.'''
 		atomlist= self.atoms
 		sines= AtomSine.atomsineListsFromAtomList(atomlist, coordinate)
-		intersections= RigidGroup.calculate_intersections(sines)
+		intersections= calculate_intersections(sines)
 		ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in (0,1) ]
-		angulardomains= RigidGroup.calculate_bound_limits(sines, ordered_intersections)
-		RigidGroup.sliceRegions(angulardomains)
-		validdomains= RigidGroup.validRegions(angulardomains)
+		angulardomains= calculate_bound_limits(sines, ordered_intersections)
+		sliceRegions(angulardomains)
+		validdomains= validRegions(angulardomains)
 		#validdomains.mergeAdjacentRegions()
-		newlimits= RigidGroup.calculate_atom_limits(validdomains, sines, coordinate)
+		newlimits= calculate_atom_limits(validdomains, sines, coordinate)
 		
 		if debug:
 			return (sines, angulardomains, validdomains, newlimits)	#debug
