@@ -59,9 +59,32 @@ class Region:
 	def __contains__(self, point):
 		return self.pointInsideIncludingBounds(point)
 	
-	def containsRegion(self, region):
-		'''returns true if current region completely contains another region'''
-		return all([(p in self) for p in region])
+	def relativePosition(self, other):
+		'''gives the relative position of this (1D) region relative to
+		another. return codes:
+		1- self starts and ends before other
+		2- self starts and ends  after other
+		3- self starts before other, other ends after self
+		4- other starts before self, self ends after other
+		5- self contains other
+		6- other contains self
+		'''
+		if other==None:
+			return 1
+		if self[0]<=other[0]:
+			if self[1]<=other[0]:
+				return 1
+			if self[1]>=other[1]:
+				return 5
+			else:
+				return 3
+		else:
+			if other[1]<=self[0]:
+				return 2
+			if other[1]>=self[1]:
+				return 6
+			else:
+				return 4
 		
 	def cutOnPoint(self, point):
 		'''cuts the region along the Point, gives a list of Regions.
