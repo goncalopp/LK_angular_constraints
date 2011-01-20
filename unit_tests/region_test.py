@@ -39,3 +39,23 @@ r2= Region(l[1], l[4])
 assert r1.relativePosition(r2)==5
 assert r2.relativePosition(r1)==6
 
+r1= Region(l[0], l[1])
+r2= Region(l[0], l[4])
+assert r1.relativePosition(r2)==6
+assert r2.relativePosition(r1)==5
+
+r1= Region(l[0], l[4])
+r2= Region(l[0], l[1])
+assert r1.relativePosition(r2)==5
+assert r2.relativePosition(r1)==6
+
+r1= Region(l[1], l[4])
+r2= Region(l[0], l[4])
+assert r1.relativePosition(r2)==6
+assert r2.relativePosition(r1)==5
+
+r1= Region(l[0], l[4])
+r2= Region(l[1], l[4])
+assert r1.relativePosition(r2)==5
+assert r2.relativePosition(r1)==6
+

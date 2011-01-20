@@ -71,20 +71,27 @@ class Region:
 		'''
 		if other==None:
 			return 1
-		if self[0]<=other[0]:
+		if self==None:	#may happen if called as class method
+			return 2
+		if self[0]<other[0]:
 			if self[1]<=other[0]:
 				return 1
 			if self[1]>=other[1]:
 				return 5
 			else:
 				return 3
-		else:
-			if other[1]<=self[0]:
+		elif self[0]>other[0]:
+			if other[1]<self[0]:
 				return 2
 			if other[1]>=self[1]:
 				return 6
 			else:
 				return 4
+		else:				#self[0]==other[0]
+			if other[1]<=self[1]:
+				return 5
+			if other[1]>self[1]:
+				return 6
 		
 	def cutOnPoint(self, point):
 		'''cuts the region along the Point, gives a list of Regions.
