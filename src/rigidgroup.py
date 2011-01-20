@@ -52,8 +52,8 @@ def validRegions(angulardomain_list):
 
 def calculate_intersections(sines):
 	'''calculates the intersections between each pair of (lower-bound and
-	upper bound)sines. Returns two lists (for lower and upper bounds) of
-	intersections, ordered.'''
+	upper bound) sines. Returns two OrderedList (for lower and upper
+	bounds) of intersections.'''
 	intersections=[[],[]]
 	for bound in (0,1):
 		for sine1, sine2 in combinations(sines[bound], 2):
@@ -61,7 +61,10 @@ def calculate_intersections(sines):
 				zeros= intersectionsine.calculateZeros()
 				intersection_list= [ SineIntersection(sine1, sine2, zero) for zero in zeros]
 				intersections[bound].extend( intersection_list )
-	return intersections
+
+	k= lambda x: x.angle
+	ordered_intersections=[ OrderedList(intersections[i], key=k) for i in (0,1) ]
+	return ordered_intersections
 
 
 def calculate_first_region(bound, sinelist, intersection_orderedlist):
@@ -126,9 +129,9 @@ def calculate_bound_limits(sine_lists, intersection_orderedlists):
 		while current_region:
 			ad.insertRegion(current_region)
 			current_region= calculate_next_region(current_region, iol)
+			
 		if len(ad)>0:
 			ad[-1][1]= PointND([2*pi])	#close last region
-	
 	return angulardomains
 
 
@@ -202,14 +205,11 @@ class RigidGroup:
 		atoms are on valid positions (inside their domains). Using that data,
 		each atom domain is reduced to the strictly necessary, ensuring no
 		valid group positions are lost.'''
-		atomlist= self.atoms
-		sines= AtomSine.atomsineListsFromAtomList(atomlist, coordinate)
+		sines= AtomSine.atomsineListsFromAtomList(self.atoms, coordinate)
 		intersections= calculate_intersections(sines)
-		ordered_intersections=[ OrderedList(intersections[i], key=lambda x: x.angle) for i in (0,1) ]
-		angulardomains= calculate_bound_limits(sines, ordered_intersections)
+		angulardomains= calculate_bound_limits(sines, intersections)
 		sliceRegions(angulardomains)
 		validdomains= validRegions(angulardomains)
-		#validdomains.mergeAdjacentRegions()
 		newlimits= calculate_atom_limits(validdomains, sines, coordinate)
 		
 		if debug:
