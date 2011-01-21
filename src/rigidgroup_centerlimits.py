@@ -3,24 +3,39 @@ from orderedlist import OrderedList
 from atomsine import AtomSine
 from sineintersection import SineIntersection
 from angulardomain import AngularDomain
+from region import Region
+from pointnd import PointND
 
 from itertools import combinations
-
+from math import pi
 
 def calculateCenterLimits(rigidgroup, coordinate, debug=False):
 	'''Given a rigidgroup and a coordinate, calculates the sine waves
 	associated to the allowed translation of the center (in that
 	coordinate) as a function of the rotation of the group'''
+	#calculates center translation limit FOR EACH atom, as function of
+	#rotation
 	sines= AtomSine.atomsineListsFromAtomList(rigidgroup.atoms, coordinate)
+	#calculate intersections between sines
 	intersections= calculate_intersections(sines)
+	#use the intersections to calculate which atom limits the center (the
+	# most), as function of rotation
 	angulardomains= calculate_bound_limits(sines, intersections)
+	#"cut" the domains to prepare for next step 
 	sliceRegions(angulardomains)
+	#delete invalid rotations (where the center translation upper limit
+	#is lower than the lower limit
 	validdomains= validRegions(angulardomains)
-	newlimits= calculate_atom_limits(validdomains, sines, coordinate)
 	
 	if debug:
 		return (sines, angulardomains, validdomains, newlimits)	#debug
-	return validdomains
+	return (sines, validdomains)
+
+def other(tuple, myobject):
+	'''taking a tuple of 2 objects, if "myobject" is in tuple,
+	returns the other object in the tuple, otherwise raises exception'''
+	assert len(tuple)==2
+	return tuple[(tuple.index(myobject)+1)%2]
 
 def calculate_bound_limits(sine_lists, intersection_orderedlists):
 	'''taking the sine list and intersection orderedlist *for each bound*,
