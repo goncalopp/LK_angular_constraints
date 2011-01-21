@@ -11,11 +11,16 @@ class AtomSine(Sine):
 			self.y= atom.region[bound][(coordinate+2)%3]
 	
 	@staticmethod
-	def atomsineListsFromAtomList(atomlist, coordinate):
-		'''given an atom list and a coordinate, calculates the sine waves
-		associated with the rotation of the origin (0,0,0) around each atom;
+	def atomsineListsFromAtomList(atomlist, rotation_axis, coordinate):
+		'''given an atom list, a rotation axis RA and a coordinate C,
+		calculates the sine waves associated with the values of C as the
+		origin (0,0,0) rotates (in RA) around each atom;
 		in other words, it represents how much the center can be translated
 		(in the given coordinate), for each of the atoms. The result is
 		given as a tuple with two lists of atomsine; the first is the lower
 		bound, the second is the upper bound'''
+		assert rotation_axis!=coordinate
+		is_cosine= False
+		if (coordinate-rotation_axis)%3==1:
+			is_cosine= True
 		return [[AtomSine(atom, coordinate, i) for atom in atomlist] for i in (0,1)]

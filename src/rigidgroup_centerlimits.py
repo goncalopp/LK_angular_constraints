@@ -9,13 +9,18 @@ from pointnd import PointND
 from itertools import combinations
 from math import pi
 
-def calculateCenterLimits(rigidgroup, coordinate, debug=False):
-	'''Given a rigidgroup and a coordinate, calculates the sine waves
-	associated to the allowed translation of the center (in that
-	coordinate) as a function of the rotation of the group'''
+def calculateCenterLimits(rigidgroup, rotation_axis, limits_coordinate, debug=False):
+	'''Given a rigidgroup, a rotation axis and a coordinate C, calculates
+	the sine waves associated to the allowed translation of the center
+	(in C) as a function of the rotation of the group (around
+	rotation_axis)'''
+	if rotation_axis == limits_coordinate:
+		raise Exception("Your are trying to calculate the limits of \
+		movements in a coordinate as the group rotates around that same \
+		coordinate; not the smartest thing in the world, is it...?")
 	#calculates center translation limit FOR EACH atom, as function of
 	#rotation
-	sines= AtomSine.atomsineListsFromAtomList(rigidgroup.atoms, coordinate)
+	sines= AtomSine.atomsineListsFromAtomList(rigidgroup.atoms, rotation_axis, limits_coordinate)
 	#calculate intersections between sines
 	intersections= calculate_intersections(sines)
 	#use the intersections to calculate which atom limits the center (the

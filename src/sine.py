@@ -79,11 +79,12 @@ class Sine(object):
 	
 	
 	
-	def fromPoint(self, origin, point1, rotation_axis):
-		'''given two 3D PointND, origion and point1, and a projection
-		axis, projects the points and calculates the sine that 
-		represents the variation of y-coordinate(sine) of point1 as it
-		rotates around origin'''
+	def fromPoint(self, origin, point1, rotation_axis, cosine=False):
+		'''given two 3D PointND, origin and point1, and a rotation
+		axis, calculates the sine that represents the variation of the
+		y-coordinate(sine) of point1 as it rotates (in the rotation_axis)
+		around origin .If "cosine" option is True, calculates the
+		x-coordinate(cosine) instead'''
 		if origin!=None:
 			vector= point1-origin
 		else:
@@ -91,6 +92,8 @@ class Sine(object):
 		vector.project(rotation_axis)
 		self.a= vector.norm()
 		self.p= vector.angle()
+		if cosine:
+			self.p= pi/2 + self.p
 		self.y=0
 		self.zeros=[]
 		self.zeros_calculated= False
