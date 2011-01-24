@@ -10,7 +10,7 @@ class AtomSine(Sine):
 		super(AtomSine, self).fromPoint(atom.position, PointND([0,0,0]), rotation_axis, is_cosine)
 		self.atom=atom		#store the associated atom object
 		if bound!=None:
-			self.y= atom.region[bound][(rotation_axis+2)%3]
+			self.y= atom.region[bound][coordinate]
 	
 	@staticmethod
 	def atomsineListsFromAtomList(atomlist, rotation_axis, coordinate):
