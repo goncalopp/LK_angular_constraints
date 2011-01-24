@@ -26,7 +26,6 @@ def calculateAtomLimits(rigidgroup, rotation_axis):
 	for atom in rigidgroup.atoms:
 		atom_lower_limits= [minmaxes[c][atom][0] for c in (0,1)]
 		atom_upper_limits= [minmaxes[c][atom][1] for c in (0,1)]
-		print atom_lower_limits
 		lower_limit= PointND([float("-inf")]*3)
 		upper_limit= PointND([float("inf")]*3)
 		lower_limit[x]= atom_lower_limits[0]
