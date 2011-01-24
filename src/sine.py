@@ -33,12 +33,11 @@ class Sine(object):
 		self.y=-self.y
 	
 	def __iadd__(self, other):
-		if self.cosine ^ other.cosine:	#xor
-			x= self.a*sin(self.p)+other.a*sin(other.p)
-			y= self.a*cos(self.p)+other.a*cos(other.p)
-		else:
+		if not self.cosine ^ other.cosine:	#xor
 			y= self.a*sin(self.p)+other.a*sin(other.p)
 			x= self.a*cos(self.p)+other.a*cos(other.p)
+		else:
+			raise Exception("sum of sine with cosine not supported yet...")
 		self.a=  sqrt(x*x + y*y)
 		self.p=  atan2(y,x)
 		self.y+= other.y
@@ -76,8 +75,12 @@ class Sine(object):
 				self.zeros= []
 				return []
 			
-			z0= (pi  + tmp - self.p) % pi2
-			z1= (pi2 - tmp - self.p) % pi2
+			if not self.cosine:
+				z0= (pi  + tmp - self.p) % pi2
+				z1= (pi2 - tmp - self.p) % pi2
+			else:
+				z0= (pi/2  + tmp - self.p) % pi2
+				z1= (pi2 - pi/2 - tmp - self.p) % pi2
 			if z0<z1:
 				self.zeros= [PointND([z0]),PointND([z1])]
 			else:
