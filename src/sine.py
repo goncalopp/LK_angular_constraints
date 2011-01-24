@@ -113,8 +113,6 @@ class Sine(object):
 		vector.project(rotation_axis)
 		self.a= vector.norm()
 		self.p= vector.angle()
-		if cosine:
-			self.p= pi/2 + self.p
 		self.cosine= cosine
 		self.y=0
 		self.zeros=[]
