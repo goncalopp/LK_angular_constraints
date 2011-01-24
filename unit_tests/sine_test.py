@@ -12,6 +12,20 @@ assert equal(s1.valueat(2), -1.5136049906)
 assert s1.getMaximizant()==5*pi/2-2
 assert s1.getMinimizant()==3*pi/2-2
 
+s1= Sine(2,3*pi+2, 0, cosine=True)
+assert s1.a==2
+assert s1.y==0
+assert s1.p==pi+2	#phase should be simplified
+assert s1.getMaximizant()==pi-2
+assert s1.getMinimizant()==2*pi-2
+s1.invert()
+assert s1.a==2
+assert s1.p==2
+assert s1.y==0
+assert equal(s1.valueat(2), -1.3072872417)
+assert s1.getMaximizant()==2*pi -2
+assert s1.getMinimizant()== 2*pi -2 -pi
+
 a= PointND([2,2,2])
 b= PointND([3,0,5])
 s1= Sine().fromPoint(a, b, 0)
@@ -24,9 +38,11 @@ s6= Sine().fromPoint(a, b, 2, cosine=True)
 assert equal(s1.p, atan2( 3,-2) % (2*pi))
 assert equal(s2.p, atan2( 1, 3) % (2*pi))
 assert equal(s3.p, atan2(-2, 1) % (2*pi))
-assert equal(s4.p, atan2(-2,-3) % (2*pi))
-assert equal(s5.p, atan2( 3,-1) % (2*pi))
-assert equal(s6.p, atan2( 1, 2) % (2*pi))
+'''
+assert equal(s1.p, s4.p)
+assert equal(s2.p, s5.p)
+assert equal(s3.p, s6.p)
+'''
 
 '''outdated
 assert equal_list( [p[0] for p in s1.calculateZeros()], [2.158798930342464, 5.3003915839322575])
