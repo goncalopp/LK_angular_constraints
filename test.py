@@ -2,6 +2,7 @@ from src.pointnd import PointND
 from src.rigidgroup import RigidGroup
 from  src import atomsine_calc
 from src.orderedlist import OrderedList
+from src.rigidgroup_centerlimits import calculateCenterLimits
 
 
 from math import sqrt, atan2, pi
@@ -13,7 +14,10 @@ g2 = Gnuplot.Gnuplot()
 
 
 def sineToFunction(sine, xmin=0, xmax=2*pi):
-	return  'x>=%f && x<=%f ? (%f*sin(x+%f)+%f) : 1/0'%(xmin, xmax, sine.a, sine.p, sine.y)
+	if not sine.cosine:
+		return  'x>=%f && x<=%f ? (%f*sin(x+%f)+%f) : 1/0'%(xmin, xmax, sine.a, sine.p, sine.y)
+	else:
+		return  'x>=%f && x<=%f ? (%f*cos(x+%f)+%f) : 1/0'%(xmin, xmax, sine.a, sine.p, sine.y)
 	
 def plotSineList(gnuplotinstance, sinelist):
 	f= ','.join([ sineToFunction(sine) for sine in sinelist])
@@ -51,11 +55,11 @@ for i in xrange(200):
 
 #-------------
 
-c1= PointND([-3,0,0])
-c2= PointND([3,0,0])
-rigid.addAtom(c1,c1-1, c1+1)
-rigid.addAtom(c2,c2-9,c2+9)
-rigid.recalculateCenter()
+c1= PointND([0,-3.000001,0])
+c2= PointND([0,3,0])
+#rigid.addAtom(c1,c1-1, c1+1)
+rigid.addAtom(c2,c2-1,c2+1)
+#rigid.recalculateCenter()
 
 #for atom in rigid.atoms:
 #	print atom
@@ -69,10 +73,7 @@ rigid.recalculateCenter()
 #5-5.81282
 #blender: first atom should be reduced to roughly 6.236-7
 
-sines, angulardomains, validdomains, newlimits= rigid.solve_instance(2, debug= True)
-
-for i in newlimits:
-	print i, newlimits[i]
+sines, angulardomains, validdomains= calculateCenterLimits(rigid, 2, 0, debug= True)
 
 plotAngularDomains(g1, validdomains)
 from src.sine import Sine
