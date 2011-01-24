@@ -33,7 +33,7 @@ def calculateCenterLimits(rigidgroup, rotation_axis, limits_coordinate, debug=Fa
 	validdomains= validRegions(angulardomains)
 	
 	if debug:
-		return (sines, angulardomains, validdomains, newlimits)	#debug
+		return (sines, angulardomains, validdomains)	#debug
 	return (sines, validdomains)
 
 def other(tuple, myobject):
