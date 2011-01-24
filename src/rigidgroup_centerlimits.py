@@ -99,11 +99,11 @@ def calculate_first_region(bound, sinelist, intersection_orderedlist):
 	in that Region, depending on Bound. Trims intersection_orderedlist
 	if it's first intersections are on angle 0'''
 	ending_intersections= intersection_orderedlist.peekMinimums()
-	if ending_intersections:
-		if ending_intersections[0].angle==0.0: #current ending angle is 0, not what we want
+	if ending_intersections and ending_intersections[0].angle==0.0: #current ending angle is 0, not what we want
 			intersection_orderedlist.popMinimums()	#remove the intersections on 0
 			ending_intersections= intersection_orderedlist.peekMinimums()	#and get the next ones
 		
+	if ending_intersections:
 		beginning_angle=0.0
 		ending_angle= ending_intersections[0].angle[0] # "0" is arbitrary, since all the intersections here have the same angle
 	else:		#there are no intersections
