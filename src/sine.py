@@ -4,21 +4,26 @@ pi2= 2*pi
 
 class Sine(object):
 	'''Represents a sine wave of fixed frequency 1/(2*pi)'''
-	def __init__(self, amplitude=1.0, phase=0.0, y=0.0):
+	def __init__(self, amplitude=1.0, phase=0.0, y=0.0, cosine=False):
 		if isinstance(amplitude, Sine):		#cloning...
 			self.a= amplitude.a
 			self.p= amplitude.p
 			self.y= amplitude.y
+			self.cosine= amplitude.cosine
 		else:															#creating new
 			self.a= amplitude
 			self.p= phase
 			self.y= y
+			self.cosine= cosine
 		self.zeros=[]
 		self.zeros_calculated= False
 		self.simplifyPhase()
 		
 	def __repr__(self):
-		return '<Sine a=%f p=%f y=%f>'%(self.a, self.p, self.y)
+		if not self.cosine:
+			return '<Sine a=%f p=%f y=%f>'%(self.a, self.p, self.y)
+		else:
+			return '<coSine a=%f p=%f y=%f>'%(self.a, self.p, self.y)
 		
 	def simplifyPhase(self):
 		self.p%= pi2;
@@ -28,8 +33,12 @@ class Sine(object):
 		self.y=-self.y
 	
 	def __iadd__(self, other):
-		y= self.a*sin(self.p)+other.a*sin(other.p)
-		x= self.a*cos(self.p)+other.a*cos(other.p)
+		if self.cosine ^ other.cosine:	#xor
+			x= self.a*sin(self.p)+other.a*sin(other.p)
+			y= self.a*cos(self.p)+other.a*cos(other.p)
+		else:
+			y= self.a*sin(self.p)+other.a*sin(other.p)
+			x= self.a*cos(self.p)+other.a*cos(other.p)
 		self.a=  sqrt(x*x + y*y)
 		self.p=  atan2(y,x)
 		self.y+= other.y
@@ -49,7 +58,10 @@ class Sine(object):
 
 
 	def valueat(self, angle):
-		return self.a*sin(angle+self.p)+self.y;
+		if not self.cosine:
+			return self.a*sin(angle+self.p)+self.y;
+		else:
+			return self.a*cos(angle+self.p)+self.y;
 
 	def calculateZeros(self):
 		if self.zeros_calculated:
@@ -73,17 +85,24 @@ class Sine(object):
 			return self.zeros
 
 	def getMaximizant(self):
-		return (pi/2 - self.p)%pi2
+		if not self.cosine:
+			return (pi/2 - self.p)%pi2
+		else:
+			return (-self.p)%pi2
+			
 	def getMinimizant(self):
-		return (3*pi/2 - self.p)%pi2
+		if not self.cosine:
+			return (3*pi/2 - self.p)%pi2
+		else:
+			return (pi - self.p)%pi2
 	
 	
-	
-	def fromPoint(self, origin, point1, rotation_axis):
-		'''given two 3D PointND, origion and point1, and a projection
-		axis, projects the points and calculates the sine that 
-		represents the variation of y-coordinate(sine) of point1 as it
-		rotates around origin'''
+	def fromPoint(self, origin, point1, rotation_axis, cosine=False):
+		'''given two 3D PointND, origin and point1, and a rotation
+		axis, calculates the sine that represents the variation of the
+		y-coordinate(sine) of point1 as it rotates (in the rotation_axis)
+		around origin .If "cosine" option is True, calculates the
+		x-coordinate(cosine) instead'''
 		if origin!=None:
 			vector= point1-origin
 		else:
@@ -91,6 +110,9 @@ class Sine(object):
 		vector.project(rotation_axis)
 		self.a= vector.norm()
 		self.p= vector.angle()
+		if cosine:
+			self.p= pi/2 + self.p
+		self.cosine= cosine
 		self.y=0
 		self.zeros=[]
 		self.zeros_calculated= False

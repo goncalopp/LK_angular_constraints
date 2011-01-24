@@ -110,15 +110,18 @@ class AngularDomain:
 				raise Exception("The given AngularDomains are not doublecut")
 		
 
-	def intersect(self, other):
-		'''takes self and other AngularDomain and removes from both the
+	def intersect(self, other, bothways=False, doublecutAlreadyDone=False):
+		'''takes self and other AngularDomain and removes from self the
 		region "pieces" that don't belong to both, i.e.: after this
-		operation, both AngularDomains become their intersection'''
-		self.doubleCut(other)
-		self_removals, other_removals= [],[]
+		operation, self becomes their intersection. If bothways variable is
+		set to true, other also becomes the intersection. Warning: will
+		doublecut both Angulardomains'''
+		if not doublecutAlreadyDone:
+			self.doubleCut(other)
+		self_removals, other_removals= [], []
 		i,j= 0,0
 		for a,b in self.doublecutIterator(other):
-			if a==None:
+			if a==None: #other has a region self doesn't have
 				other_removals.append(j)
 				j+=1
 			elif b==None:
@@ -127,11 +130,10 @@ class AngularDomain:
 			else:
 				i+=1
 				j+=1
-
-		print self_removals
-		print other_removals
+		
 		self.removeIndexes(self_removals)
-		other.removeIndexes(other_removals)
+		if bothways:
+			other.removeIndexes(other_removals)
 
 	def removeIndexes(self, index_list):
 		i=0

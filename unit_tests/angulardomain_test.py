@@ -63,7 +63,7 @@ assert a2[2]== Region(l[10], l[15])
 assert a2[3]== Region(l[20], l[25])
 assert a2[4]== Region(l[25], l[30])
 
-a1.intersect(a2)
+a1.intersect(a2, bothways=True)
 assert len(a1)==3
 assert len(a2)==3
 assert a1[0]== a2[0]== Region(l[ 0], l[ 5])
@@ -116,7 +116,7 @@ assert a2[8]== Region(l[22], l[24])
 assert a2[9]== Region(l[25], l[26])
 assert a2[10]== Region(l[26], l[28])
 
-a1.intersect(a2)
+a1.intersect(a2, bothways=True)
 assert len(a1)==7
 assert len(a2)==7
 assert a1[0]== a2[0]== Region(l[ 0], l[ 2])
