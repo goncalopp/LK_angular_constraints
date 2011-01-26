@@ -14,8 +14,6 @@ class Region:
 
 	def __setitem__(self, key, value):
 		self.bounds[key]=value
-		if self[0]==self[1]:
-			raise Exception('Region starts and ends at the same point')
 
 	def __iter__(self):
 		return self.bounds.__iter__()
@@ -43,10 +41,11 @@ class Region:
 			return cmp(self[0],other)
 
 	def pointInsideExcludingBounds(self, point):
-		'''returns True iff point is inside region, excluding bounds'''
+		'''returns True iff given point is inside this (open) region'''
 		return all([point[i]<self[1][i] and point[i]>self[0][i] for i in range(len(self[0]))])
 
 	def pointInsideIncludingBounds(self, point):
+		'''returns true iff given point is inside this (closed) region'''
 		return all([point[i]<=self[1][i] and point[i]>=self[0][i] for i in range(len(self[0]))])
 
 	def pointInside(self, point):
@@ -60,8 +59,39 @@ class Region:
 	def __contains__(self, point):
 		return self.pointInsideIncludingBounds(point)
 	
-	def containsRegion(self, region):
-		return all([(p in self) for p in region])
+	def relativePosition(self, other):
+		'''gives the relative position of this (1D) region relative to
+		another. return codes:
+		1- self starts and ends before other
+		2- self starts and ends  after other
+		3- self starts before other, other ends after self
+		4- other starts before self, self ends after other
+		5- self contains other
+		6- other contains self
+		'''
+		if other==None:
+			return 1
+		if self==None:	#may happen if called as class method
+			return 2
+		if self[0]<other[0]:
+			if self[1]<=other[0]:
+				return 1
+			if self[1]>=other[1]:
+				return 5
+			else:
+				return 3
+		elif self[0]>other[0]:
+			if other[1]<self[0]:
+				return 2
+			if other[1]>=self[1]:
+				return 6
+			else:
+				return 4
+		else:				#self[0]==other[0]
+			if other[1]<=self[1]:
+				return 5
+			if other[1]>self[1]:
+				return 6
 		
 	def cutOnPoint(self, point):
 		'''cuts the region along the Point, gives a list of Regions.
@@ -73,11 +103,28 @@ class Region:
 		return [Region(self[0], PointND(point), self.value),Region(PointND(point), self[1], self.value)]
 
 	def cutOnPoints(self, pointlist):
-		regions=self.cutOnPoint(pointlist[0])
-		if len(pointlist)==1:
-			return regions
+		'''similar to cutOnPoint, but for a list of cutting points'''
+		if len(pointlist)==0:
+			return [self]
+		regions= self.cutOnPoint(pointlist[0])
 		newlist=pointlist[1:]
-		final=[]
-		for r in regions:
-			final+=r.cutOnPoints(newlist)
-		return final
+		return [r.cutOnPoints(newlist) for t in regions]
+
+	def midpoint(self):
+		'''the midpoint of the region'''
+		return (self[0]+self[1])*0.5
+
+	def intersect(self,other):
+		'''intersects this region with another, stores result on itself'''
+		if self[0]<other[0]:
+			if self[1]>other[1]:					#self contains other
+				self[0]= PointND(other[0])
+				self[1]= PointND(other[1])
+			else:
+				self[0]= PointND(other[0])
+		else:
+			if self[1]>other[1]:
+				self[1]= PointND(other[1])
+			else:													#other contains self
+				pass
+
