@@ -21,7 +21,7 @@ class AngularDomain:
 		return len(self.regions)
 
 	def __repr__(self):
-		s=["-"]*32
+		s=["-"]*63
 		for r in self.regions:
 			a=int(r[0][0]*10)
 			b=int(r[1][0]*10)
