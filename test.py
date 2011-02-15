@@ -53,26 +53,6 @@ for i in xrange(200):
 	p1= p+PointND([rd()+1, rd()+1, rd()+1])
 	#rigid.addAtom(p, p0, p1)
 
-#-------------
-
-c1= PointND([0,-3.000001,0])
-c2= PointND([0,3,0])
-#rigid.addAtom(c1,c1-1, c1+1)
-rigid.addAtom(c2,c2-1,c2+1)
-#rigid.recalculateCenter()
-
-#for atom in rigid.atoms:
-#	print atom
-
-#valid from 228.1963o-270.008o, or 3.98266-4.71239 in radians
-#papel: atomos 2 e 3 amplitude 2; ate 270o certos (atomos 1 e 2 verticais)
-#facilita visualizacao a rotacao em torno do atomo 2
-#regiao valida tem 2 segmentos:
-#	primeiro segmento: limitado por atomos 2-3, amplitude inicial:2, amplitude final: ?
-#	segundo  segmento: limitado por atomos 1-2, amplitude inicial:?, amplitude final: 3
-#5-5.81282
-#blender: first atom should be reduced to roughly 6.236-7
-
 sines, angulardomains, validdomains= calculateCenterLimits(rigid, 2, 0, debug= True)
 
 plotAngularDomains(g1, validdomains)
