@@ -87,11 +87,9 @@ class PointND:
 		'''returns the norm of the vector this point forms with the origin'''
 		return sqrt(sum(n*n for n in self.c))
 	
-	def distance(self, point):
+	def distance(self, other):
 		'''returns the euclidian distance to another PointND'''
-		tmp= PointND(self)
-		tmp-point
-		return tmp.norm()
+		return (self-other).norm()
 	
 	def angle(self):
 		'''Returns angle point-origin makes with x-axis. point must be 2D.'''
