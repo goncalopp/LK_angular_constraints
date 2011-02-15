@@ -33,14 +33,19 @@ class Sine(object):
 		self.y=-self.y
 	
 	def __iadd__(self, other):
-		if not self.cosine ^ other.cosine:	#xor
-			y= self.a*sin(self.p)+other.a*sin(other.p)
-			x= self.a*cos(self.p)+other.a*cos(other.p)
-		else:
-			raise Exception("sum of sine with cosine not supported yet...")
+		undo_sinification_on= None
+		if self.cosine ^ other.cosine:	#xor
+			undo_sinification_on= (self if self.cosine else other)
+			undo_sinification_on.sinificy()
+			
+		y= self.a*sin(self.p)+other.a*sin(other.p)
+		x= self.a*cos(self.p)+other.a*cos(other.p)
 		self.a=  sqrt(x*x + y*y)
 		self.p=  atan2(y,x)
 		self.y+= other.y
+
+		if undo_sinification_on!=None:
+			undo_sinification_on.cosinificy()
 		return self
 	
 	def __isub__(self, other):
@@ -113,8 +118,6 @@ class Sine(object):
 		vector.project(rotation_axis)
 		self.a= vector.norm()
 		self.p= vector.angle()
-		if cosine:
-			self.p= pi/2 + self.p
 		self.cosine= cosine
 		self.y=0
 		self.zeros=[]
@@ -137,4 +140,22 @@ class Sine(object):
 		m= self.getMaximizant()
 		if PointND([m]) in region:
 			angles.append(m)
-		return max(map(self.valueat, angles)) 
+		return max(map(self.valueat, angles))
+		
+	def sinificy(self):
+		'''turns a cosine into a sine, without changing the image of an \
+		angle (changes phase)'''
+		if not self.cosine:
+			raise Exception("Can't sinificy a sine")
+		self.p+= pi/2
+		self.simplifyPhase
+		self.cosine= False
+	
+	def cosinificy(self):
+		'''turns a sine into a cosine, without changing the image of an \
+		angle (changes phase)'''
+		if self.cosine:
+			raise Exception("Can't cosinificy a cosine")
+		self.p-= pi/2
+		self.simplifyPhase
+		self.cosine= True
