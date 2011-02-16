@@ -9,7 +9,6 @@ from src.rigidgroup_centerlimits import *
 from src.rigidgroup_atomlimits import *
 from src.orderedlist import OrderedList
 from src.angulardomain import AngularDomain
-from src import atomsine_calc
 from src.orderedlist import OrderedList
 
 from math import sqrt, atan2, atan, pi

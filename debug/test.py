@@ -1,6 +1,5 @@
 from src.pointnd import PointND
 from src.rigidgroup import RigidGroup
-from  src import atomsine_calc
 from src.orderedlist import OrderedList
 from src.rigidgroup_centerlimits import calculateCenterLimits
 
