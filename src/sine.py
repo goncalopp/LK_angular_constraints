@@ -86,7 +86,10 @@ class Sine(object):
 			else:
 				z0= (pi/2  + tmp - self.p) % pi2
 				z1= (pi2 - pi/2 - tmp - self.p) % pi2
-			if z0<z1:
+				
+			if abs(z0-z1) < 1e-10:
+				self.zeros=[PointND([min(z0,z1)])]
+			elif z0<z1:
 				self.zeros= [PointND([z0]),PointND([z1])]
 			else:
 				self.zeros= [PointND([z1]),PointND([z0])]
