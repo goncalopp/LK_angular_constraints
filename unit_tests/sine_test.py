@@ -38,6 +38,16 @@ s6= Sine().fromPoint(a, b, 2, cosine=True)
 assert equal(s1.p, atan2( 3,-2) % (2*pi))
 assert equal(s2.p, atan2( 1, 3) % (2*pi))
 assert equal(s3.p, atan2(-2, 1) % (2*pi))
+
+#CHECK FOR ROUNDING ERROR-------------------------------
+s1= Sine(2, pi/2, -3)
+s2= Sine(2, 3*pi/2, 1)
+s3= s1-s2
+z=  s3.calculateZeros()
+assert len(z)==1
+assert z[0]==0
+#END OF ROUNDING ERROR CHECK-----------------------------
+
 '''
 assert equal(s1.p, s4.p)
 assert equal(s2.p, s5.p)
