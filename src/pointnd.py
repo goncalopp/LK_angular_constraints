@@ -58,6 +58,11 @@ class PointND:
 		
 	def __mul__(self, op):
 		return PointND(self).__imul__(op)
+	
+	def __neg__(self):
+		p= PointND(self)
+		p.c= [-x for x in p.c]
+		return p
 
 	def __eq__(self, other):
 		if isinstance(other, PointND):

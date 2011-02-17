@@ -88,7 +88,7 @@ def calculate_intersections(sines):
 				intersection_list= [ SineIntersection(sine1, sine2, zero) for zero in zeros]
 				intersections[bound].extend( intersection_list )
 
-	k= lambda x: x.angle
+	k= lambda x: -x.angle
 	ordered_intersections=[ OrderedList(intersections[i], key=k) for i in (0,1) ]
 	return ordered_intersections
 

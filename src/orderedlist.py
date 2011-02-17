@@ -1,7 +1,7 @@
 class OrderedList:
 	'''custom ordered list with some useful methods for this problem'''
 	
-	def __init__(self, list, key= lambda x:x, alreadyordered=False):
+	def __init__(self, list, key= lambda x:-x, alreadyordered=False):
 		if not alreadyordered:
 			self.list= sorted(list, key=key)
 		self.keyfunction= key
@@ -9,19 +9,19 @@ class OrderedList:
 	def __len__(self):
 		return len(self.list)
 
-	def popMaximum(self):
+	def popMinimum(self):
 		'''returns and deletes maximum value from list'''
 		return self.list.pop()
 		
-	def popMinimum(self):
+	def popMaximum(self):
 		'''returns and deletes minimum value from list'''
 		return self.list.pop(0)
 
-	def peekMinimum(self):
+	def peekMaximum(self):
 		'''returns minimum value from list'''
 		return self.list[0]
 
-	def peekMaximum(self):
+	def peekMinimum(self):
 		'''returns maximum value from list'''
 		return self.list[-1]
 
@@ -31,10 +31,10 @@ class OrderedList:
 		if len(self.list)==0:
 			return []
 		k= self.keyfunction
-		ret= [self.list.pop(0)]
+		ret= [self.list.pop()]
 		minimum= k(ret[0])
-		while len(self.list) and k(self.list[0])==minimum:
-			ret.append(self.list.pop(0))
+		while len(self.list) and k(self.list[-1])==minimum:
+			ret.append(self.list.pop())
 		return ret
 
 	def peekMinimums(self):
@@ -43,10 +43,10 @@ class OrderedList:
 		if len(self.list)==0:
 			return []
 		k= self.keyfunction
-		ret= [self.list[0]]
+		ret= [self.list[-1]]
 		minimum= k(ret[0])
-		i=1
-		while i<len(self.list) and k(self.list[i])==minimum:
+		i=-2
+		while i>=-len(self.list) and k(self.list[i])==minimum:
 			ret.append(self.list[i])
-			i+=1
+			i-=1
 		return ret
