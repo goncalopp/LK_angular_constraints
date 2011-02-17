@@ -45,14 +45,18 @@ def rigid1():
 	r= RigidGroup()
 	p1= PointND([-2,0,0])
 	p2= PointND([2,0,0])
-	r.addAtom(p1, p1-1, p1+1)
-	r.addAtom(p2, p2-1, p2+1)
+	
+	p3= PointND([0,0,-2])
+	p4= PointND([0,0,2])
+	
+	r.addAtom(p1, p3-1, p3+1)
+	r.addAtom(p2, p4-1, p4+1)
 	return r
 	
 
 rigid= rigid1()
 
-sines, angulardomains, validdomains= calculateCenterLimits(rigid, 1, 0, debug= True)
+sines, angulardomains, validdomains= calculateCenterLimits(rigid, 1, 2, debug= True)
 
 plotAngularDomains(g1, validdomains)
 from src.sine import Sine
