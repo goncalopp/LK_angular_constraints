@@ -1,6 +1,7 @@
 from pointnd import PointND
 from math import pi,atan2,asin, sin, cos, sqrt
-pi2= 2*pi
+PI2= 2*pi
+ROUNDING_ERROR= 1e-10
 
 class Sine(object):
 	'''Represents a sine wave of fixed frequency 1/(2*pi)'''
@@ -26,10 +27,10 @@ class Sine(object):
 			return '<coSine a=%f p=%f y=%f>'%(self.a, self.p, self.y)
 		
 	def simplifyPhase(self):
-		self.p%= pi2;
+		self.p%= PI2;
 	
 	def invert(self):
-		self.p= (self.p + pi) % pi2
+		self.p= (self.p + pi) % PI2
 		self.y=-self.y
 	
 	def __iadd__(self, other):
@@ -81,13 +82,13 @@ class Sine(object):
 				return []
 			
 			if not self.cosine:
-				z0= (pi  + tmp - self.p) % pi2
-				z1= (pi2 - tmp - self.p) % pi2
+				z0= (pi  + tmp - self.p) % PI2
+				z1= (PI2 - tmp - self.p) % PI2
 			else:
-				z0= (pi/2  + tmp - self.p) % pi2
-				z1= (pi2 - pi/2 - tmp - self.p) % pi2
+				z0= (pi/2  + tmp - self.p) % PI2
+				z1= (PI2 - pi/2 - tmp - self.p) % PI2
 				
-			if abs(z0-z1) < 1e-10:
+			if abs(z0-z1) < ROUNDING_ERROR:
 				self.zeros=[PointND([min(z0,z1)])]
 			elif z0<z1:
 				self.zeros= [PointND([z0]),PointND([z1])]
@@ -97,15 +98,15 @@ class Sine(object):
 
 	def getMaximizant(self):
 		if not self.cosine:
-			return (pi/2 - self.p)%pi2
+			return (pi/2 - self.p)%PI2
 		else:
-			return (-self.p)%pi2
+			return (-self.p)%PI2
 			
 	def getMinimizant(self):
 		if not self.cosine:
-			return (3*pi/2 - self.p)%pi2
+			return (3*pi/2 - self.p)%PI2
 		else:
-			return (pi - self.p)%pi2
+			return (pi - self.p)%PI2
 	
 	
 	def fromPoint(self, origin, point1, rotation_axis, cosine=False):
