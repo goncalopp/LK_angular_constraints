@@ -136,6 +136,8 @@ def calculate_next_region(current_region, intersection_orderedlist):
 	cr[1]= PointND(ei.angle)	#closes last Region
 	new_beggining=   PointND(ei.angle)
 	new_sine= other(ei.sines, cr.value)	#takes the other sine in the intersection
+	if len((new_sine-current_sine).calculateZeros())<2:
+		new_sine=current_sine
 	new_region= Region(new_beggining, None, value=new_sine)
 	return new_region
 	
