@@ -41,18 +41,22 @@ def plotAngularDomains(gnuplotinstance, angulardomains):
 
 #--------------------------------------------------------
 
+def rigid1():
+	r= RigidGroup()
+	p1= PointND([-2,0,0])
+	p2= PointND([2,0,0])
+	
+	p3= PointND([0,0,-2])
+	p4= PointND([0,0,2])
+	
+	r.addAtom(p1, p3-1, p3+1)
+	r.addAtom(p2, p4-1, p4+1)
+	return r
+	
 
-from random import random as rd
-r=1
-rigid= RigidGroup()
+rigid= rigid1()
 
-for i in xrange(200):
-	p= PointND([rd()*20-10, rd()*20-10, rd()*20-10])
-	p0= p-PointND([rd()+1, rd()+1, rd()+1])
-	p1= p+PointND([rd()+1, rd()+1, rd()+1])
-	#rigid.addAtom(p, p0, p1)
-
-sines, angulardomains, validdomains= calculateCenterLimits(rigid, 2, 0, debug= True)
+sines, angulardomains, validdomains= calculateCenterLimits(rigid, 1, 2, debug= True)
 
 plotAngularDomains(g1, validdomains)
 from src.sine import Sine
